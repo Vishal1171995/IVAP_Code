@@ -1,0 +1,8 @@
+RegionID,COMP_NAME,REGION_CODE,REGION_NAME,Status
+,,,,
+Display Name,,Mandatory Fields,Data Type,Remarks
+RegionID,,,integer,Insert time 0 and updata time give CompID id
+COMP_NAME,,YES,Text,
+REGION_CODE,,YES,Text,Minimum 4 character and Maximum can be 100 character
+REGION_NAME,,YES,Text,
+Status,,YES,bool,

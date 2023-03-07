@@ -1,0 +1,387 @@
+﻿@model Ivap.Areas.Master.ViewModel.EntityVM
+@{
+    ViewBag.Title = "Entity List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="clear10"></div>
+    <div class="pull-right VendorSiteBtnRightMain">
+        <div class="pull-right VendorSiteBtnRightMain">
+            <a class="btn btn-primary BtnBlueLg BtnWidth150" href='@Url.RouteUrl("EntitySetUp")'>Create Entity</a>
+        </div>
+    </div>
+
+    <div class="panel-heading">
+        <h2>Entity Master</h2>
+        <div class="clear5"></div>
+    </div>
+    
+    <div class="panel-body">
+
+        <div class="clear20"></div>
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="clear10"></div>
+                        <div class="TableOuterDiv table-responsive">
+                            <div id="KgrdEntity"></div>
+                        </div>
+                    </div>
+                    <div class="clear20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="EntityDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Entity Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>Entity Code</label> </td>
+                                            <td><span id="lblEntityCode"> </span></td>
+                                            <td><label>Entity Name</label> </td>
+                                            <td><span id="lblEntityName"> </span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><label>Entity City</label></td>
+                                            <td> <span id="lblEntityCity"> </span></td>
+                                            <td> <label>Entity State</label> </td>
+                                            <td><span id="lblEntityState"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Entity Pin</label></td>
+                                            <td> <span id="lblEntityPin"> </span></td>
+                                            <td><label>Pay Period</label></td>
+                                            <td><span id="lblPayPeriod"></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Entity Address 1</label></td>
+                                            <td> <span id="lblEntityAddress1"> </span></td>
+                                            <td> <label>Entity Address 2</label> </td>
+                                            <td><span id="lblEntityAddress2"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Currency</label></td>
+                                            <td> <span id="lblCurrency"> </span></td>
+                                            <td> <label>Country</label> </td>
+                                            <td><span id="lblCountry"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>Date Format</label> </td>
+                                            <td><span id="lblDateFormat"></span></td>
+                                            
+                                            <td><label>Created On</label></td>
+                                            <td><span id="lblEntityCreatedOn"></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>Entity Status</label> </td>
+                                            <td><span id="lblEntityStatus"></span></td>
+                                            
+                                            <td></td>
+                                            <td></td>
+
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvEntityAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Entity Master</h4>
+                </div>
+                @using (Ajax.BeginForm("UpdateEntity", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage" }))
+                {@Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Entity Code<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.EntityModel.TID)
+                            @Html.TextBoxFor(m => m.EntityModel.ENTITY_CODE, new { @class = "form-control", @placeholder = "Entity Code" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_CODE)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">Entity Name<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.EntityModel.ENTITY_NAME, new { @class = "form-control", @placeholder = "Entity Name" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_NAME)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">State<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.EntityModel.ENTITY_STATE, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_STATE)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">City<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.EntityModel.ENTITY_CITY, new { @class = "form-control", @placeholder = "City" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_CITY)
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+                        <label class="col-sm-2 control-label">Pay Period<span class="text-red"></span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.EntityModel.ENTITY_Payperiod, new SelectList(
+                                 new List<Object>{
+                                      new { value = "" , text = "--Select--"  },
+                                      new { value = "Weekly" , text = "Weekly" },
+                                      new { value = "Monthly" , text = "Monthly"},
+                                      new { value = "Fortnight" , text = "Fortnight"},
+                                   },"value","text"), new { @class = "form-control" })
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">Country<span class="text-red"></span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.EntityModel.ENTITY_Country, new SelectList(Model.CountryList, "Value", "Text", "0"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_Country)
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+                        <label class="col-sm-2 control-label">Currency<span class="text-red"></span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.EntityModel.ENTITY_Currency, new SelectList(Model.CurrencyList, "Value", "Text", "0"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_Currency)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">Date Format<span class="text-red"></span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.EntityModel.DATE_FORMAT, new SelectList(
+                                 new List<Object>{
+                                      new { value = "" , text = "--Select--"  },
+                                      new { value = "dd/mm/yy" , text = "dd/mm/yy" },
+                                      new { value = "dd/mm/yyyy" , text = "dd/mm/yyyy"},
+                                      new { value = "dd-mm-yyyy" , text = "dd-mm-yyyy"},
+                                      new { value = "yyyy-mm-dd" , text = "yyyy-mm-dd"}
+                                   },"value","text"), new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                      <label for="inputPassword3" class="col-sm-2 control-label">Address 1<span class="text-red"></span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.EntityModel.ENTITY_ADDR1, new { @class = "form-control", @placeholder = "Address 1" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_ADDR1)
+                        </div>
+
+                        <label for="inputPassword3" class="col-sm-2 control-label">Address 2</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.EntityModel.ENTITY_ADDR2, new { @class = "form-control", @placeholder = "Address 2" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_ADDR2)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-2 control-label">PIN<span class="text-red"></span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.EntityModel.ENTITY_PIN, new { @class = "form-control", @placeholder = "PIN" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_PIN)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">Domain Name<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.EntityModel.DOMAIN_NAME, new { @class = "form-control", @placeholder = "Domain Name" })
+                            @Html.ValidationMessageFor(m => m.EntityModel.DOMAIN_NAME)
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Is Active</label>
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(m => m.EntityModel.IsActive)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-4">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="clear"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetEntityURL = "@Url.RouteUrl("GetEntity")"
+        @*var GetUserRoleHisURL = '@Url.RouteUrl("GetUserRoleHis")'
+        var DownloadAllRoleURL= '@Url.RouteUrl("DownloadAllRole")'*@
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#li55").addClass("active");
+            $("#anch3").addClass("CurantPageIcon");
+            $.get(GetEntityURL, { EID: 0 }, function (response) {
+                var strResponseEntity = JSON.parse(response.Data)
+                BindEntity(strResponseEntity);
+            });
+        });
+
+
+        function SuccessMessage(res) {
+            if ($("#TID").val() > 0)
+                $("#dvEntityAddEdit").modal('hide');
+            HandleSuccessMessage(res, "btnReset");
+            $.get(GetEntityURL, { EID: 0 }, function (response) {
+                var strResponseEntity = JSON.parse(response.Data)
+                BindEntity(strResponseEntity);
+            });
+        }
+        KgrdEntity = "";
+        function BindEntity(response) {
+            if (KgrdEntity != "") {
+                $('#KgrdEntity').kendoGrid('destroy').empty();
+            }
+            var GridColumns =
+                [
+                    { field: "ENTITY_CODE", title: "Entity Code", width: 150 },
+                    { field: "ENTITY_NAME", title: "Entity Name", width: 120 },
+                    { field: "ENTITY_CITY", title: "Entity City", width: 120 },
+                    { field: "STATE_NAME", title: "Entity State", width: 120 },
+                    { field: "ENTITY_PIN", title: "Entity Pin", width: 120 },
+                    { field: "STATUS", title: "Status", width: 100, template: "<span class= #if(STATUS=='Active'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:STATUS#</span>" },
+
+                ];
+            var cmd = {
+                command: [
+                    { name: "Actions", text: "", iconClass: "kIcon kIconEdit", click: EditHandler, title: "Actions" },
+                    { name: "Entity View", text: "", iconClass: "kIcon kIconView", click: ViewHandler, title: "View" }
+                ], title: "Action", width: 100
+            };
+
+            GridColumns.push(cmd);
+            KgrdEntity = $("#KgrdEntity").kendoGrid({
+                dataSource: {
+                    pageSize: 15,
+                    data: response
+                },
+                pageable: { pageSizes: true },
+                height: 400,
+                filterable: true,
+                noRecords: true,
+                resizable: true,
+                sortable: true,
+                // dataBound: ShowToolTip,
+                columns: GridColumns
+            });
+        }
+
+
+        var EditHandler = function EditHandler(e) {
+            $("#btnReset").click();
+            e.preventDefault();
+            var dataItem = {};
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var EID = dataItem.TID;
+            $.ajax({
+                type: "GET",
+                url: GetEntityURL,
+                contentType: "application/json; charset=utf-8",
+                data: {EID: EID },
+                dataType: "json",
+                success: function (response) {
+                    var data1 = $.parseJSON(response.Data);
+                    if (data1.length > 0) {
+                        $("#EntityModel_TID").val(data1[0].TID);
+                        $('#EntityModel_ENTITY_CODE').attr('disabled', true);
+                        $("#EntityModel_ENTITY_CODE").val(data1[0].ENTITY_CODE);
+                        $("#EntityModel_ENTITY_NAME").val(htmlEncode(data1[0].ENTITY_NAME));
+                        $("#EntityModel_ENTITY_STATE").val(htmlEncode(data1[0].ENTITY_STATE));
+                        $("#EntityModel_ENTITY_CITY").val(htmlEncode(data1[0].ENTITY_CITY));
+                        $("#EntityModel_ENTITY_PIN").val(htmlEncode(data1[0].ENTITY_PIN));
+                        $("#EntityModel_ENTITY_ADDR1").val(htmlEncode(data1[0].ENTITY_ADDR1));
+                        $("#EntityModel_ENTITY_ADDR2").val(htmlEncode(data1[0].ENTITY_ADDR2));
+                        $("#EntityModel_DOMAIN_NAME").val(htmlEncode(data1[0].DOMAIN_NAME));
+                        $("#EntityModel_ENTITY_STATE").val(htmlEncode(data1[0].ENTITY_STATE));
+                        $("#EntityModel_ENTITY_Country").val(htmlEncode(data1[0].COUNTRY));
+                        $("#EntityModel_ENTITY_Currency").val(htmlEncode(data1[0].CURRENCY));
+                        $("#EntityModel_DATE_FORMAT").val(htmlEncode(data1[0].DATE_FORMAT));
+                        $("#EntityModel_ENTITY_Payperiod").val(htmlEncode(data1[0].PAY_PERIOD));
+                        var IsAct = htmlEncode(data1[0].ISACT);
+                        (IsAct == 1) ? $('#EntityModel_IsActive').prop('checked', true) : $('#EntityModel_IsActive').prop('checked', false);
+                        OpenModal("dvEntityAddEdit", 500, "Update Entity");
+                    }
+                }
+            });
+        }
+
+        var ViewHandler = function ViewHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var EID = dataItem.TID;
+            $.get(GetEntityURL, { EID: EID }, function (response) {
+                var Data = $.parseJSON(response.Data);
+                $("#lblEntityCode").html(htmlEncode(Data[0].ENTITY_CODE));
+                $("#lblEntityName").html(htmlEncode(Data[0].ENTITY_NAME));
+                $("#lblEntityCity").html(htmlEncode(Data[0].ENTITY_CITY));
+                $("#lblEntityState").html(htmlEncode(Data[0].STATE_NAME));
+                $("#lblEntityPin").html(htmlEncode(Data[0].ENTITY_PIN));
+                $("#lblEntityStatus").html(htmlEncode(Data[0].STATUS));
+                $("#lblEntityAddress1").html(htmlEncode(Data[0].ENTITY_ADDR1));
+                $("#lblEntityAddress2").html(htmlEncode(Data[0].ENTITY_ADDR2));
+                $("#lblCurrency").html(htmlEncode(Data[0].CURRENCY_NAME));
+                $("#lblCountry").html(htmlEncode(Data[0].COUNTRY_NAME));
+                $("#lblDateFormat").html(htmlEncode(Data[0].DATE_FORMAT));
+                $("#lblPayPeriod").html(htmlEncode(Data[0].PAY_PERIOD));
+                $("#lblEntityCreatedOn").html(htmlEncode(Data[0].CREATED_ON));
+                // HistoryGridData(RoleID);
+                OpenModal("EntityDetails", 909, "Entity Details");
+            });
+        }
+    </script>
+}
+

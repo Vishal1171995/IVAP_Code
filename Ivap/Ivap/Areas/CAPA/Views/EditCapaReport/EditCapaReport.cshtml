@@ -1,0 +1,210 @@
+﻿@model Ivap.Areas.CAPA.Models.CapaModel
+@{
+    ViewBag.Title = "EditCapaReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.print.css" media="print" />
+
+<div class="row">
+    <div class="pull-right">
+        <div class="VendorSiteBtnRightMain">
+            @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "CapaReport", area = string.Empty });}
+        </div>
+    </div>
+    <div class="panel-heading"><h3><strong>CAPA VIEW</strong></h3></div>
+</div>
+
+<div class="clear10"></div>
+
+<div class="panel panel-default  Mdm-panel">
+    <div class="cch-tab mdm-tab">
+        <ul class="nav nav-tabs">
+            <li class="active" style="width:50%!important;"> <a href="#2b" data-toggle="tab"><i class="fa fa-list-alt"> </i>&nbsp;List View</a></li>
+            <li style="width:50%!important;" id="lidash"> <a href="#1b" data-toggle="tab"><i class="fa fa-calendar"></i> &nbsp;Calendar View</a> </li>
+        </ul>
+        <div class="panel-body">
+            <div class="tab-content clearfix">
+                <div class="tab-pane" id="1b">
+                    <div id="calendar"></div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="tab-pane active" id="2b">
+                    <div id="EditKapagrid"></div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade PopUpMainDiv" id="CalendarCapaModal" style="display:none">
+    <div class="modal-dialog" style="width:100%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">CAPA Details</h4>
+            </div>
+            <div class="modal-body">
+                <div id="CalendarGrid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="CapaDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">CAPA Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+
+                                        <td><label>Issue</label></td>
+                                        <td> <span id="lblissue"> </span></td>
+                                        @*<td><label>Issue Description</label> </td>
+                                            <td><span id="lbldescription"> </span></td>*@
+                                        <td><label>Customer Impact</label> </td>
+                                        <td><span id="lblcustomerImpact"> </span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td> <label>Sequence Of Events </label> </td>
+                                        <td><span id="lblSequence"></span></td>
+                                        <td><label>Communication Process</label> </td>
+                                        <td><span id="lblCommunication"> </span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><label>Root Cause</label> </td>
+                                        <td><span id="lblroot"> </span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#tabCorrective_1" data-toggle="tab" aria-expanded="true">Corrective</a></li>
+                                    <li class=""><a href="#tabPreventive_2" data-toggle="tab" aria-expanded="false">Preventive</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tabCorrective_1">
+                                        <div id="CorrectiveCalendarGrid"></div>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="tabPreventive_2">
+                                        <div id="PreventiveCalendarGrid"></div>
+                                    </div>
+                                    <!-- /.tab-pane -->
+                                    <!-- /.tab-pane -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="CapaCorrectiveOnClick" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Corrective Details</h4>
+            </div>
+            <div class="modal-body">
+
+                <div id="CorrectiveGridOnClick"></div>
+                @*<div id="PreventiveGridOnClick"></div>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="CapaPreventiveOnClick" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Preventive Details</h4>
+            </div>
+            <div class="modal-body">
+
+                @*<div id="CorrectiveGridOnClick"></div>*@
+                <div id="PreventiveGridOnClick"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- qTip -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+
+    <!-- Full Calendar -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+    <script type="text/javascript">
+     var CapaCorrectiveUpdateDataSource = [];
+        var CapaPreventiveUpdateDatasource = [];
+        var GetCapaURL = "@Url.RouteUrl("GetEditCapa")"
+        var GetCapaHisURL = "@Url.RouteUrl("GetCapaHis")"
+        var GetCapaTestingURL = "@Url.RouteUrl("GetEditCapaTesting")"
+        var GetCapaForCalendarURL = "@Url.RouteUrl("GetCapaForCalendar")"
+        var GetCapaCalendarURL = "@Url.RouteUrl("GetCalendarCapa")"
+        var GetCapaHisURL = "@Url.RouteUrl("GetCapaCalendarHis")"
+        var GetCapaCalendarDataURL="@Url.RouteUrl("GetCapaCalendarData")"
+
+    </script>
+    @Scripts.Render("~/Scripts/ViewEditCapaJS")
+}

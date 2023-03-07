@@ -1,0 +1,229 @@
+﻿
+@{
+    ViewBag.Title = "CalendarDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+<!-- qTip -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
+
+<!-- Full Calendar -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.print.css" media="print" />
+
+@*<div class="row">
+        <div class="panel-heading">
+            <div class="col-md-8  custom-heading3">
+                <h3>
+                    <i class="fa fa-calendar"></i>
+                    <span>Calendar Details</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <section class="col-md-12 col-md-push-0">
+            <div class="row">
+                <div class="col-xs-9 col-xs-push-2">
+                    <div class="box box-primary">
+                        <div class="box-body no-padding">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>*@
+
+<div class="panel panel-default">
+    <div class="panel-heading pd-0 mg-top7">
+        <div class="col-md-4"> <button onclick="myFunction()" class="btn  btn-primary btn-sm"> <i class="fa fa-filter"> </i> </button> </div>
+        <div class="col-md-8"> <label> <i class="fa fa-calendar"> </i> Calendar Details</label> </div>
+        <div class="clear"> </div>
+    </div>
+    <div class="panel-body panel-body-pd" style="padding-bottom:0px !important;">
+        <div class="col-md-4 col-sm-4 col-xs-12 pd-0" id="myDIV">
+            <div class="panel panel-default">
+                <div class="panel-heading pd-0 mg-top7">
+                    <div class="col-md-10"> <strong>Filter</strong></div>
+                    <div class="clear"></div>
+                </div>
+                <div class="panel-body pd-0">
+                    <div class="col-sm-12 col-md-12 pd-6">
+                        <div class="clear10"></div>
+                        <div class="row form-group">
+                            <label for="inputbox" class="col-sm-4 control-label">Pay Date</label>
+                            <div class="col-sm-8">
+                                <div class='input-group date mg-0' id='datetimepicker1'>
+                                    <input id="txtSearchPayDate" type='text' class="form-control" />
+                                    <span id="spnPayDate" class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputbox" class="col-sm-4 control-label">Due Date</label>
+                            <div class="col-sm-8">
+                                <div class='input-group date mg-0' id='datetimepicker1'>
+                                    <input id="txtSearchDueDate" type='text' class="form-control" />
+                                    <span id="spnDueDate" class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputbox" class="col-sm-4 control-label">Event</label>
+                            <div class="col-sm-8">
+                                <div class="nobdr">
+                                    <select id="ddlSearchEvent" class="form-control" title="Select Event">
+                                        <option value="">--Select--</option>
+                                        <option value="CLIENT MAKER">CLIENT MAKER</option>
+                                        <option value="CLIENT CHECKER">CLIENT CHECKER</option>
+                                        <option value="CLIENT ADMIN">CLIENT ADMIN</option>
+                                        <option value="MYND MAKER">MYND MAKER</option>
+                                        <option value="MYND CHECKER">MYND CHECKER</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="col-md-12">
+                            <div class="pull-left"> <input type="reset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" /> </div>
+                            <div class="pull-left"> <input id="btnSearch" type="button" class="btn btn-primary BtnBlueLg BtnWidth150" value="Search" /> </div>
+                        </div>
+                        <div class="clear20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 pd-right acdd">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- THE CALENDAR -->
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- qTip -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+
+    <!-- Full Calendar -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#txtSearchDueDate,#txtSearchPayDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+            });
+            $("#spnPayDate").click(function () {
+                $('#txtSearchPayDate').datepicker('show');
+            });
+            $("#spnDueDate").click(function () {
+                $('#txtSearchDueDate').datepicker('show');
+            });
+            $("#btnSearch").click(function () {
+                $('#calendar').fullCalendar('refetchEvents');
+            });
+
+            $('#calendar').fullCalendar({
+                header:
+                {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                buttonText: {
+                    today: 'today',
+                    month: 'month',
+                    week: 'week',
+                    day: 'day'
+                },
+
+                events: function (start, end, timezone, callback) {
+
+                    var CalendarType = '@ViewBag.CalendarType';
+                    var PayDate = $("#txtSearchPayDate").val();
+                    var DueDate = $("#txtSearchDueDate").val();
+                    var Event = $("#ddlSearchEvent").val();
+                    var FileType = "";
+                    $.ajax({
+                        url: "@Url.RouteUrl("GetCalendarData")",
+                        type: "GET",
+                        dataType: "JSON",
+                        data: { CalendarType: CalendarType, PayDate: PayDate, DueDate: DueDate, Event: Event, FileType: FileType},
+                        success: function (result) {
+                            var events = [];
+
+                            $.each(result, function (i, data) {
+                                events.push(
+                                    {
+                                        title: data.Title,
+                                        description: data.Desc,
+                                        start: moment(data.Start_Date).format('YYYY-MM-DD'),
+                                        end: moment(data.End_Date).format('YYYY-MM-DD'),
+                                        backgroundColor: data.BackColor,
+                                        borderColor: data.BackColor
+                                    });
+                            });
+
+                            callback(events);
+                        }
+                    });
+                },
+
+                eventRender: function (event, element) {
+                    element.qtip(
+                        {
+                            content: event.description
+                        });
+                },
+                editable: false
+            });
+        });
+        function BindUser(value) {
+            var Event = value;
+            var ddlUser = $("#ddlSearchUser");
+            ddlUser.empty().append($('<option></option>').val("0").html("Please wait..."));
+            if (Event != "") {
+                $.get("@Url.RouteUrl("GetUserByRole")", { Role: Event }, function (response) {
+                    if (response.IsSuccess) {
+                        ddlUser.empty().append($('<option></option>').val("0").html("-- Select --"));
+                        var ds = $.parseJSON(response.Data);
+                        if (ds.length > 0) {
+                            $.each(ds, function () {
+                                ddlUser.append($('<option></option>').val(this.UID).html(this.USERID));
+                            });
+                        }
+                    }
+                });
+            }
+            else {
+                ddlUser.html('').append($('<option></option>').val("0").html("-- first select a Event --"));
+            }
+        }
+    </script>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myDIV");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+                $('.acdd').removeClass('col-md-12').addClass('col-md-8');
+            } else {
+                x.style.display = "none";
+                $('.acdd').removeClass('col-md-8').addClass('col-md-12');
+            }
+        }
+    </script>
+}
+

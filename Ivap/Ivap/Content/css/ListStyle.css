@@ -1,0 +1,127 @@
+.Listtree { margin: 2% auto;}
+.Listtree ul { margin: 4px auto; margin-left: 6px; border-left: 1px dashed #dfdfdf;}
+.Listtree li { padding: 8px 18px; cursor: pointer; vertical-align: middle; border:1px solid #ccc;max-height: 200px; height:300px;overflow-y: scroll;margin-bottom:20px; word-break:break-all;}
+.Listtree li:first-child { border-radius: 3px 3px 0 0;}
+.Listtree li:last-child { border-radius: 0 0 3px 3px;}
+.Listtree li ul li{border:none;height:auto;padding: 0px; overflow:hidden;margin:5px 0px;}
+.Listtree .active,
+.active li { background: #efefef;}
+.Listtree label { cursor: pointer;}
+.Listtree input[type=checkbox] { margin: -2px 6px 0 0px;}
+.has > label { color: #000; }
+.counter-check > label{width:400px;display: contents;}
+.Listtree .total { color: #e13300;}
+/* tree-view structure css starts */
+.tree-view{height: auto; max-height: 370px; overflow: auto; width: 100%;text-align:left;}
+.tree-view ul{padding: 0 0px 0 25px;}
+.tree-view ul > li {}
+.tree-view > ul.checktree-root, ul#tree ul {list-style: none;}
+.tree-view > ul.checktree-root label {font-weight: normal;position: relative;}
+.tree-view > ul.checktree-root label input {position: relative;top: 2px;left: -5px;}
+.main-explore { border-right: 1px solid #ccc; padding: 2px;}
+/* tree-view structure css ends */
+/* scrollbar css starts */
+.listblock { max-width:500px!important;padding: 8px 22px!important;}
+.checklist-block{height: auto; *margin: 0 3px 10px;max-height: 100px; max-width: 381px; overflow-y: auto; padding: 0 5px;width: 100%;}
+.checkscroll-block ul{height: auto; margin: 0 3px 10px;max-height: 45px; max-width: 500px; overflow-y: scroll; padding: 0 5px;width: 100%;}
+/*tbody {display:block;max-height: 369px;overflow-y: auto;width: 100%;}*/
+.databd{height:auto; *margin: 0 3px 10px;max-height: 469px; overflow-y: auto; padding: 0 5px;width: 100%;}
+.databd > table > tr > td > label{text-align:left;}
+.conmax{line-height: 22px;width: 285px;}
+.scrollbox3{}
+.track3 { width: 10px; background: rgba(0, 0, 0, 0); margin-right: 2px; border-radius: 10px;  -webkit-transition: background 250ms linear;
+  transition: background 250ms linear;}
+.track3:hover,
+.track3.dragging { background: #d9d9d9;  background: rgba(0, 0, 0, 0.15);}
+.handle3 { width: 7px; right: 0; background: #999; background: rgba(0, 0, 0, 0.4); border-radius: 7px; -webkit-transition: width 250ms;
+    transition: width 250ms;}
+.track3:hover .handle3,
+.track3.dragging .handle3 { width: 10px;}
+.loc-map { background: url(../images/location-map.png); background-repeat: no-repeat; background-position: left center; }
+.map-outer { width:562px; height:400px; }
+@media only screen and (min-width: 1200px)
+.grid-tree {
+    width: 24%;
+}
+@media only screen and (min-width: 992px)
+.grid-tree {
+    width: 24%;
+}
+/* scrollbar css ends */
+/* file-explorer css starts */
+.tabinner-explorer{margin:5px 0px;font-family:Arial, Helvetica, sans-serif;}
+.main-explore{border-right:1px solid #ccc;padding:2px;}
+.main-explore > div > label{font-family:Arial, Helvetica, sans-serif; font-size:0.7vw;color:#666666;}
+.explore-tab{font-size:0.8vw;}
+.icon-ex{}
+.ex{margin-right:3px;}
+.exm{margin-right:4px;}
+.cpy-icon{background:url(../images/cpy-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.paste-icon{background:url(../images/paste-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.cut-icon{background:url(../images/cut-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.det-icon{background:url(../images/delete-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.folder-icon{background:url(../images/folder-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.dowld-icon{background:url(../images/download-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.upld-icon{background:url(../images/upload-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.renm-icon{background:url(../images/rename-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.op-icon{background:url(../images/open-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.preview-icon{background:url(../images/pre-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.zipfolder-icon{background:url(../images/zip-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.credit-icon{background:url(../images/cred-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.service-icon{background:url(../images/tax-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.filterexplo-icon{background:url(../images/filter-explorer-icon.png);width:30px; height:30px;display:block;cursor:pointer;}
+.mgfl{margin-left:5px;}
+.main-explore > ul {list-style:none;font-family: Arial, Helvetica, sans-serif;font-size: 0.8vw;color: #666666;margin:0px; padding:0px;}
+.multi-file{margin:1px 2px; padding:0px;float:left;}
+.multi-file > label{margin:0px 5px; padding:0px;}
+/* rightclick small-icon css starts */
+.sml_cpy-icon{background:url(../images/smcpy-icon.png);width:18px; height:18px;display:block;}
+.sml_paste-icon{background:url(../images/smpaste-icon.png);width:18px; height:18px;display:block;}
+.sml_cut-icon{background:url(../images/smcut-icon.png);width:18px; height:18px;display:block;}
+.sml_det-icon{background:url(../images/smdelete-icon.png);width:18px; height:18px;display:block;}
+.sml_folder-icon{background:url(../images/smfolder-icon.png);width:18px; height:18px;display:block;}
+.sml_dowld-icon{background:url(../images/smdownload-icon.png);width:18px; height:18px;display:block;}
+.sml_upld-icon{background:url(../images/smupload-icon.png);width:18px; height:18px;display:block;}
+.sml_renm-icon{background:url(../images/smrename-icon.png);width:18px; height:18px;display:block;}
+.sml_op-icon{background:url(../images/smopen-icon.png);width:18px; height:18px;display:block;}
+.sml_preview-icon{background:url(../images/smpre-icon.png);width:18px; height:18px;display:block;}
+.sml_zipfolder-icon{background:url(../images/smzip-icon.png);width:18px; height:18px;display:block;}
+.sml_credit-icon{background:url(../images/smcred-icon.png);width:18px; height:18px;display:block;}
+.sml_delete-icon{background:url(../images/smdelete-icon.png);width:18px; height:18px;display:block;}
+.sml_service-icon{background:url(../images/smtax-icon.png);width:18px; height:18px;display:block;}
+.rtclick-tab > li > a > label {font-size:12px; color:#333;margin-left:20px;cursor:pointer;}
+.rtclick-tab > li > a > label:hover{color:#4d85a4;}
+/* rightclick small-icon css ends */
+.middle-section{margin-top:10px;}
+.bodbtt{border-bottom:2px solid #ccc;-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s ; -webkit-appearance: none;  -moz-appearance: none; appearance: none;background-color: #f5f6f7;}
+.middle-section > div > label{font-family:Arial, Helvetica, sans-serif; font-size:0.9vw;color:#666666;text-align:center;}
+.large-fd{background:url(../images/lg-folder.png);width:96px; height:96px;display:block;cursor:pointer;}
+.tooltext:hover{background-color:#e5f3ff;border-radius:3px;}
+.large-fd2{background:url(../images/lg-folder2.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-search{background:url(../images/lg-search.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-zip{background:url(../images/lg-zip.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-docu{background:url(../images/lg-word.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-wrd{background:url(../images/lg-doc.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-pdf{background:url(../images/lg-pdf.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-pdfload{background:url(../images/lg-pdf2.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-ppt{background:url(../images/lg-ppt.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-pptx{background:url(../images/lg-pptx.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-xls{background:url(../images/lg-xls.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-xlsx{background:url(../images/lg-xlsx.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-wall{background:url(../images/lg-wallpaper.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-jeepg{background:url(../images/lg-jeepg.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-peeng{background:url(../images/lg-peeng.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-mp4{background:url(../images/lg-mp4.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-giif{background:url(../images/lg-giif.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-vsd{background:url(../images/lg-vsd.png);width:96px; height:96px;display:block;cursor:pointer;}
+.large-credit{background:url(../images/lg-credit.png);width:96px; height:96px;display:block;cursor:pointer;}
+.cut-icon:disabled { background: #dddddd;}
+.toolbar-btn{ opacity: 0.4;}
+.tooltext{text-align:center;}
+.crumb{padding:0px;color:#333;background-color: #fff;border: 1px solid #ccc;}
+.breadcrumb-item{color:#333!important;}
+.crumb > li > a{padding:3px 5px;color:#4d85a4;font-size:13px;}
+.icon-folder{background:url(../images/nav-icon.png);width:20px;height:20px;}
+.breadcrumb > li + li::before { padding: 0px 5px; color: #ccc;background:url(../images/nav-arr.png);background-repeat:no-repeat;width:5px; 
+ height:7px; content:close-quote;}
+/* file-explorer css starts */

@@ -1,0 +1,451 @@
+﻿@model Ivap.Areas.Master.Models.CompanyModel
+@*@using Idea.Repository;*@
+@{
+    ViewBag.Title = "Manage Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="ContentRightMain">*@
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewCompany", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+
+<div id="dvCompanyDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a id="atab1" href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <div class="horizontalscroll">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            @*<td><label>@Model.EID_TEXT</label> </td>
+                                                <td><span id="lblEntity"> </span></td>*@
+                                            <td> <label>@Model.COMP_NAME_TEXT</label> </td>
+                                            <td><span id="lblCOMP_NAME"></span></td>
+                                            <td><label>@Model.COMP_CODE_TEXT</label></td>
+                                            <td> <span id="lblCOMP_CODE"> </span></td>
+                                        </tr>
+                                        <tr>
+
+                                            <td> <label>@Model.COMP_ADDR1_TEXT</label> </td>
+                                            <td><span id="lblCOMP_ADDR1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_ADDR2_TEXT</label> </td>
+                                            <td><span id="lblCOMP_ADDR2"></span></td>
+                                            <td> <label>@Model.COMP_CITY_TEXT</label> </td>
+                                            <td><span id="lblCOMP_CITY"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_STATE_TEXT</label> </td>
+                                            <td><span id="lblCOMP_STATE"></span></td>
+                                            <td> <label>@Model.COMP_PIN_TEXT</label> </td>
+                                            <td><span id="lblCOMP_PIN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_CLASS_TEXT</label> </td>
+                                            <td><span id="lblCOMP_CLASS"></span></td>
+                                            <td> <label>@Model.COMP_PANNO_TEXT</label> </td>
+                                            <td><span id="lblCOMP_PANNO"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_TANNO_TEXT</label> </td>
+                                            <td><span id="lblCOMP_TANNO"></span></td>
+                                            <td> <label>@Model.COMP_TDSCIRCLE_TEXT</label> </td>
+                                            <td><span id="lblCOMP_TDSCIRCLE"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_FNAME_TEXT</label> </td>
+                                            <td><span id="lblSIGN_FNAME"></span></td>
+                                            <td> <label>@Model.SIGN_LNAME_TEXT</label> </td>
+                                            <td><span id="lblSIGN_LNAME"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_ADDR1_TEXT</label> </td>
+                                            <td><span id="lblSIGN_ADDR1"></span></td>
+                                            <td> <label>@Model.SIGN_ADDR2_TEXT</label> </td>
+                                            <td><span id="lblSIGN_ADDR2"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_CITY_TEXT</label> </td>
+                                            <td><span id="lblSIGN_CITY"></span></td>
+                                            <td> <label>@Model.SIGN_DSG_TEXT</label> </td>
+                                            <td><span id="lblSIGN_DSG"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_STATE_TEXT</label> </td>
+                                            <td><span id="lblSIGN_STATE"></span></td>
+                                            <td> <label>@Model.SIGN_PIN_TEXT</label> </td>
+                                            <td><span id="lblSIGN_PIN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_PLACE_TEXT</label> </td>
+                                            <td><span id="lblSIGN_PLACE"></span></td>
+                                            <td> <label>@Model.SIGN_DATE_TEXT</label> </td>
+                                            <td><span id="lblSIGN_DATE"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.RETIRE_AGE_TEXT</label> </td>
+                                            <td><span id="lblRETIRE_AGE"></span></td>
+                                            <td> <label>@Model.EMP_CODE_GEN_TEXT</label> </td>
+                                            <td><span id="lblEMP_CODE_GEN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.EMP_CODE_PREFIX_TEXT</label> </td>
+                                            <td><span id="lblEMP_CODE_PREFIX"></span></td>
+                                            <td> <label>@Model.EMP_CODE_LEN_TEXT</label> </td>
+                                            <td><span id="lblEMP_CODE_LEN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_URL_TEXT</label> </td>
+                                            <td><span id="lblSCOMP_URL"></span></td>
+                                            <td> <label>@Model.ISACTIVE_TEXT</label> </td>
+                                            <td><span id="lblSTATUS"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<div id="dvCompanyAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Master</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateCompany", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+            {@Html.AntiForgeryToken()
+            <div class="modal-body horizontalscroll">
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">@Model.COMP_NAME_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_NAME, new { @class = "form-control", @placeholder = @Model.COMP_NAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_NAME)
+                    </div>
+
+
+                    @Html.HiddenFor(m => m.CompID)
+                    <label for="inputEmail3" class="col-sm-2 control-label">@Model.COMP_CODE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_CODE, new { @class = "form-control", @placeholder = @Model.COMP_CODE_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_CODE)
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_ADDR1_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_ADDR1, new { @class = "form-control", @placeholder = @Model.COMP_ADDR1_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_ADDR1)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_ADDR2_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_ADDR2, new { @class = "form-control", @placeholder = @Model.COMP_ADDR2_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_ADDR2)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_CITY_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_CITY, new { @class = "form-control", @placeholder = @Model.COMP_CITY_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_CITY)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_STATE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.COMP_STATE, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = @Model.COMP_STATE_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_STATE)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_PIN_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_PIN, new { @class = "form-control", @placeholder = @Model.COMP_PIN_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_PIN)
+                    </div>
+                    <label class="col-sm-2 control-label">@Model.COMP_CLASS_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.COMP_CLASS, new SelectList(Model.ClassList, "Value", "Text", "0"), new { @class = "form-control selectbdr" })
+                        @Html.ValidationMessageFor(m => m.COMP_CLASS)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-sm-2 control-label">@Model.COMP_PANNO_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_PANNO, new { @class = "form-control", @placeholder = @Model.COMP_PANNO_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_PANNO)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_TANNO_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_TANNO, new { @class = "form-control", @placeholder = @Model.COMP_TANNO_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_TANNO)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_TDSCIRCLE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_TDSCIRCLE, new { @class = "form-control", @placeholder = @Model.COMP_TDSCIRCLE_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_TDSCIRCLE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_FNAME_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_FNAME, new { @class = "form-control", @placeholder = @Model.SIGN_FNAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_FNAME)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_LNAME_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_LNAME, new { @class = "form-control", @placeholder = @Model.SIGN_LNAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_LNAME)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_FATHER_NAME_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_FATHER_NAME, new { @class = "form-control", @placeholder = @Model.SIGN_FATHER_NAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_FATHER_NAME)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_ADDR1_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_ADDR1, new { @class = "form-control", @placeholder = @Model.SIGN_ADDR1_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_ADDR1)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_ADDR2_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_ADDR2, new { @class = "form-control", @placeholder = @Model.SIGN_ADDR2_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_ADDR2)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_CITY_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_CITY, new { @class = "form-control", @placeholder = @Model.SIGN_CITY_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_CITY)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_DSG_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_DSG, new { @class = "form-control", @placeholder = @Model.SIGN_DSG_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_DSG)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_STATE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.SIGN_STATE, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = @Model.SIGN_STATE_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_STATE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_PIN_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_PIN, new { @class = "form-control", @placeholder = @Model.SIGN_PIN_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_PIN)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_PLACE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_PLACE, new { @class = "form-control", @placeholder = @Model.SIGN_PLACE_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_PLACE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_DATE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_DATE, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                        @Html.ValidationMessageFor(m => m.SIGN_DATE)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.RETIRE_AGE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.RETIRE_AGE, new { @class = "form-control", @placeholder = @Model.RETIRE_AGE_TEXT })
+                        @Html.ValidationMessageFor(m => m.RETIRE_AGE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.EMP_CODE_PREFIX_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.EMP_CODE_PREFIX, new { @class = "form-control", @placeholder = @Model.EMP_CODE_PREFIX_TEXT })
+                        @Html.ValidationMessageFor(m => m.EMP_CODE_PREFIX)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.EMP_CODE_LEN_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.EMP_CODE_LEN, new { @class = "form-control", @placeholder = @Model.EMP_CODE_LEN_TEXT })
+                        @Html.ValidationMessageFor(m => m.EMP_CODE_LEN)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.Comp_Logo_TEXT</label>
+                    <div class="col-sm-4">
+                        <input type="file" name="files" id="Comp_Upload" target-control="Comp_Logo" target-control-orignal="RFP_DOCUMENT_NAME">
+                        @Html.HiddenFor(m => m.Comp_Logo)
+                        @Html.ValidationMessageFor(m => m.Comp_Logo)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_URL_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_URL, new { @class = "form-control", @placeholder = @Model.COMP_URL_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_URL)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.EMP_CODE_GEN_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(m => m.EMP_CODE_GEN)
+                        @Html.ValidationMessageFor(m => m.EMP_CODE_GEN)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.ISACTIVE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="clear"></div>
+            <div class="col-md-12">
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+            </div>
+            <div class="clear20"></div>
+        }
+        </div>
+        <!-- Modal content-->
+    </div>
+</div>
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Log</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                            <label class="headtag">Total Success</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotSuccess" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label class="headtag">Total Loss</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotFailed" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="reset_btn" align="right">
+                                <input type="hidden" id="hdnresultFile" />
+                                <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    @*<script src="~/Content/js/enscroll-0.6.2.min.js"></script>*@
+    <script type="text/javascript">
+        var FilesUploadURL = "@Url.RouteUrl("FilesUpload")"
+        var GetCompanyURL = "@Url.RouteUrl("GetCompany")"
+        var GetCompHisURL = "@Url.RouteUrl("GetCompanyHistory")"
+        var DownloadAllCompanyURL = '@Url.RouteUrl("DownloadAllCompany")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadCompanyDetailsURL = "@Url.RouteUrl("UploadCompanyDetails")"
+        var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var DownLoadResultFileURL = '@Url.RouteUrl("DownLoadResultFileForExcel")'
+
+        var Model = @Html.Raw(Json.Encode(Model));
+
+    </script>
+
+    @Scripts.Render("~/Scripts/CompanyScript")
+
+
+}
+

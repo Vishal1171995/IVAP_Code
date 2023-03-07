@@ -1,0 +1,349 @@
+﻿@model Ivap.Areas.Configuration.Models.CalendarSetupModel
+@using Ivap.Repository;
+@{
+    ViewBag.Title = "CalendarSetup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+<!-- qTip -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" />
+
+<!-- Full Calendar -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.print.css" media="print" />
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @if (AuthorizationRepo.IsValidAction("CalendarSetup", "CreateAction"))
+        {
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+    </div>
+    <div class="panel-heading"><h3><strong>Calendar Setup</strong></h3></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="">
+                <div class="panel panel-default nobdr">
+                    <div id="exTab3" class="cch-tab mdm-tab">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#1b" class="courshow" data-toggle="tab"> <i class="fa fa-list-alt"> </i> List View </a> </li>
+                            <li><a href="#2b" class="courhide" data-toggle="tab" style="margin-right:0;"><i class="fa fa-calendar"></i> Calendar View</a></li>
+                        </ul>
+                        <div class="tab-content clearfix">
+
+                            <div class="tab-pane active" id="1b">
+                                @*<div class="col-md-12">*@
+                                <div class="TableOuterDiv table-responsive">
+                                    <div id="Kgrid"></div>
+                                </div>
+                                @*</div>*@
+                            </div>
+                            <div class="tab-pane" id="2b" style=" display: block;overflow:hidden;">
+                                <div class="clear"></div>
+                                <button onclick="myFunction()" class="btn  btn-primary btn-sm"> <i class="fa fa-filter"> </i> </button>
+                                <div class="clear10"></div>
+                                    <div class="col-md-4 col-sm-4 col-xs-12 pd-0" id="myDIV">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading pd-0 mg-top7">
+                                                <label>Filter</label>
+                                            </div>
+                                            <div class="panel-body pd-0">
+                                                <div class="col-sm-12 col-md-12 pd-6">
+                                                    <div class="clear10"></div>
+                                                    <div class="row form-group">
+                                                        <label for="inputbox" class="col-sm-4 control-label">Calendar Type</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="nobdr">
+                                                                @Html.DropDownList("SearchCalendarType", new SelectList(Model.CalendarTypeList, "Value", "Text", "0"), new { @class = "form-control" })
+                                                                @*<input class="form-control" type="text" placeholder="MS7765">*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label for="inputbox" class="col-sm-4 control-label">Pay Date</label>
+                                                        <div class="col-sm-8">
+                                                            <div class='input-group date mg-0' id='datetimepicker1'>
+                                                                <input id="txtSearchPayDate" type='text' class="form-control" />
+                                                                <span id="spnPayDate" class="input-group-addon">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label for="inputbox" class="col-sm-4 control-label">Due Date</label>
+                                                        <div class="col-sm-8">
+                                                            <div class='input-group date mg-0' id='datetimepicker1'>
+                                                                <input id="txtSearchDueDate" type='text' class="form-control" />
+                                                                <span id="spnDueDate" class="input-group-addon">
+                                                                    <i class="fa fa-calendar"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <label for="inputbox" class="col-sm-4 control-label">Resoponsibility</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="nobdr">
+                                                                <select id="ddlSearchEvent" class="form-control" title="Select Resoponsibility">
+                                                                    <option value="">--Select--</option>
+                                                                    <option value="CLIENT MAKER">CLIENT MAKER</option>
+                                                                    <option value="CLIENT CHECKER">CLIENT CHECKER</option>
+                                                                    <option value="CLIENT ADMIN">CLIENT ADMIN</option>
+                                                                    <option value="MYND MAKER">MYND MAKER</option>
+                                                                    <option value="MYND CHECKER">MYND CHECKER</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="clear"></div>
+                                                    <div class="col-md-12">
+                                                        <div class="pull-left"> <input type="reset" id="btnSearchreset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" /> </div>
+                                                        <div class="pull-left"> <input type="submit" id="btnSearch" class="btn btn-primary BtnBlueLg BtnWidth150" value="Search" /> </div>
+                                                    </div>
+                                                    <div class="clear20"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                <div class="col-md-8 pd-right acdd">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div id="calendar"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div id="dvDivisionDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Calendar Setup Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td><label>Entity Name</label> </td>
+                                        <td><span id="lblENTITY_NAME"> </span></td>
+                                        <td><label>Pay Date</label></td>
+                                        <td> <span id="lblPAY_DATE"> </span></td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td><label>Calendar Type</label></td>
+                                        <td> <span id="lblCalendarType"> </span></td>
+                                        <td><label>Description</label></td>
+                                        <td> <span id="lblDESC"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> <label>Due Date</label> </td>
+                                        <td><span id="lbl_Due_Date"></span></td>
+                                        <td><label>Resoponsibility</label></td>
+                                        <td> <span id="lblEVENT"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> <label>Is Active</label> </td>
+                                        <td><span id="lblSTATUS"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<div id="dvCalendarSetupAddUpdate" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Calendar Setup</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateCalendarSetup", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+                    <div class="row form-group">
+                        @Html.HiddenFor(m => m.TID)
+                        <label for="inputEmail3" class="col-sm-2 control-label">Pay Date<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.PAY_DATE, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                            @Html.ValidationMessageFor(m => m.PAY_DATE)
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 control-label">Calendar Type<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+
+                            @Html.DropDownListFor(m => m.CALENDAR_TYPE, new SelectList(Model.CalendarTypeList, "Value", "Text", "0"), new { @class = "form-control", @style = "border:1px solid #ccc" })
+                            @Html.ValidationMessageFor(m => m.CALENDAR_TYPE)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Description<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextAreaFor(m => m.DESCRIPTION, new { @class = "form-control", @placeholder = "Description", @Col = '2', @Row = '5' })
+                            @Html.ValidationMessageFor(m => m.DESCRIPTION)
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 control-label">Due Date<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.DUE_DATE, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                            @Html.ValidationMessageFor(m => m.DUE_DATE)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Resoponsibility<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.EVENT,
+                                new SelectList(new List<SelectListItem> {
+                                    new SelectListItem { Text = "--Select--", Value = ""},
+                                    new SelectListItem { Text = "CLIENT MAKER", Value = "CLIENT MAKER"},
+                                    new SelectListItem { Text = "CLIENT CHECKER", Value = "CLIENT CHECKER"},
+                                    new SelectListItem { Text = "CLIENT ADMIN", Value = "CLIENT ADMIN"},
+                                    new SelectListItem { Text = "MYND MAKER", Value = "MYND MAKER"},
+                                    new SelectListItem { Text = "MYND CHECKER", Value = "MYND CHECKER"},
+
+                                }, "Value", "Text"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EVENT)
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 control-label">File Type<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.FILE_TYPE,
+                                new SelectList(new List<SelectListItem> {
+                                    new SelectListItem { Text = "--Select--", Value = ""},
+                                    new SelectListItem { Text = "Payroll Input", Value = "Payroll Input"},
+                                    new SelectListItem { Text = "Payroll Output", Value = "Payroll Output"},
+
+                                }, "Value", "Text"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.FILE_TYPE)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Activity Category</label>
+                        <div class="col-sm-4">
+                            @Html.DropDownListFor(m => m.ActivityCategory,
+                                new SelectList(new List<SelectListItem> {
+                                    new SelectListItem { Text = "--Select--", Value = ""},
+                                    new SelectListItem { Text = "First Cut Input Collection", Value = "First Cut Input Collection"},
+                                    new SelectListItem { Text = "Clarification on input", Value = "Clarification on input"},
+                                    new SelectListItem { Text = "Additional input", Value = "Additional input"},
+                                    new SelectListItem { Text = "Delivery of first cut output", Value = "Delivery of first cut output"},
+                                    new SelectListItem { Text = "Observation on first cut output", Value = "Observation on first cut output"},
+                                    new SelectListItem { Text = "Second cut input", Value = "Second cut input"},
+                                    new SelectListItem { Text = "Third cut input", Value = "Third cut input"},
+                                    new SelectListItem { Text = "Final cut output delivery", Value = "Final cut output delivery"},
+                                    new SelectListItem { Text = "Payroll Signoff", Value = "Payroll Signoff"},
+                                    new SelectListItem { Text = "Delivery of Report pack", Value = "Delivery of Report pack"},
+                                    new SelectListItem { Text = "Salary slip distribution", Value = "Salary slip distribution"},
+                                    new SelectListItem { Text = "Delivery of reports to complience team", Value = "Delivery of reports to complience team"},
+
+                                }, "Value", "Text"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ActivityCategory)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">Is Active</label>
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(m => m.IsActive)
+                        </div>
+                    </div>
+
+
+                    <!-- /.box-body -->
+                    <div class="clear20"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                    </div>
+                    <div class="clear20"></div>
+                </div>
+            }
+        </div>
+
+
+        <!-- Modal content-->
+    </div>
+</div>
+<div id="dvConfirm" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Confirmation!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvOPMsg" style="display:block;text-align:center;">
+                    Are you sure you want to delete?
+                </div>
+                <div class="clear20"></div>
+                <div id="dvPOButtons" style="text-align:center;">
+                    <input type="button" class="btn btn-primary BtnBlueLg" value="OK" id="btnOPok" />
+                    <input type="button" data-dismiss="modal" class="btn btn-primary BtnBlueLg" value="Cancel" id="btnOPCancel" />
+                </div>
+                <div id="dvLoader" style="text-align:center;display:none;">
+                    <img src="../Images/preloader22.gif" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- qTip -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+
+    <!-- Full Calendar -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.9.1/fullcalendar.min.js"></script>
+    <script type="text/javascript">
+       // var FilesUploadURL = "@Url.RouteUrl("FilesUpload")"
+        var GetCalendarSetupURL = "@Url.RouteUrl("GetCalendarSetup")"
+        var GetCalendar_Setup_HisURL = "@Url.RouteUrl("GetCalendarSetupHistory")"
+        var DeleteCalendarSetupURL = "@Url.RouteUrl("DeleteCalendarSetup")"
+        var GetCalendarSetupDataURL = "@Url.RouteUrl("GetCalendarSetupData")"
+    </script>
+
+    @Scripts.Render("~/Scripts/CalendarSetupScript")
+}
+
+

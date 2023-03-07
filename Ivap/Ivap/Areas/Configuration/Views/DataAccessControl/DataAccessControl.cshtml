@@ -1,0 +1,254 @@
+﻿@model Ivap.Areas.Configuration.Models.DataAccessControlModel
+@using Ivap.Repository;
+@{
+    ViewBag.Title = "DataAccessControl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .k-dropdown {
+        width: 330px !important;
+    }
+
+    .btn {
+        border: none;
+        outline: none;
+        padding: 10px 16px;
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    /* Style the active class (and buttons on mouse-over) */
+    .active1 {
+        background-color: #015b9f;
+        color: white;
+    }
+</style>
+
+<style>
+    /*  bhoechie tab */
+    div.bhoechie-tab-container {
+        z-index: 10;
+        background-color: #ffffff;
+        padding: 0 !important;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        border: 1px solid #ddd;
+        -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        background-clip: padding-box;
+        opacity: 0.97;
+        filter: alpha(opacity=97);
+    }
+
+    div.bhoechie-tab-menu {
+        padding-right: 10px;
+        padding-left: 0;
+        padding-bottom: 0;
+    }
+
+        div.bhoechie-tab-menu div.list-group {
+            margin-bottom: 0;
+        }
+
+            div.bhoechie-tab-menu div.list-group > a {
+                margin-bottom: 0;
+            }
+
+                div.bhoechie-tab-menu div.list-group > a .glyphicon,
+                div.bhoechie-tab-menu div.list-group > a .fa {
+                    color: #015b9f;
+                }
+
+                div.bhoechie-tab-menu div.list-group > a:first-child {
+                    border-top-right-radius: 0;
+                    -moz-border-top-right-radius: 0;
+                }
+
+                div.bhoechie-tab-menu div.list-group > a:last-child {
+                    border-bottom-right-radius: 0;
+                    -moz-border-bottom-right-radius: 0;
+                }
+
+                div.bhoechie-tab-menu div.list-group > a.active,
+                div.bhoechie-tab-menu div.list-group > a.active .glyphicon,
+                div.bhoechie-tab-menu div.list-group > a.active .fa {
+                    background-color: #015b9f;
+                    background-image: #015b9f;
+                    color: #ffffff;
+                }
+
+                    div.bhoechie-tab-menu div.list-group > a.active:after {
+                        content: '';
+                        position: absolute;
+                        left: 100%;
+                        top: 50%;
+                        margin-top: -13px;
+                        border-left: 0;
+                        border-bottom: 13px solid transparent;
+                        border-top: 13px solid transparent;
+                        border-left: 10px solid #015b9f;
+                    }
+
+    div.bhoechie-tab-content {
+        background-color: #ffffff;
+        /* border: 1px solid #eeeeee; */
+        /*padding-left: 20px;
+        padding-top: 10px;*/
+    }
+
+    div.bhoechie-tab div.bhoechie-tab-content:not(.active) {
+        display: block;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">	<h2>Data Access Control</h2> </div>
+    <div class="panel-body">
+        <div class="form-group row">
+            <div class="clear20"></div>
+            <div class="col-md-7 col-md-offset-2">
+                <label class="col-sm-2 col-form-label mg-top7">User Id : </label>
+                <div class="col-sm-7">
+                    @{
+                        string sel = Convert.ToString(ViewBag.SelectedValue);
+                    }
+
+                    @Html.DropDownListFor(m => m.UserID, new SelectList(Model.UserList, "Value", "Text", 0), new { @class = "form-control selectbdr" })
+                    @Html.ValidationMessageFor(m => m.UserID)
+                </div>
+                <div class="col-md-3">
+                    @if (AuthorizationRepo.IsValidAction("DataAccessControl", "CreateAction"))
+                    {
+                        @*<button id="btnCopyToAnotherUser" type="button" class="btn btn-primary BtnBlueLg">Copy To Another User</button>*@
+                        <button id="btnCopyToAnotherUser" type="button" class="btn btn-primary btn-new">Copy To Another User</button>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body" style="padding-top:0px;padding-bottom:10px;">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu verticalscroll">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item text-center active MenuTable" attr-table="FileSetupList">
+                            <i class="fa fa-cog"></i> <br />File Setup
+                        </a>
+                        @foreach (var menu in ViewBag.MenuData)
+                        {
+                            <a href="#" class="list-group-item text-center MenuTable" attr-table="@menu["ROUTE"]">
+                                <i class="fa fa-cog"></i> <br />@menu["NAME"]
+                            </a>
+                        }
+                    </div>
+                </div>
+                @*<div class="col-12" style="text-align:right;">
+                        @if (AuthorizationRepo.IsValidAction("DataAccessControl", "CreateAction"))
+                        {
+                            <input type="button" id="btnSubmit" value="Submit" class="btn btn-primary BtnBlueLg" />
+                        }
+                    </div>*@
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 bhoechie-tab">
+                    <!-- flight section -->
+                    <div class="bhoechie-tab-content active">
+                        <center>
+                            <input type="hidden" id="TableName" />
+                            <input type="hidden" id="TableID" />
+                            <div id="Kgrid"></div>
+                        </center>
+                    </div>
+                    <div class="clear10"></div>
+                    <div class="col-12" style="text-align:right;">
+                        @if (AuthorizationRepo.IsValidAction("DataAccessControl", "CreateAction"))
+                        {
+                            <input type="button" id="btnSubmit" value="Submit" class="btn btn-primary BtnBlueLg" />
+                        }
+                    </div>
+                    <!-- train section onclick="SubmitAccessControl()"-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade PopUpMainDiv" id="myModal" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Copy To Another User</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">User<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        <select id="UserCopyRightList" class="form-control">
+                            <option value="0">All</option>
+                        </select>
+                        <input type="hidden" value="" id="hf_skill" />
+                    </div>
+                </div>
+
+                @*<label>User</label>
+                    <select id="UserCopyRightList" class="form-control">
+                        <option value="0">All</option>
+                    </select>
+                    <input type="hidden" value="" id="hf_skill" onclick="CopyRightSubmit()"/>*@
+            </div>
+            <div class="clear10"></div>
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary BtnBlueLg" id="btnCopyRight">Submit</button>
+                <button type="button" class="btn btn-primary BtnWhiteLg" data-dismiss="modal">Close</button>
+            </div>
+            <div class="clear20"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade PopUpMainDiv popupindex" id="dvError" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" id="ModalHeading"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnError"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+
+}
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetAccessControlURL = "@Url.RouteUrl("GetAccessControl")"
+        var AddUpdateDataAccessURL = "@Url.RouteUrl("AddUpdateDataAccess")"
+        var CopyRightUserURL = "@Url.RouteUrl("CopyRightUser")"
+        var CopyRightSubmitURL = "@Url.RouteUrl("CopyRightSubmit")"
+
+        var SelectedValue = '@(@ViewBag.SelectedValue)';
+
+    </script>
+    @Scripts.Render("~/Scripts/DataAccessControlScript")
+    
+
+}

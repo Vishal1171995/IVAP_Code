@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Master Meta Config";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>Master Meta Configuration</strong></h3></div>
+    <div class="panel-body">
+        <div class="pull-right VendorSiteBtnRightMain">
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        </div>
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+}

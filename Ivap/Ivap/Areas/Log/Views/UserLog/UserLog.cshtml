@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "UserLog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>User Log</strong></h3></div>
+    <div class="panel-body">
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            BindGrid();
+        });
+
+        var Kgrid = "";
+        function BindGrid() {
+            var url = '@Url.RouteUrl("UserLogDetail")';
+            var typepar = "";
+            if (Kgrid != "") {
+                $('#Kgrid').kendoGrid('destroy').empty();
+            }
+            Kgrid = $("#Kgrid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    transport: {
+                        read: {
+                            url: url,
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                        },
+                        parameterMap: function (data, type) {
+                            return JSON.stringify({
+                                page: data.page,
+                                pageSize: data.pageSize,
+                                skip: data.skip,
+                                take: data.take,
+                                sorting: data.sort === undefined ? null : data.sort,
+                                filter: data.filter === undefined ? null : data.filter
+                            });
+                        }
+                    },
+                    schema: {
+                        model: {
+                            fields: {
+                                TID: { type: "string" },
+                                LOC_CODE: { type: "string" },
+                                LOC_NAME: { type: "string" },
+                                METRO: { type: "string" },
+                                STATE_NAME: { type: "string" },
+                                STATUS: { type: "string" },
+                            }
+                        },
+                        data: function (data) {
+                            var res = JSON.parse(data.Data)
+                            if (data.IsSuccess) {
+                                if (res.Data.length > 0) {
+                                    return res.Data || [];
+                                }
+                            }
+                            else {
+                                FailResponse(data);
+                            }
+                        },
+
+                        total: function (data) {
+                            if (data.IsSuccess) {
+                                var res = JSON.parse(data.Data)
+                                if (res.Data.length > 0) {
+                                    return res.Total || [];
+                                }
+                            }
+                            else {
+                                //alert("data 2")
+                                //FailResponse(data);
+                            }
+                        }
+                    },
+                    pageSize: 10,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true
+                },
+                dataBound: ShowToolTip,
+                noRecords: true,
+                groupable: false,
+                resizable: true,
+                height: 400,
+                filterable: {
+                    //  extra: false,
+                    operators: {
+                        string: {
+                            eq: "Is equal to",
+                            neq: "Is not equal to",
+                            contains: "Contains",
+                            doesnotcontain: "Does not contain",
+                            startswith: "Starts with",
+                            endswith: "Ends with"
+                        }
+                    }
+                },
+
+                sortable: {
+                    mode: "multiple"
+                },
+                pageable: {
+                    pageSizes: true,
+                    refresh: true
+                },
+                columns: [
+                    { field: "Name", title: "Name", width: 200 },
+                    { field: "USERID", title: "User ID", width: 200 },
+                    { field: "USER_EMAIL", title: "Email", width: 200 },
+                    { field: "IP_ADDRESS", title: "IP Address", width: 200 },
+                    { field: "LOGIN_TIME", title: "Login Time", width: 200 },
+                    { field: "LOGOUT_TIME", title: "Log Out Time", width: 200 },
+                ]
+            });
+        }
+    </script>
+
+
+}
+
+

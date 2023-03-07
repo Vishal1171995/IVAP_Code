@@ -1,0 +1,54 @@
+﻿@model Ivap.Areas.Master.ViewModel.EntityOnBoardVM
+@{
+    ViewBag.Title = "Entity SetUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"> <h2>Entity Setup</h2> </div>
+    <div class="panel-body">
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            <div class="row">
+                <h3>Congratulation!!! Entity created successfully.</h3>
+                
+            </div>
+            <div class="clear20"></div>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table-borderless">
+                        <tr>
+                            <td><label class="mg-0">Entity Name</label></td>
+                            <td>@Model.EntityModel.ENTITY_NAME</td>
+                        </tr>
+                        <tr>
+                            <td><label class="mg-0">Entity Domain</label></td>
+                            <td>@Model.EntityModel.DOMAIN_NAME</td>
+                        </tr>
+                        <tr>
+                            <td><label class="mg-0">Entity Userid</label></td>
+                            <td>@Model.EntityUser.UserID</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="clear20"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="/" class="btn btn-primary BtnBlueLg BtnWidth150">Go To Home Page</a></td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+}
+

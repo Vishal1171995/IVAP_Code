@@ -1,0 +1,344 @@
+﻿@model Ivap.Areas.Master.ViewModel.EntityOnBoardVM
+@{
+    ViewBag.Title = "Entity Setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"> <h2>Entity Setup</h2> </div>
+    <div class="panel-body">
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            @using (Html.BeginForm("CreateEntity", "Entity", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div style="color:red;">
+                        @Html.ValidationSummary(true)
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="clear10"></div>
+                        <h4>Entity Detail</h4>
+                        <div class="clear10"></div>
+                        <div class="row">
+                            <div class="clear10"></div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="mg-0">Entity Name<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityModel.ENTITY_NAME, new { @class = "effect-16", @placeholder = "Eg Mynd" })
+                                    @Html.ValidationMessageFor(m => Model.EntityModel.ENTITY_NAME)
+                                    @*<input class="effect-16" type="text" placeholder="Mynd MS7765">*@
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="mg-0">Domain<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityModel.DOMAIN_NAME, new { @class = "effect-16", @placeholder = "Eg:mynd" })
+                                    @Html.ValidationMessageFor(m => Model.EntityModel.DOMAIN_NAME)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="mg-0">Currency<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.EntityModel.ENTITY_Currency, new SelectList(Model.CurrencyList, "Value", "Text", "0"), new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_Currency)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="mg-0">Date Format<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.EntityModel.DATE_FORMAT, new SelectList(
+                                      new List<Object>{
+                                           new { value = "" , text = "--Select--"  },
+                                           new { value = "dd/mm/yy" , text = "dd/mm/yy" },
+                                           new { value = "dd/mm/yyyy" , text = "dd/mm/yyyy"},
+                                           new { value = "dd-mm-yyyy" , text = "dd-mm-yyyy"},
+                                           new { value = "yyyy-mm-dd" , text = "yyyy-mm-dd"}
+                                        },"value","text"), new { @class = "selectpicker" })
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="mg-0">Address1<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityModel.ENTITY_ADDR1, new { @class = "effect-16", @placeholder = "Address Line1" })
+                                    @Html.ValidationMessageFor(m => Model.EntityModel.ENTITY_ADDR1)
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label class="mg-0">Address2</label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityModel.ENTITY_ADDR2, new { @class = "effect-16", @placeholder = "Address Line2" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">City<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityModel.ENTITY_CITY, new { @class = "effect-16", @placeholder = "Eg:New Delhi" })
+                                    @Html.ValidationMessageFor(m => Model.EntityModel.ENTITY_CITY)
+                                </div>
+
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">State<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.EntityModel.ENTITY_STATE, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_STATE)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">PIN<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityModel.ENTITY_PIN, new { @class = "effect-16", @placeholder = "Eg 122001" })
+                                    @Html.ValidationMessageFor(m => Model.EntityModel.ENTITY_PIN)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Country<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.EntityModel.ENTITY_Country, new SelectList(Model.CountryList, "Value", "Text", "0"), new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_Country)
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Services Availed<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.EntityModel.ENTITY_Services_Availed, new SelectList(Model.Services_Availed_List, "Value", "Text", "0"), new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(m => m.EntityModel.ENTITY_Services_Availed)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <label class="mg-0">Pay Period<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.EntityModel.ENTITY_Payperiod, new SelectList(
+                                      new List<Object>{
+                                           new { value = "" , text = "--Select--"  },
+                                           new { value = "Monthly" , text = "Monthly"},
+                                           new { value = "Fortnight" , text = "Fortnight"},
+                                           new { value = "Weekly" , text = "Weekly" },
+                                           new { value = "Daily" , text = "Daily"}
+                                      },"value","text"), new { @class = "selectpicker" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvWeeklyfr">
+                                <label class="mg-0">Weekly From<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.ENTITY_Payperiod_Weekly_Fr, new SelectList(
+                                      new List<Object>{
+                                           new { value = "" , text = "--Select--"  },
+                                           new { value = "Monday" , text = "Monday"},
+                                           new { value = "Tuesday" , text = "Tuesday"},
+                                           new { value = "Wednesday" , text = "Wednesday" },
+                                           new { value = "Thursday" , text = "Thursday"},
+                                           new { value = "Friday" , text = "Friday"},
+                                           new { value = "Saturday" , text = "Saturday"},
+                                           new { value = "Sunday" , text = "Sunday"}
+                                      },"value","text"), new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Weekly_Fr)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvWeeklyTo">
+                                <label class="mg-0">Weekly To<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.DropDownListFor(m => m.ENTITY_Payperiod_Weekly_To, new SelectList(
+                                      new List<Object>{
+                                           new { value = "" , text = "--Select--"  },
+                                           new { value = "Monday" , text = "Monday"},
+                                           new { value = "Tuesday" , text = "Tuesday"},
+                                           new { value = "Wednesday" , text = "Wednesday" },
+                                           new { value = "Thursday" , text = "Thursday"},
+                                           new { value = "Friday" , text = "Friday"},
+                                           new { value = "Saturday" , text = "Saturday"},
+                                           new { value = "Sunday" , text = "Sunday"}
+                                      },"value","text"), new { @class = "selectpicker" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Weekly_To)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvMonthlyFr">
+                                <label class="mg-0">Monthly From<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.ENTITY_Payperiod_Monthly_Fr, new { @class = "effect-16", @placeholder = "Eg 1" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Monthly_Fr)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvMonthlyTo">
+                                <label class="mg-0">Monthly To<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.ENTITY_Payperiod_Monthly_To, new { @class = "effect-16", @placeholder = "Eg 1" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Monthly_To)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvFortNightlyFr1">
+                                <label class="mg-0">First Fortnight From<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.ENTITY_Payperiod_Fortnightly_Fr1, new { @class = "effect-16", @placeholder = "Eg 1" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Fortnightly_Fr1)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvFortNightlyTo1">
+                                <label class="mg-0">First Fortnight To<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.ENTITY_Payperiod_Fortnightly_To1, new { @class = "effect-16", @placeholder = "Eg 1" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Fortnightly_To1)
+                                </div>
+                            </div>
+                            <div class="clear20"></div>
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvFortNightlyFr2">
+                                <label class="mg-0">Second Fortnight From<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.ENTITY_Payperiod_Fortnightly_Fr2, new { @class = "effect-16", @placeholder = "Eg 1" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Fortnightly_Fr2)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12" id="dvFortNightlyTo2">
+                                <label class="mg-0">Second Fortnight To<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.ENTITY_Payperiod_Fortnightly_To2, new { @class = "effect-16", @placeholder = "Eg 1" })
+                                    @Html.ValidationMessageFor(m => Model.ENTITY_Payperiod_Fortnightly_To2)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear20"></div>
+
+                        <hr />
+                        <div class="clear10"></div>
+                        <h4>Client Admin Details</h4>
+                        <div class="clear20"></div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">UserID<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityUser.UserID, new { @class = "effect-16", @placeholder = "Eg MyndAdmin" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.UserID)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">First Name<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityUser.FirstName, new { @class = "effect-16", @placeholder = "Eg:Smith" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.FirstName)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Last Name<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityUser.LastName, new { @class = "effect-16", @placeholder = "Eg:George" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.LastName)
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Email<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityUser.Email, new { @class = "effect-16", @placeholder = "Eg:Email.myndsol.com" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.Email)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear30"></div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Mobile Number<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.TextBoxFor(m => Model.EntityUser.MobileNo, new { @class = "effect-16", @placeholder = "Eg:9276646536" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.MobileNo)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Password<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.PasswordFor(m => Model.EntityUser.Password, new { @class = "effect-16", @placeholder = "Password" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.Password)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 col-xs-12">
+                                <label class="mg-0">Confirm Password<span class="text-red">*</span></label>
+                                <div class="TextBoxMainMain mg-0">
+                                    @Html.PasswordFor(m => Model.EntityUser.ConfirmPassword, new { @class = "effect-16", @placeholder = "Password" })
+                                    @Html.ValidationMessageFor(m => Model.EntityUser.ConfirmPassword)
+                                </div>
+                            </div>
+
+                            @*<div class="col-md-3 col-sm-6 col-xs-12">
+                                    <label class="mg-0">Sign_Address2</label>
+                                    <div class="TextBoxMainMain mg-0">
+                                        <input class="effect-16" type="text" placeholder="Lorem ipsum dolor sit...">
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="clear30"></div>
+                        <div class="row">
+                            <div class="pull-right VendorSiteBtnRightMain">
+                                @*<button type="button" class="btn btn-primary BtnBlueLg BtnWidth150">Create Entity</button>*@
+                                <input type="submit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Create Entity" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="clear"></div>
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#dvWeeklyfr,#dvWeeklyTo,#dvMonthlyFr,#dvMonthlyTo,#dvFortNightlyFr1,#dvFortNightlyTo1,#dvFortNightlyFr2,#dvFortNightlyTo2").hide();
+            ShowhideControls();
+        });
+        $('#EntityModel_ENTITY_Payperiod').change(function () {
+            ShowhideControls();
+        });
+
+        function ShowhideControls() {
+            var selectedVal = $("#EntityModel_ENTITY_Payperiod option:selected").val();
+            if (selectedVal.toUpperCase() == 'WEEKLY') {
+                $("#dvWeeklyfr,#dvWeeklyTo").show();
+                $("#dvMonthlyFr,#dvMonthlyTo,#dvFortNightlyFr1,#dvFortNightlyTo1,#dvFortNightlyFr2,#dvFortNightlyTo2").hide();
+            }
+            else if (selectedVal.toUpperCase() == 'MONTHLY') {
+                $("#dvMonthlyFr,#dvMonthlyTo").show();
+                $("#dvWeeklyfr,#dvWeeklyTo,#dvFortNightlyFr1,#dvFortNightlyTo1,#dvFortNightlyFr2,#dvFortNightlyTo2").hide();
+
+            }
+            else if (selectedVal.toUpperCase() == 'FORTNIGHT') {
+                $("#dvFortNightlyFr1,#dvFortNightlyTo1,#dvFortNightlyFr2,#dvFortNightlyTo2").show();
+                $("#dvWeeklyfr,#dvWeeklyTo,#dvMonthlyFr,#dvMonthlyTo").hide();
+
+            }
+            else if (selectedVal.toUpperCase() == 'DAILY') {
+                $("#dvWeeklyfr,#dvWeeklyTo,#dvMonthlyFr,#dvMonthlyTo,#dvFortNightlyFr1,#dvFortNightlyTo1,#dvFortNightlyFr2,#dvFortNightlyTo2").hide();
+            }
+            else {
+                $("#dvWeeklyfr,#dvWeeklyTo,#dvMonthlyFr,#dvMonthlyTo,#dvFortNightlyFr1,#dvFortNightlyTo1,#dvFortNightlyFr2,#dvFortNightlyTo2").hide();
+            }
+        }
+    </script>
+}

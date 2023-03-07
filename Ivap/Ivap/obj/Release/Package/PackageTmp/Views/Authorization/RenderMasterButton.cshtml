@@ -1,0 +1,35 @@
+﻿@using Ivap.Repository;
+@{
+    Layout = null;
+}
+@*<button type="button" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+    <button type="button" class="btn btn-primary TransparantBtnBlue" data-toggle="modal" data-target="#myimportpopup">Import Excel</button>
+    <button type="button" class="btn btn-primary BtnBlueLg BtnWidth150" data-toggle="modal" data-target="#mynewdetailpopup">Create new site</button>*@
+
+       
+        @if (AuthorizationRepo.IsValidAction(ViewBag.RouteName, "CreateAction"))
+        {
+            @*<button id="dvimport" type="button" class="btn btn-danger">
+                <i class="fa fa-cloud-download"></i>
+                Import
+            </button>*@
+    <button type="button" id="dvimport" class="btn btn-primary TransparantBtnBlue">Import Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction(ViewBag.RouteName, "ViewAction"))
+        {
+            @*<button id="dvExport" type="button" class="btn btn-danger">
+                <i class="fa fa-cloud-upload"></i>
+                Export
+            </button>*@
+    <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction(ViewBag.RouteName, "CreateAction"))
+        {
+            @*<button type="button" class="btn btn-danger" id="add">
+                    <i class="fa fa-plus-square"></i>
+                    Add
+                </button>*@
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+
+

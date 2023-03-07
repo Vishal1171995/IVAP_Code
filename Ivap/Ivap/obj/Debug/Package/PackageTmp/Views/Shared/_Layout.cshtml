@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>iVAP | @ViewBag.Title</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @Styles.Render("~/Content/css/CommanCssBundle")
+    <link href="~/Content/css/slick-theme.css" rel="stylesheet" />
+    @*<link href="~/Content/css/progress-tracker.css" rel="stylesheet" />*@
+
+    <!-- Bootstrap JavaScript -->
+</head>
+<body>
+    <div class="WebsiteMaxWidth">
+        <header>
+            <div class="HeaderTop">
+                <div class="container">
+                    <div class="hamburger close">
+                        <img class="HamburgerMenuOpen" src="~/Content/images/MenuIcon1.png" />
+                        <img class="HamburgerMenuClose" src="~/Content/images/MenuIcon2.png" />
+                    </div>
+                    <div class="HeaderTopIdeaLogo">
+                        <img src="~/Content/images/iVap_logo.png" alt="" />
+                    </div>
+                    <div class="AdityaBirlaLogo">
+                        <div class="var-list">
+                            <ul class="nav pull-right">
+                                <li>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle login-link" type="button">
+                                            <img src="~/Content/images/usrprofile.png" style="width:16px; height:16px">
+                                            <span style="color:white;">
+                                                Welcome <br>
+                                                <strong>Ajay</strong>
+                                            </span>
+                                            <span class="caret arow"></span>
+                                        </button>
+                                        <ul class="dropdown-menu menu-icons">
+                                            <li><a href="Profile.aspx"> <span class="glyphicon glyphicon-user pull-left"></span> <span class="fieldtxt">Profile</span> </a></li>
+                                            <li><a href="ChangePwd.aspx"> <span class="glyphicon glyphicon-lock pull-left"></span> <span class="fieldtxt">Change Password</span> </a></li>
+                                            <li><a href="Login.aspx"> <span class="glyphicon glyphicon-log-out pull-left"></span> <span class="fieldtxt">Signout</span> </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle login-link" type="button">
+                                            <img src="~/Content/images/usrprofile.png" style="width:16px; height:16px"> <span style="color:white;">
+                                                Your Role
+                                                <br> <strong>Super Admin</strong>
+                                            </span>
+                                            <span class="caret arrow"></span>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        @*<img src="~/Content/images/iVap_logo.png" alt="" />*@
+                    </div>
+                    <div class="HeaderNotificationsIconMain">
+                        <a href="#">
+                            <img src="~/Content/images/Notification_Active.png" />
+                        </a>
+
+                    </div>
+
+                    <div class="AdityaBirlaLogo">
+                        <div class="var-list">
+                            <ul class="nav pull-right">
+                                <li>
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle login-link" type="button">
+                                            <img src="~/Content/images/indiaflag24.png" style="width:24px; height:24px">
+                                            <span style="color:white;">
+                                                Language <br>
+                                                <strong>English</strong>
+                                            </span>
+                                            <span class="caret arow"></span>
+                                        </button>
+                                        <ul class="dropdown-menu menu-icons">
+                                            <li><a href="Profile.aspx"> <span class="glyphicon glyphicon-user pull-left"></span> <span class="fieldtxt">Profile</span> </a></li>
+                                            <li><a href="ChangePwd.aspx"> <span class="glyphicon glyphicon-lock pull-left"></span> <span class="fieldtxt">Change Password</span> </a></li>
+                                            <li><a href="Login.aspx"> <span class="glyphicon glyphicon-log-out pull-left"></span> <span class="fieldtxt">Signout</span> </a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        @*<img src="~/Content/images/iVap_logo.png" alt="" />*@
+                    </div>
+
+
+                    <div id="flip" class="HeaderOptionIconMainDiv">
+                        <img src="~/Content/images/OptionIcon.png" />
+                    </div>
+                    <div id="panel" class="HeaderOptionBootom">
+                        <div class="North_West_Zone_Dropdown">
+
+                            <select class="selectpicker" title="North-West Zone">
+                                <option>North-West Zone</option>
+                                <option>Hindi</option>
+                                <option>Option 3</option>
+                            </select>
+
+                        </div>
+                        <div class="HeaderNotificationsIconMain">
+                            <a href="#">
+                                <img src="~/Content/images/Notification_Active.png" />
+                            </a>
+                        </div>
+                        <div class="SearchMainDiv" id="custom-search-input">
+                            <div class="input-group col-md-12">
+
+                                <input type="text" class="form-control" placeholder="Search RFPs, Vehicle request etc" />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-danger" type="button">
+                                        <img src="~/Content/images/Search_Icon.png" alt="" />
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+
+
+            </div>
+
+            <div class="clear"></div>
+
+        </header>
+        <div class="clear"></div>
+        <div class="container">
+            <div class="leftMenu">
+                <div class="leftMenuProfileMain">
+                    <div class="leftMenuProfileMainIcon">
+                        @*<img src="~/Content/images/ProfileImg.png" />*@
+                        @{
+                            string ProfilePic = ((Ivap.Models.AppUser)Session["uBo"]).ProfilePic;
+                            if (ProfilePic == "")
+                            {
+                                @*<img src="~/Content/images/ProfileImg.png" />*@
+
+                                string UserFrltr = ((Ivap.Models.AppUser)Session["uBo"]).FirstName;
+                                char first = UserFrltr[0];
+                                <p data-letters="@first"></p>
+                            }
+                            else
+                            {
+                                <img src="data:image/png;base64,@ProfilePic" />
+                            }
+
+                        }
+                    </div>
+                    <div class="leftMenuProfileMainText">
+                        <h3>
+                            <strong>
+                                @{
+                                    string UserName = ((Ivap.Models.AppUser)Session["uBo"]).FirstName;
+                                    string UserLastName = ((Ivap.Models.AppUser)Session["uBo"]).LastName;
+                                    string RoleName = ((Ivap.Models.AppUser)Session["uBo"]).RoleName;
+                                    UserName = UserName + " " + UserLastName;
+                                }
+                                <a href="/MyProfile">@UserName</a>
+                            </strong>
+                        </h3>
+                        <p><small>@RoleName</small></p>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="u-vmenu listvmenu scrollbox3" style="width:250px !important;">
+                    @{Html.RenderAction("RenderMenu", "Authorization", new { area = string.Empty });}
+                </div>
+                <div class="clear"></div>
+
+            </div>
+            @*<div class="MsgRightMain">
+                    <div class="LastLogin">
+                        <div class="clear10"></div>
+                        @{
+                            DateTime Lastlogintime = ((Ivap.Models.AppUser)Session["uBo"]).Lastlogintime;
+                            string lastdate = Lastlogintime.ToString("dd-MMM-yyyy");
+                            string lasttime = Lastlogintime.ToString("hh:mm tt");
+                            string currenttime = System.DateTime.Now.ToString("HH");
+                            string greeting = "";
+                            if (Int32.Parse(currenttime) < 12)
+                            {
+                                greeting = "Good morning!";
+                            }
+                            else if (Int32.Parse(currenttime) < 17)
+                            {
+                                greeting = "Good afternoon!";
+
+                            }
+                            else
+                            {
+                                greeting = "Good evening!";
+                            }
+                        }
+                        <h3>
+                            <strong>@greeting<small> Your Last Login was on <span>@lastdate</span>  at <span>@lasttime</span></small></strong>
+                        </h3>
+                        <div class="clear10"></div>
+                    </div>
+
+                </div>*@
+            <div class="ContentRightMain">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="Footer">
+            <p>© @System.DateTime.Now.Year Mynd Solution Pvt.Ltd.</p>
+        </div>
+    </div>
+</body>
+</html>
+@RenderSection("scripts", required: false)
+<script src="~/Scripts/MenuSlide.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<script>
+    $(function () {
+
+        $('.navbar-toggle').click(function () {
+            $('.navbar-nav').toggleClass('slide-in');
+            $('.side-body').toggleClass('body-slide-in');
+            $('#search').removeClass('in').addClass('collapse').slideUp(200);
+        });
+    });
+    $(document).ready(function () {
+        //$(".TextBoxMainMain input").val("");
+        $(".TextBoxMainMain input").focusout(function () {
+            if ($(this).val() != "") {
+                $(this).addClass("has-content");
+            } else {
+                $(this).removeClass("has-content");
+            }
+        });
+        $(".hamburger").click(function () {
+            $(".MsgRightMain").toggleClass("MenuOpenContentRight");
+            $(".leftMenu").toggleClass("leftMenuOpen");
+
+        });
+
+
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('.scrollbox3').enscroll({
+            showOnHover: false,
+            verticalTrackClass: 'track3',
+            verticalHandleClass: 'handle3'
+        });
+
+    });
+</script>
+
+

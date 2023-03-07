@@ -1,0 +1,10 @@
+UID,Entity,User_Name,User_ID,Email,Contact_Number,Role
+,,,,,,
+Display Name,,Mandatory Fields,Data Type,Remarks,,
+UID,,,integer,Insert time 0 and updata time give UID id,,
+Entity,,YES,Text,,,
+User_Name,,YES,Text,Minimum 4 character and Maximum can be 100 character,,
+User_ID,,YES,Text,,,
+Email,,YES,Text,,,
+Role,,YES,Text,,,
+Contact_Number,,YES,Text,,,

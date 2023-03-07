@@ -1,0 +1,74 @@
+﻿
+@model Ivap.Areas.Configuration.Models.SpecialComponentModel
+
+
+<div id="dvSpecialComponent" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close" />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Add Special Component</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateSpecialComponent", new AjaxOptions { OnSuccess = "SuccessMessageSpecialComponent" }))
+            {
+                @Html.AntiForgeryToken();
+            <div class="modal-body">
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Field Type<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.TID)
+                        @Html.HiddenFor(m => m.FileID)
+                        @Html.DropDownListFor(m => m.Special_Field_Type,
+                                         new SelectList(new List<SelectListItem> {
+                                                new SelectListItem { Text = "Static", Value = "DEFAULT VALUED"},
+                                                new SelectListItem { Text = "Lookup", Value = "LOOKUP VALUED"},
+                                         }, "Value", "Text"),
+                                         "Select Field Type",
+                                         new { @class = "form-control selectbdr" })
+                        @Html.ValidationMessageFor(m => m.Special_Field_Type)
+                    </div>
+                </div>
+
+                <div class="row form-group" id="LookUpName" style="display:none">
+                    <label for="inputPassword3" class="col-sm-2 control-label">LookUp Field Name</label>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.LookUp_Field_Value)
+                        @Html.TextBoxFor(m => m.LookUp_Name, new { @class = "form-control", @placeholder = "LookUp Field" })
+                        @Html.ValidationMessageFor(m => m.LookUp_Name)
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Display Name</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.Display_Name, new { @class = "form-control", @placeholder = "Display Name" })
+                        @Html.ValidationMessageFor(m => m.Display_Name)
+                    </div>
+                </div>
+
+                <div class="row form-group" id="SpecialDefaultValue" style="display:none">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Default Value</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.Default_Value, new { @class = "form-control", @placeholder = "Default Value" })
+                        @Html.ValidationMessageFor(m => m.Default_Value)
+                    </div>
+                </div>
+
+            </div>
+                <div class="clear5"></div>
+                <div class="col-md-12">
+
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" class="btn btn-primary BtnBlueLg BtnWidth150" id="SpecialComponentSubmit" />
+
+                </div>
+                <div class="clear10"></div>
+
+            }
+            @*<div id="Tkgrid"></div>*@
+        </div>
+    </div>
+
+</div>

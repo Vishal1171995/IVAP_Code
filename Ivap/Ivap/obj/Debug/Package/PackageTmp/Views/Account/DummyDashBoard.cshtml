@@ -1,0 +1,419 @@
+﻿
+@{
+    ViewBag.Title = "Dummy Dash Board";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+   <div class="panel panel-default">
+    <div class="panel-heading"> <h2>Pay by Period</h2> </div>
+    <div class="panel-body">
+        <div class="clear"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="tab-content">
+                        <div class="col-md-8 col-sm-8 col-xs-12">
+                            <div id="NotificationsTab1" class="tab-pane fade in active">
+                                <img src="images/graph.png" class="img-responsive">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <ul class="nav nav-tabs NotificationsTabMain">
+                            <li class="active"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab1">3m,</a></li>
+                            <li><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab2">6m,</a></li>
+                            <li><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab3">9m,</a></li>
+                            <li><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab4">12m,</a></li>
+                            <li><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab5">2y,</a></li>
+                            <li><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab5">5y</a></li>
+                        </ul>
+                        <div class="tab-checkbox">
+                            <input id="checkbox1" type="checkbox">
+                            <label for="checkbox1"> Select All</label>
+                        </div>
+                        <div class="tab-checkbox">
+                            <input id="checkbox2" type="checkbox">
+                            <label for="checkbox2"> <div class="color-box Deduct"> </div> Deduction</label>
+                        </div>
+                        <div class="tab-checkbox">
+                            <input id="checkbox3" type="checkbox">
+                            <label for="checkbox3"> <div class="color-box Empcontibute"> </div> Employer Contributions</label>
+                        </div>
+                        <div class="tab-checkbox">
+                            <input id="checkbox4" type="checkbox">
+                            <label for="checkbox4"> <div class="color-box Netpay"> </div> Net Pay</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear20"></div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> <h2>Pay History</h2> </div>
+                            <div class="panel-body">
+                                <div class="alert alert-info alert-dismissible">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Info!</strong> One pay period must be checked at all times. Select up to 3 pay periods to compare in Pay Details..
+                                </div>
+                                <div class="payStatements horizontalscroll">
+                                    <button class="tablinks" onclick="openCity(event, 'rel0')" id="defaultOpen">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox0" type="checkbox">
+                                            <label for="checkbox0"> 31 December 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 2,95167</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 28,4930</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel1')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox01" type="checkbox">
+                                            <label for="checkbox01"> 30 November 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 29,7842</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 28,7600</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel2')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox02" type="checkbox">
+                                            <label for="checkbox02"> 30 October 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 32,1982</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 31,17900</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel3')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox03" type="checkbox">
+                                            <label for="checkbox03"> 29 September 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 27,51087</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 26,492000</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel4')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox03" type="checkbox">
+                                            <label for="checkbox03"> 26 August 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 27,51907</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 26,4920</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel5')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox03" type="checkbox">
+                                            <label for="checkbox03"> 25 July 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 27,5167</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 26,4920</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel6')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox03" type="checkbox">
+                                            <label for="checkbox03"> 25 June 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 27,5167</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 26,4920</div>
+                                        </div>
+                                    </button>
+                                    <button class="tablinks" onclick="openCity(event, 'rel7')">
+                                        <div class="tab-checkbox pd-0">
+                                            <input id="checkbox03" type="checkbox">
+                                            <label for="checkbox03"> 25 June 2018</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Gross Pay</p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 27,5167</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>Net Pay </p>
+                                            <div class="bold"> <i class="fa fa-rupee"></i> 26,4920</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> <h2>Pay Detail</h2> </div>
+                            <div class="panel-body">
+                                <h1 class="list-custom">30 October 2018</h1>
+                                <span> <i class="fa fa-info-circle font"></i> From: 1 October 2018 To: 31 December 2018 </span>
+                                <div class="clear20"></div>
+                                <div id="rel0" class="paymentcontent row">
+                                    <div class="col-md-8 col-sm-8 col-xs-12">
+                                        <div class="pull-left bold">Gross Pay</div>
+                                        <div class="pull-right bold"> <i class="fa fa-rupee"> </i> 27,51672</div>
+                                        <div class="clear"></div>
+                                        <div id="slide" class="slide-header">
+                                            <div>
+                                                <h4 class="accordion-toggle">
+                                                    <div class="pull-left" style="margin-left:12px;"><i class="icon"></i> Earning </div>
+                                                    <div class="pull-right bold"> <i class="fa fa-rupee"></i>27,51672</div>
+                                                    <div class="clear"></div>
+                                                </h4>
+                                                <div class="accordion-content default">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="pull-left">Basic Salary</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 8,45003</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">House rent allowance</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 16,46280</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">Leave Travel allowance</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 70389</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">PI-Co funded (Rating)</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 1,90090</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">PI-Co funded (Value)</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 2,0000</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="clear10"></div>
+                                            <div>
+                                                <h4 class="accordion-toggle">
+                                                    <div class="pull-left" style="margin-left:12px;"> <i class="icon icon-plus"></i>Deduction </div>
+                                                    <div class="pull-right bold"> <i class="fa fa-rupee"></i>01,02321</div>
+                                                    <div class="clear"></div>
+                                                </h4>
+                                                <div class="accordion-content">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="pull-left">Ee LWF contribution</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 1000</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">Rounding off adjustment</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 1,2022</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">ecovery of round off amt</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 12345</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">Ee PF contribution</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 1,01400</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="clear10"></div>
+                                            <div>
+                                                <h4 class="accordion-toggle">
+                                                    <div class="pull-left" style="margin-left:12px;"> <i class="icon icon-plus"></i>Employer Contribution</div>
+                                                    <div class="pull-right bold"> <i class="fa fa-rupee"></i>01,02321</div>
+                                                    <div class="clear"></div>
+                                                </h4>
+                                                <div class="accordion-content">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="pull-left">Er PF contribution</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 31000</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">Er Pension contribution</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 70400</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="pull-left">Er LWF contribution</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 2,000</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="clear10"></div>
+                                            <div>
+                                                <h4 class="accordion-toggle">
+                                                    <div class="pull-left" style="margin-left:12px;"> <i class="icon icon-plus"></i>Net Pay </div>
+                                                    <div class="pull-right bold"> <i class="fa fa-rupee"></i>28,49300</div>
+                                                    <div class="clear"></div>
+                                                </h4>
+                                                <div class="accordion-content">
+                                                    <ul>
+                                                        <li>
+                                                            <div class="pull-left">Net pay</div>
+                                                            <div class="pull-right bold"> <i class="fa fa-rupee"></i> 28,49300</div>
+                                                            <div class="clear"></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="clear30"></div>
+                                            <button type="button" class="btn btn-primary"> <i class="fa fa-download"> </i> Download</button>
+                                            <button type="button" class="btn btn-default"> My Forms</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-12">
+                                        <img src="images/graphch.png" class="img-responsive">
+                                        <div class="text-center"> <strong>Gross Pay</strong> </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel1" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel2" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel3" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel4" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel5" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel6" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                                <div id="rel7" class="paymentcontent row">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <img src="images/business-graph.png" class="img-rounded">
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+@Scripts.Render("~/Scripts/LoginScript")
+@section scripts {
+<script>
+    $('.scrollbox3').enscroll({
+        showOnHover: false,
+        verticalTrackClass: 'track3',
+        verticalHandleClass: 'handle3'
+    });
+</script>
+<script>
+    function openCity(evt, cityName) {
+        var i, paymentcontent, tablinks;
+        paymentcontent = document.getElementsByClassName("paymentcontent");
+        for (i = 0; i < paymentcontent.length; i++) {
+            paymentcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
+<script>
+    $(document).ready(function ($) {
+        $('#slide').find('.accordion-toggle').click(function () {
+
+            //Expand or collapse this panel
+            $(this).next().slideToggle('fast');
+            var ii = $(this).find('.icon');
+
+            $('.icon').not(ii).addClass('icon-plus');
+            ii.toggleClass('icon-plus');
+
+            //Hide the other panels
+            $(".accordion-content").not($(this).next()).slideUp('fast');
+        });
+    });
+</script>
+}

@@ -1,0 +1,262 @@
+﻿ @model Ivap.Areas.Master.Models.UserProfileVM
+@{
+    ViewBag.Title = "Profile Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="container">
+    <div class="ContentRightMain">*@
+        <div class="panel panel-default">
+            <div class="panel-heading"><h2>Profile Settings</h2></div>
+            <div class="panel-body">
+
+                <div class="TextBoxMainOuter">
+
+                    <div class="clear"></div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="Layer-1796-copy">
+                                @*<img src="~/Content/images/layer-1796-copy.png">*@
+                                <span id="lblUserImage"> </span>
+                            </div>
+                            <div class="clear20"></div>
+
+                        </div>
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                      <div class="TextBoxMainMain">
+                                        <p><small>First Name</small></p>
+                                        <div class="clear"></div>
+                                        <span id="lblFirstName"> </span>
+                                         </div>
+                                </div>
+                                <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <div class="TextBoxMainMain">
+                                        <p><small>Last Name</small></p>
+                                        <div class="clear"></div>
+                                        <span id="lblLastName"> </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    <div class="TextBoxMainMain">
+                                        <p><small>Mobile No</small></p>
+                                        <div class="clear"></div>
+                                        <span id="lblMobileno"> </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <div class="TextBoxMainMain">
+                                        <p><small>Email Address</small></p>
+                                        <div class="clear"></div>
+                                        <span id="lblEmail"> </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear20"></div>
+                            <button id="btnedit" type="button" class="btn btn-primary BtnBlueLg BtnWidth150">Edit</button>
+                            <a href="/Account/ChangePassword"> <button type="button" class="btn btn-primary BtnWhiteLg"> Change Password </button></a>
+                            <span id="lblUID" style="visibility:hidden"> </span>
+                        </div>
+
+                        <div class="clear20"></div>
+                   
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="clear"></div>
+            <div style="height:150px;"></div>
+        </div>
+    @*</div>
+
+    </div>*@
+
+
+
+@*<div class="container">*@
+    
+    <div id="dvProfileAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png"   alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Edit Profile</h4>
+                </div>
+                @using (Ajax.BeginForm("UpdateProfile", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage" }))
+                    {  
+                    @*@Html.AntiForgeryToken()*@
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="clear10"></div>
+                            <div class="Layer-1796-copy">
+                                @*<img src="~/Content/images/layer-1796-copy.png">*@
+                                <span id="lblUserImageEdit"> </span>
+                                <div class="clear20"></div>
+                              <input type="file" name="files" id="files" target-control="hdnFileName">
+                                @Html.HiddenFor(m => m.ProfilePic, new { id = "hdnFileName" })
+                            </div>
+                            <div class="clear20"></div>
+
+                        </div>
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                            <div class="row form-group">
+                                @Html.HiddenFor(m => m.UID)
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <label for="inputEmail3" class="control-label">First Name<span class="text-red">*</span></label>
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                                    @Html.ValidationMessageFor(m => m.FirstName)
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <label for="inputEmail3" class="control-label">Last Name<span class="text-red">*</span></label>
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                                    @Html.ValidationMessageFor(m => m.LastName)
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <label for="inputEmail3" class="control-label">Mobile Number<span class="text-red">*</span></label>
+                                    @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", @placeholder = "Mobile Number" })
+                                    @Html.ValidationMessageFor(m => m.MobileNo)
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <label for="inputEmail3" class="control-label">Email<span class="text-red">*</span></label>
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
+                                    @Html.ValidationMessageFor(m => m.Email)
+                                </div>
+                            </div>
+                            <div class="clear20"></div>
+                            <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                            <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                            
+                        </div>
+                    </div>
+                 
+                </div>
+    
+                <div class="clear20"></div>
+                 } 
+            </div>
+        </div>
+    </div>
+@*</div>*@
+
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+
+        //OnSuccess OnFailure
+        function SuccessMessage(res) {
+            $("#dvProfileAddEdit").modal("hide");
+            HandleSuccessMessage(res);
+            if (res.IsSuccess == true) {
+                setTimeout(function () {
+                    window.location = window.location.href;
+                }, 2000)
+                ViewProfile();
+            }
+        }
+     
+    $("#btnedit").click(function () {
+        OpenModal("dvProfileAddEdit", 500, "Add Site");
+        EditHandler();
+    })
+    $(document).ready(function () {
+        ViewProfile();
+    })
+
+
+        
+    $(document).ready(function () {
+        var form = $('#__AjaxAntiForgeryForm');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: "@Url.RouteUrl("ProfileImageUpload")",
+            //removeUrl: "remove",
+            autoUpload: true
+        },
+            validation: {
+            allowedExtensions: [".gif", ".jpg", ".png"]
+            },
+        upload: function (e) {
+            e.data = { __RequestVerificationToken: token, Folder: "Profile" };
+        },
+        multiple: false,
+        success: onSuccessForImageUpload,
+        remove: onRemoveForUpload,
+        showFileList: false
+    });
+    });
+
+    function onSuccessForImageUpload(e) {
+        var name = this.name;
+        var id = e.sender.element[0].id;
+        var filename = e.response.Data;
+        $("#hdnFileName").val(filename);
+    }
+
+    var ViewProfile = function ViewProfile() {
+        var UserID = 0;
+        $.get('@Url.RouteUrl("GetProfile")', function (response) {
+
+            var Data = $.parseJSON(response.Data);
+            $("#lblUID").html(Data[0].UID);
+            $("#lblFirstName").html(Data[0].USER_FIRSTNAME);
+            $("#lblLastName").html(Data[0].USER_LASTNAME);
+            $("#lblMobileno").html(Data[0].USER_MOBILENO);
+            $("#lblEmail").html(Data[0].USER_EMAIL);
+            if (Data[0].PROFILEPIC == null || Data[0].PROFILEPIC == 'undefined')
+            {
+                $("#lblUserImage").html('<img src="Content/images/nouser.jpg">');
+                $("#hdnFileName").val(Data[0].PROFILEPIC);
+            }
+            else {
+                $("#lblUserImage").html(' <img src="data:image/png;base64,' + Data[0].PROFILEPIC + '" />');
+                $("#hdnFileName").val(Data[0].PROFILEPIC);
+            }
+           
+           });
+    }
+        
+        var EditHandler = function EditHandler() {
+            $("#btnReset").click();
+           var UserID = $("#lblUID").val();
+            $.ajax({
+                type: "GET",
+                url: "@Url.RouteUrl("GetProfile")",
+                contentType: "application/json; charset=utf-8",
+                //data: { SiteID: UserID },
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Data != "") {
+                    var data1 = $.parseJSON(response.Data);
+                    if (data1.length > 0) {
+                        $("#btnSubmit").val("Update");
+                        $("#UID").val(data1[0].UID);
+                        $("#FirstName").val(data1[0].USER_FIRSTNAME);
+                        $("#LastName").val(data1[0].USER_LASTNAME);
+                        $("#MobileNo").val(data1[0].USER_MOBILENO);
+                        $("#Email").val(data1[0].USER_EMAIL);
+                        if (data1[0].PROFILEPIC == null || data1[0].PROFILEPIC == 'undefined') {
+                            $("#lblUserImageEdit").html('<img src="Content/images/nouser.jpg">');
+                            $("#hdnFileName").val(data1[0].PROFILEPIC);
+                        }
+                        else {
+                            $("#lblUserImageEdit").html(' <img src="data:image/png;base64,' + data1[0].PROFILEPIC + '" />');
+                            $("#hdnFileName").val(data1[0].PROFILEPIC);
+                        }
+                        
+                        OpenModal("dvProfileAddEdit", 500, "Edit Profile");
+                    }
+                }
+            }
+
+        });
+        }
+    </script>
+}

@@ -1,0 +1,1681 @@
+﻿@using System.Data
+@model DataSet
+@{
+    ViewBag.Title = "PayrollCompDB";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    /* bootstrap hack: fix content width inside hidden tabs */
+    .tab-content > .tab-pane,
+    .pill-content > .pill-pane {
+        /* display: block;     /* undo display:none          */
+        height: 0; /* height:0 is also invisible */
+        /* overflow-y: hidden; /* no-overflow                */
+    }
+
+    .tab-content > .active,
+    .pill-content > .active {
+        height: auto; /* let the content decide it  */
+    }
+    /* bootstrap hack end */
+    .left-align-slick > .slick-list > .slick-track {
+        margin-left: 0;
+    }
+    .k-grid-content {
+        overflow: hidden;
+    }
+</style>
+
+<div class="icon-bar">
+    <a href="/Calendar/CalendarDetails?CalendarType=1" class="sticky-calendar"><i class="fa fa-calendar"></i></a>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default Mdm-panel">
+            <div id="exTab3" class="cch-tab">
+                @*<ul class="nav nav-tabs">
+                    <li class="active" style="width:50%!important;"> <a href="#1b" data-toggle="tab"> <i class="fa fa-dashboard"> </i> <br /> Dashboard</a> </li>
+                    <li style="width:50%!important;"> <a href="#2b" id="lidash" data-toggle="tab"> <i class="fa fa-calendar"> </i> <br />Calendar</a> </li>
+                </ul>*@
+
+                <ul class="nav nav-tabs">
+                    <li class="active" style="width:50%!important;"> <a href="#1b" data-toggle="tab"> <i class=" fa fa-sort-amount-desc"> </i> Input Processing</a> </li>
+                    <li style="width:50%!important;"> <a href="#2b" id="lidash" data-toggle="tab"> <i class=" fa fa-sort-amount-asc"> </i>Output Processing</a> </li>
+                    <span class="badge badge-info pull-right mg-top7">Active Pay Date : @ViewBag.Paydate</span>
+                </ul>
+                <div class="tab-content clearfix">
+                    <div class="tab-pane active" id="1b">
+                        <div class="col-md-12">
+                            @if (Model.Tables[0].Rows.Count > 0)
+
+                            {
+                                <input type="hidden" id="hdnFilename_Input" value="@Model.Tables[0].Rows[0]["FILETYPEID"]" />
+                                <div class="center slider left-align-slick">
+                                    @{
+
+                                        int i = 0;
+                                        foreach (DataRow dr in Model.Tables[0].Rows)
+                                        {
+                                            string firstclass = "";
+                                            <div>
+                                                <div class="Ongoing_Trips_BoxTop" style="cursor:pointer;">
+                                                    <div class="card o-hidden web-num-card">
+                                                        @if (i == 0)
+                                                        {
+                                                            firstclass = "First";
+                                                        }
+                                                        <div class="card-block  dvfiletab @firstclass" attr_First="@i" attr_Pending="@dr["PENDING"]" attr_Approved="@dr["APPROVED"]" attr_Total="@dr["TOTAL"]" attrfilename="@dr["FILETYPEID"]" attrfilenametxt="@dr["File_Name"]" attrcategorytxt="@dr["CATEGORY"]">
+                                                            <div class="pull-right">
+
+                                                                @if (Convert.ToInt32(dr["APPROVED"]) == Convert.ToInt32(dr["TOTAL"]))
+                                                                {
+                                                                    <img src="../Content/images/approved.png" class="img-responsive">
+                                                                }
+
+
+
+                                                            </div>
+                                                            <h2 class="m-t-10 ">@dr["CATEGORY"]</h2>
+                                                            <p>@dr["File_Name"]</p>
+                                                            <h3 class="m-b-15  pull-right">@dr["APPROVED"]/<i class="text-danger">@dr["TOTAL"]</i></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            i++;
+                                        }
+
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="clear"></div>
+                        <div class="panel panel-default" id="dvApprovePnl">
+                            <div class="panel-heading">
+                                <div class="TripId pull-left"> <h4> <strong><label id="lblInputTypetxt"></label></strong></h4> </div>
+                                <div class="pull-right">
+                                    <button type="button" id="btnInputFileApproveModal" class="btn btn-sm btn-success" title="Approve"> <i class="fa fa-thumbs-o-up"> </i> </button>
+
+
+                                    @if (ViewBag.RoleID != 9)
+                                    {
+                                        <button type="button" id="btnInputFileReconsiderModal" class="btn btn-sm btn-danger" title="Reject"> <i class="fa fa-ban"> </i> </button>
+                                    }
+                                    @*<button type="button" class="btn btn-sm btn-info" title="Detail"> <i class="fa fa-info-circle"> </i> </button>*@
+                                    <button type="button" id="btnInputFileDownload" class="btn btn-sm btn-primary" title="Download"> <i class="fa fa-download"> </i> </button>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="clear5"></div>
+                        <div class="panel panel-default" d="dvInputPayCompChart">
+                            <div class="panel-heading">
+                                <div class="TripId pull-left"> <h4> <strong>PAY COMPONENT TREND DASHBOARD</strong> </h4> </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-8">
+                                    <div class="TableOuterDiv">
+                                        <table class="table CustomTable">
+                                            <div id="dvSummaryChart"></div>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="TableOuterDiv">
+                                        <table class="table CustomTable">
+                                            <ul class="nav nav-tabs NotificationsTabMain" id="lstDuration">
+                                                <li class="active" id="lst3M"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab1">3M</a></li>
+                                                <li id="lst6M"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab2">6M</a></li>
+                                                <li id="lst9M"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab3">9M</a></li>
+                                                <li id="lst12M"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab4">12M</a></li>
+                                            </ul>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear5"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>CTC RECONCILIATION DASHBAORD</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="chartCTCReconCount_Input"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>HEAD COUNT DASHBAORD</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="chartHeadCount"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear5"></div>
+                        <div class="row" style="display:none">
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>EXCEPTIONS DASHBOARD</h2> </div>
+                                    <div class="panel-body">
+                                        @*<img src="images/graphch.png" class="img-responsive">*@
+                                        <div id="dverrorchart" style="background: center no-repeat url('../content/shared/styles/world-map.png');"></div>
+                                        <div class="text-center"> <strong>Gross Pay</strong> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @*FOR OUTPUT PROCESSING FILE*@
+
+                    <div class="tab-pane" id="2b" style=" display: block;overflow:hidden;">
+                        <div class="col-md-12">
+                            @if (Model.Tables[1].Rows.Count > 0)
+
+
+                            {
+                                <input type="hidden" id="hdnFilename_Output" value="@Model.Tables[1].Rows[0]["FILETYPEID"]" />
+                                <div class="center slider left-align-slick">
+                                    @{
+
+                                        int i = 0;
+                                        foreach (DataRow dr in Model.Tables[1].Rows)
+                                        {
+                                            string firstclass_Output = "";
+                                            if (i == 0)
+                                            {
+                                                firstclass_Output = "First_out";
+
+                                            }
+
+                                            <div>
+                                                <div class="Ongoing_Trips_BoxTop" style="cursor:pointer;" attr_selected_output="@i">
+                                                    <div class="card o-hidden web-num-card">
+                                                        <div class="card-block  dvfiletab_Output @firstclass_Output" attr_First_Output="@i" attr_Pending_Output="@dr["PENDING"]" attr_Pending_Total="@dr["TOTAL"]" attr_Approved_Output="@dr["APPROVED"]" attr_filename_Output="@dr["FILETYPEID"]" attr_filenametxt_Output="@dr["File_Name"]" attr_categorytxt_Output="@dr["CATEGORY"]">
+                                                            <div class="pull-right">
+
+                                                                @if (Convert.ToInt32(dr["APPROVED"]) == Convert.ToInt32(dr["TOTAL"]))
+                                                                {
+                                                                    <img src="../Content/images/approved.png" class="img-responsive">
+                                                                }
+
+                                                            </div>
+                                                            <h2>@dr["CATEGORY"]</h2>
+                                                            <p>@dr["File_Name"]</p>
+                                                            <h3 class="m-b-15  pull-right">@dr["APPROVED"]/<i class="text-danger">@dr["TOTAL"]</i></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            i++;
+                                        }
+
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="clear"></div>
+
+                        <div class="panel panel-default" id="dvApprovePnl_Output">
+                            <div class="panel-heading">
+                                <div class="TripId pull-left"> <h4> <strong><label id="lblOutputTypetxt"></label></strong></h4> </div>
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-sm btn-success" id="btnOuputApprove" title="Approve"> <i class="fa fa-thumbs-o-up"> </i> </button>
+                                    @if (ViewBag.RoleID != 2)
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger" title="Reject" id="btnOutputReject"> <i class="fa fa-ban"> </i> </button>
+                                    }
+                                    <button type="button" id="btnOutFileDownload" class="btn btn-sm btn-primary" title="Download"> <i class="fa fa-download"> </i> </button>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="panel-body"> </div>
+                        </div>
+
+                        <div class="clear5"></div>
+                        <div class="panel panel-default" style="display:none;">
+                            <div class="panel-heading">
+                                <div class="TripId pull-left"> <h4> <strong>PAY COMPONENT TREND DASHBOARD</strong> </h4> </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-8">
+                                    <div class="TableOuterDiv">
+                                        <table class="table CustomTable">
+                                            <div id="dvSummaryChart_Output"></div>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="TableOuterDiv">
+                                        <table class="table CustomTable">
+                                            <ul class="nav nav-tabs NotificationsTabMain" id="lstDuration_Output">
+                                                <li class="active" id="lst3M_Output"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab1">3M</a></li>
+                                                <li id="lst6M_Output"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab2">6M</a></li>
+                                                <li id="lst9M_Output"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab3">9M</a></li>
+                                                <li id="lst12M_Output"><a style="background-color:#fff!important;" data-toggle="tab" href="#NotificationsTab4">12M</a></li>
+                                            </ul>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear5"></div>
+
+
+                        <div class="row" style="display:none">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>CTC RECONCILIATION DASHBAORD</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="chartCTCReconCount_Output"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>HEAD COUNT DASHBAORD</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="chartHeadCount_Output"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>CTC RECONCILIATION DATA</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="kgridCTCRecon_Out"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>HEAD COUNT DATA</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="kgridHeadCount_Out"></div>
+                                        <div class="clear30"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>EXCEPTION DATA</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="kgridException_Out" style="height:300px;"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>VARIANCE</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="dvVarianceDB_Output" style="height:300px;"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>ONETIME EARNING & DEDUCTION RECONCILLIATION</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="dvEarningDeduction" style="height:300px;"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>STATUTORY DEDUCTION SUMMARY</h2> </div>
+                                    <div class="panel-body">
+                                        <div id="KgrdSDS_output" style="height:300px;"></div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                        <div class="clear5"></div>
+
+
+
+                        <div class="clear5"></div>
+
+                        <div class="row" style="display:none">
+
+
+                            <div class="col-md-4 col-sm-4 col-xs-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"> <h2>Exceptions Dashboard</h2> </div>
+                                    <div class="panel-body">
+                                        @*<img src="images/graphch.png" class="img-responsive">*@
+                                        <div id="dverrorchart_Output" style="background: center no-repeat url('../content/shared/styles/world-map.png');"></div>
+                                        <div class="text-center"> <strong>Gross Pay</strong> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvInputFileApprovalModal" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 style="font-size: 16px !important" class="modal-title">Approve</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea id="txtRemarksInputApproval" rows="6" cols="80" placeholder="Comments, If any" class="aptextarea"></textarea>
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-md-12">
+                        <button type="button" id="btn_Input_FileApprove" class="btn btn-primary BtnBlueLg BtnWidth150">Approve</button>
+                    </div>
+                    <div class="clear30"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvInputFileRejectionModal" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 style="font-size: 16px !important" class="modal-title">Reconsider</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea id="txtRemarksInputReconsider" rows="6" cols="80" placeholder="Comments, If any" class="aptextarea"></textarea>
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-md-12">
+                        <button type="button" id="btn_Input_FileReConsider" class="btn btn-primary BtnBlueLg BtnWidth150">Reconsider</button>
+                    </div>
+                    <div class="clear30"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvOutputFileApprovalModal" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 style="font-size: 16px !important" class="modal-title">Approve</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea id="txtRemarksOutputApproval" rows="6" cols="80" placeholder="Comments, If any" class="aptextarea"></textarea>
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-md-12">
+                        @*<button type="button" class="btn btn-primary BtnWhiteLg BtnWidth150">Cancel</button>*@
+                        <button type="button" id="btn_Output_FileApprove" class="btn btn-primary BtnBlueLg BtnWidth150">Approve</button>
+                    </div>
+                    <div class="clear30"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvOutputFileReconsiderModal" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 style="font-size: 16px !important" class="modal-title">Reconsider</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea id="txtRemarksOutputReconsider" rows="6" cols="80" placeholder="Comments, If any" class="aptextarea"></textarea>
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-md-12">
+                        @*<button type="button" class="btn btn-primary BtnWhiteLg BtnWidth150">Cancel</button>*@
+                        <button type="button" id="btn_Output_FileReconsider" class="btn btn-primary BtnBlueLg BtnWidth150">Reconsider</button>
+                    </div>
+                    <div class="clear30"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }
+
+    <script type="text/javascript">
+        
+
+        $(document).ready(function () {
+            //var inputTickets = $("#1b div.dvfiletab").length;
+            //if (inputTickets < 4 && inputTickets > 0) {
+            //    $(".slick-track").css("width", "auto");
+            //    alert($(".slick-track").length);
+            //}
+            
+        var filename1 = $("#hdnFilename_Input").val();
+        if (filename1 != undefined) {
+            var PendingCnt = $('.First').attr('attr_Pending');
+            var ApprovedCnt = $('.First').attr('attr_Approved');
+            var Filenametxt = $('.First').attr('attrfilenametxt');
+            var Categorytxt = $('.First').attr('attrcategorytxt');
+            var TotalCnt = $('.First').attr('attr_Total');
+            var lbltxtInput = "Category: " + Categorytxt + " File Name: " + Filenametxt + " Pending: " + PendingCnt + " Approved: " + ApprovedCnt;
+            $("#lblInputTypetxt").text(lbltxtInput);
+            BindPayrollSummary(filename1, 3);
+        }
+
+        createCTCReconcilationChart();
+        createHeadCountChart();
+        createChartException();
+        ShowHideApprovalPnl();
+
+        // ON TICKET CLICK
+
+        $(".dvfiletab").click(function () {
+
+            $(".dvfiletab").each(function () {
+                $(this).removeClass("Ongoing_Trips_BoxTop_active");
+                $(this).find("p").removeClass("text-white");
+                $(this).find("h2").removeClass("text-white");
+                $(this).find("h3").removeClass("text-white");
+            });
+
+            $(this).addClass("Ongoing_Trips_BoxTop_active");
+            $(this).find("p").addClass("text-white");
+            $(this).find("h2").addClass("text-white");
+            $(this).find("h3").addClass("text-white");
+
+        var filename = $(this).attr("attrfilename");
+        $("#hdnFilename_Input").val(filename);
+        var tabcnt = $(this).attr("attr_First");
+        var PendingCnt = $(this).attr("attr_Pending");
+        var ApprovedCnt = $(this).attr("attr_Approved");
+        var filename_Input = $(this).attr("attrfilename");
+        var PendingCnt_Input = $(this).attr("attr_Pending");
+        var ApprovedCnt_Input = $(this).attr("attr_Approved");
+        var Filenametxt_Input = $(this).attr("attrfilenametxt");
+        var Categorytxt_Input = $(this).attr("attrcategorytxt");
+        var Total_Input = $(this).attr("attr_Total");
+        var lbltxtInput = "Category: " + Categorytxt_Input + " File Name: " + Filenametxt_Input + " Pending: " + PendingCnt_Input + " Approved: " + ApprovedCnt_Input;
+        $("#lblInputTypetxt").text(lbltxtInput);
+        BindPayrollSummary(filename, 3)
+
+                if (Total_Input == ApprovedCnt) {
+                    //$("#dvApprovePnl").hide();
+                    $("#btnInputFileApproveModal").hide();
+                }
+                else {
+                    //$("#dvApprovePnl").show();
+                    $("#btnInputFileApproveModal").show();
+                }
+        });
+    });
+
+        $("#lstDuration li").click(function () {
+        var filename1 = $("#hdnFilename_Input").val();
+        var duration = $(this).text();
+        duration = duration.replace("M", "");
+            BindPayrollSummary(filename1, duration);
+            $('.carousel-1').slick('refresh');
+            $('.carousel-2').slick('refresh');
+
+            $("#1b").click(function () {
+                $('.carousel-1').slick('refresh');
+            });
+
+            $("#2b").click(function () {
+                $('.carousel-2').slick('refresh');
+            });
+    });
+
+       
+
+
+    function ShowHideApprovalPnl() {
+        var PendingCnt = $('.First').attr('attr_Pending');
+        var TotalCnt = $('.First').attr('attr_Total');
+        var ApprovedCnt = $('.First').attr('attr_Approved');
+
+        if (TotalCnt == ApprovedCnt) {
+            //$("#dvApprovePnl").hide();
+            $("#btnInputFileApproveModal").hide();
+        }
+    };
+
+
+       // INPUT PAY COMPONENT TREND DASHBOARD
+    function BindPayrollSummary(FileTypeID, Duration) {
+             $.get("@Url.RouteUrl("GetPayComponentDB")", { FileTypeID: FileTypeID, Duration: Duration}, function (response) {
+                 var data = $.parseJSON(response);
+                 if (data.series == 'null' || data.series == null) {
+                     $("#dvInputPayCompChart").hide();
+                     $("#dvSummaryChart").hide();
+                     return;
+                 }
+                 $("#dvSummaryChart").show();
+                     $("#dvInputPayCompChart").show();
+                     $("#dvSummaryChart").kendoChart({
+                         series: data.series,
+                             legend: {
+                                 labels: {
+                                     position: "right",
+                                     template: "#= series.name #: #= series.data[0] #"
+                                 }
+                         },
+                         seriesDefaults: {
+                             type: "column",
+                             stack: true,
+                             width: 5,
+                             gap: 5
+                         },
+                         valueAxis: {
+                             line: {
+                                 visible: false
+                             },
+                             minorGridLines: {
+                                 visible: false
+                             },
+                             labels: {
+                                 //template: "#= shortLabels(value) #"
+                                 template: "#=value#"
+                             }
+                         },
+                         categoryAxis: {
+                             categories: data.categorise,
+                             majorGridLines: {
+                                 visible: false
+                             }
+                         },
+                         seriesColors: ["#f3ac32", "#b8b8b8", "#bb6e36", "#cd1533", "#d43851", "#cd1533", "#d43851", "#e47f8f", "#eba1ad", "#9C27B0", "#1B5E20", "#00ACC1"],
+                         tooltip: {
+                             visible: true,
+                             template: "#= series.name #: #= value #"
+                         },
+                         chartArea: {
+                             margin: 0,
+                             background: "#fff",
+                             padding: 0,
+                             width: 500,
+                             height: 300, /* add this option */
+                             bottom: 65
+                         }
+                     });
+                });
+    }
+
+    function shortLabels(value) {
+        return kendo.toString((value / 100000), "#") + " (Lcs)";
+    }
+
+
+
+   // INPUT CTC RECONCILATION DASHBOARD
+
+
+    function createCTCReconcilationChart () {
+                   $.get("@Url.RouteUrl("GetCTCReconcilationDB")", {}, function (response) {
+                       var data = $.parseJSON(response.Data);
+                       var InputData = data.Table
+                       var cashFlowData = [{
+                           period: "Opening\nBalance:" + InputData[0].CTC / 100000 + "L",
+                           amount: InputData[0].Value,
+                           CTC: InputData[0].CTC
+                       }, {
+                               period: "New Joinee:" + InputData[1].Value + "\nCTC:" + InputData[1].CTC/100000 + "L",
+                               amount: InputData[1].Value,
+                               CTC: InputData[1].CTC
+                       }, {
+                               period: "Transfer In:" + InputData[2].Value + '\n' + "CTC:" + InputData[2].CTC / 100000 + "L",
+                               amount: InputData[2].Value,
+                               CTC: InputData[2].CTC
+                       }, {
+                               period: "Transfer Out:" + InputData[3].Value + '\n' + "CTC:" + InputData[3].CTC / 100000 + "L",
+                               amount: InputData[3].Value,
+                               CTC: InputData[3].CTC
+                       }, {
+                               period: "Resigned:" + InputData[4].Value + "\nCTC:" + InputData[4].CTC / 100000 + "L",
+                               amount: InputData[4].Value,
+                               CTC: InputData[4].CTC
+                           },
+                           {
+                               period: "Package Change:" + InputData[6].Value + "\nCTC:" + InputData[6].CTC / 100000 + "L",
+                           },
+                       {
+                           period: "Closing\nBalance",
+                           summary: "total"
+                           }];
+                       var palette = ["#4F81BC", "#C0504E", "#9BBB57","#9BBB57", "#C0504E", "#4F81BC"];
+                       $("#chartCTCReconCount_Input").kendoChart({
+
+                           dataSource: {
+                               data: cashFlowData
+                           },
+
+                           legend: {
+                               visible: false
+                           },
+                           series: [{
+                               type: "waterfall",
+                               field: "amount",
+                               categoryField: "period",
+                               summaryField: "summary",
+                               color: function (point) {
+                                   return palette[point.index % palette.length];
+                               }
+                               //,
+                               //labels: {
+                               //    visible: true,
+                               //    format: "{0}",
+                               //    position: "insideEnd",
+                               //    background: "transparent",
+                               //    color: "white"
+                               //}
+                           }],
+                           valueAxis: {
+                               labels: {
+                                   format: "{0}"
+                               }
+                           },
+                           categoryAxis:
+                           {
+                               labels:
+                               {
+                                   rotation: -60
+                               }
+                           },
+                           tooltip: {
+                               visible: true,
+                               template: "#= category #"
+                           },
+                           chartArea: {
+                               margin: 0,
+                               background: "#fff",
+                               padding: 0,
+                               width: 450,
+                               height: 300, /* add this option */
+                               bottom: 65
+                           }
+                       });
+        });
+        }
+
+
+        // INPUT HEADCOUNT DASHBOARD
+
+        function createHeadCountChart() {
+                   $.get("@Url.RouteUrl("GetHeadCountDB")", {}, function (response) {
+                       var Headcount_Input = $.parseJSON(response.Data);
+                       var data = Headcount_Input.Table;
+                       var cashFlowData = [{
+                           period: "Opening\nBalance:" + data[0].Value,
+                           amount: data[0].Value,
+                       }, {
+                               period: "New Joinee:" + data[1].Value,
+                               amount: data[1].Value,
+                       }, {
+                               period: "Transfer In:" + data[2].Value,
+                               amount: data[2].Value,
+                       }, {
+                               period: "Transfer Out:" + data[3].Value,
+                               amount: data[3].Value,
+                       }, {
+                               period: "Resigned:" + data[4].Value,
+                               amount: data[4].Value,
+                       },
+                       {
+                           period: "Closing\nBalance:" + data[5].Value,
+                           summary: "total"
+                           }];
+                       var palette = ["#4F81BC", "#C0504E", "#9BBB57","#9BBB57", "#C0504E", "#4F81BC"];
+                       $("#chartHeadCount").kendoChart({
+
+                           dataSource: {
+                               data: cashFlowData
+                           },
+
+                           legend: {
+                               visible: false
+                           },
+                           series: [{
+                               type: "waterfall",
+                               field: "amount",
+                               categoryField: "period",
+                               summaryField: "summary",
+                               color: function (point) {
+                                   return palette[point.index % palette.length];
+                               }
+                               //,
+                               //labels: {
+                               //    visible: true,
+                               //    format: "{0}",
+                               //    position: "insideEnd",
+                               //    background: "transparent",
+                               //    color: "white"
+                               //}
+                           }],
+                           valueAxis: {
+                               labels: {
+                                   format: "{0}"
+                               }
+                           },
+                           categoryAxis:
+                           {
+                               labels:
+                               {
+                                   rotation: -60
+                               }
+                           },
+                           tooltip: {
+                               visible: true,
+                               template: "#= category #"
+                           },
+                           chartArea: {
+                               margin: 0,
+                               background: "#fff",
+                               padding: 0,
+                               width: 450,
+                               height: 300, /* add this option */
+                               bottom: 65
+                           }
+                       });
+         });
+        }
+
+    // INPUT EXCEPTION DASHBOARD
+        function createChartException() {
+            $("#dverrorchart").kendoChart({
+                title: {
+                    // text: "What is you favourite sport?"
+                },
+                legend: {
+                    visible: true,
+                    position: "bottom"
+                },
+                seriesDefaults: {
+                    labels: {
+                        //template: "#= category # - #= kendo.format('{0:P}', percentage)#",
+                        template: "#= value #",
+                        position: "center",
+                        font: "14px sans-serif",
+                        visible: true,
+                        background: "transparent"
+                    }
+                },
+                series: [{
+                    type: "pie",
+                    data: [{
+                        category: "Incentive Exception count",
+                        color: "#003f5c",
+                        value: 15
+                    }, {
+                            category: "Min Wage Exception count",
+                        color: "#ffa600",
+                        value: 18
+                    }]
+                }],
+                tooltip: {
+                    visible: true,
+                    template: "#= category # : #= value #"
+                    // template: "#= category # - #= kendo.format('{0:P}', percentage) #"
+                },
+                chartArea: {
+                    margin: 0,
+                    background: "#fff",
+                    padding: 0,
+                    width: 300,
+                    height: 250, /* add this option */
+                    bottom: 65
+                }
+            });
+    }
+
+        
+
+
+
+
+    // START FOR OUTPUT PROCESSING DASHBAORD
+
+
+     $(document).ready(function () {
+         var filename1_Output = $("#hdnFilename_Output").val();
+         if (filename1_Output != undefined) {
+             BindPayrollSummary_Output(filename1_Output, 3);
+             var PendingCnt_Output = $('.First_out').attr('attr_Pending_Output');
+             var ApprovedCnt_Output = $('.First_out').attr('attr_Approved_Output');
+             var Filenametxt_Output = $('.First_out').attr('attr_filenametxt_Output');
+             var Categorytxt_Output = $('.First_out').attr('attr_categorytxt_Output');
+             var lbltxtInput_Output = "Category: " + Categorytxt_Output + " File Name: " + Filenametxt_Output + " Pending: " + PendingCnt_Output + " Approved: " + ApprovedCnt_Output;
+             $("#lblOutputTypetxt").text(lbltxtInput_Output);
+         }
+         createCTCReconcilationChart_Output();
+         createHeadCountChart_Output();
+         createChartException_Output();
+         ShowHideApprovalPnl_Output();
+         BindHeadCountData_out();
+         BindCTCReconData_out();
+         BindExceptionData_out();
+         //BindStatutoryDeductionSummary_out();
+         //BindOneTimeEarningDeduction();
+         BindVariance_Output();
+         
+
+        // OUTPUT ON TICKET CLICK
+
+         $(".dvfiletab_Output").click(function () {
+
+             $(".dvfiletab_Output").each(function () {
+                 $(this).removeClass("Ongoing_Trips_BoxTop_active");
+                 $(this).find("p").removeClass("text-white");
+                 $(this).find("h2").removeClass("text-white");
+                 $(this).find("h3").removeClass("text-white");
+             });
+             $(this).addClass("Ongoing_Trips_BoxTop_active");
+             $(this).find("p").addClass("text-white");
+             $(this).find("h2").addClass("text-white");
+             $(this).find("h3").addClass("text-white");
+
+             var filename_Output = $(this).attr("attr_filename_Output");
+             $("#hdnFilename_Output").val(filename_Output);
+             BindPayrollSummary_Output(filename_Output, 3)
+             var PendingCnt_Output = $(this).attr("attr_Pending_Output");
+             var ApprovedCnt_Output = $(this).attr("attr_Approved_Output");
+             var Filenametxt_Output = $(this).attr("attr_filenametxt_Output");
+             var Categorytxt_Output = $(this).attr("attr_categorytxt_Output");
+             var TotalCnt_Output = $(this).attr("attr_Pending_Total");
+             var lbltxtInput_Output = "Category: " + Categorytxt_Output + " File Name: " + Filenametxt_Output + " Pending: " + PendingCnt_Output + " Approved: " + ApprovedCnt_Output;
+             $("#lblOutputTypetxt").text(lbltxtInput_Output);
+             var tabcnt = $(this).attr("attr_First_Output");
+
+                 if (TotalCnt_Output == ApprovedCnt_Output) {
+                     //$("#dvApprovePnl_Output").hide();
+                     $("#btnOuputApprove").hide();
+                 }
+                 else {
+                     //$("#dvApprovePnl_Output").show();
+                     $("#btnOuputApprove").show();
+                 }
+
+        });
+    });
+
+
+        // START FOR OUTPUT PROCESSING DATA GRID
+        KgridCTC = "";
+        function BindCTCReconData_out() {
+            $.get("@Url.RouteUrl("GetCTCReconDataOutput")", {}, function (response) {
+
+                if (KgridCTC != "") {
+                    $('#kgridCTCRecon_Out').kendoGrid('destroy').empty();
+                }
+                if (response.IsSuccess) {
+                    BindGridDataCTC(response);
+                }
+            });
+        }
+        function BindGridDataCTC(response) {
+            var GridColumns =
+                    [
+                    { field: "Type", title: "Type", width: 120 },
+                    { field: "INPUTCTC", title: "As Per Input", width: 100 },
+                    { field: "OUTPUTCTC", title: "As Per Output", width: 100 }
+
+                ];
+           
+            KgridCTC = $("#kgridCTCRecon_Out").kendoGrid({
+                dataSource: {
+                    data: JSON.parse(response.Data)
+                },
+              //  pageable: { pageSizes: true },
+                //filterable: true,
+                noRecords: true,
+                //resizable: true,
+                //height:200,
+                //sortable: true,
+                columns: GridColumns
+            });
+        }
+
+
+      
+
+
+
+        // END FOR OUTPUT GRID DATA 
+
+
+        // OUTPUT on page load show hide action bar
+        function ShowHideApprovalPnl_Output() {
+            var PendingCnt_Output = $('.First_out').attr('attr_Pending_Output');
+            var TotalCnt_Output = $('.First_out').attr('attr_Pending_Total');
+            var ApprovedCnt_Output = $('.First_out').attr('attr_Approved_Output');
+            if (TotalCnt_Output == ApprovedCnt_Output) {
+                //$("#dvApprovePnl_Output").hide();
+                $("#btnOuputApprove").hide();
+            }
+        };
+
+
+    // OUTPUT 3M 6M 9M 12M
+
+    $("#lstDuration_Output li").click(function () {
+        var duration_Output = $(this).text();
+        duration_Output = duration_Output.replace("M", "");
+        BindPayrollSummary_Output(filename1_Output, duration_Output);
+    });
+
+
+
+
+    // OUTPUT DOWNLOAD DATA
+
+
+    @*$("btnDownload").click(function () {
+var DownLoadDataURL = '@Url.RouteUrl("DownLoadDataPayrollTrend")'
+    });*@
+
+
+    // OUTPUT PAY COMPONENT TREND DASHBOARD
+
+    function BindPayrollSummary_Output(FileTypeID, Duration) {
+             $.get("@Url.RouteUrl("GetPayComponentDB")", { FileTypeID: FileTypeID, Duration: Duration}, function (response) {
+                 var data = $.parseJSON(response);
+
+                 var data = $.parseJSON(response);
+                 if (data.series == 'null' || data.series == null) {
+                     $("#dvSummaryChart_Output").hide();
+                    // $("#dvSummaryChart").hide();
+                     return;
+                 }
+
+                    $("#dvSummaryChart_Output").kendoChart({
+                        series: data.series,
+                        seriesDefaults: {
+                            type: "column",
+                            stack: true,
+                            width: 5,
+                            gap: 5
+                        },
+                        valueAxis: {
+                            line: {
+                                visible: false
+                            },
+                            minorGridLines: {
+                                visible: false
+                            },
+                            labels: {
+                                //template: "#= shortLabels(value) #"
+                                template: "#=value#"
+                            }
+                        },
+                        legend: {
+                            position: "right"
+                        },
+                        categoryAxis: {
+                            categories: data.categorise,
+                            majorGridLines: {
+                                visible: false
+                            }
+                        },
+                        seriesColors: ["#f3ac32", "#b8b8b8", "#bb6e36", "#cd1533", "#d43851", "#cd1533", "#d43851", "#e47f8f", "#eba1ad", "#9C27B0", "#1B5E20", "#00ACC1"],
+                        tooltip: {
+                            visible: true,
+                            template: "#= series.name #: #= value #"
+                        }
+                        ,
+                        chartArea: {
+                            margin: 0,
+                            background: "#fff",
+                            padding: 0,
+                            width: 500,
+                            height: 300, /* add this option */
+                            bottom: 65
+                        }
+                    });
+
+                });
+    }
+
+
+   // OUTPUT CTC RECONCILATION DASHBOARD
+
+        function createCTCReconcilationChart_Output () {
+                   $.get("@Url.RouteUrl("GetCTCReconcilationDB")", {}, function (response) {
+                       var data = $.parseJSON(response.Data);
+                       var OutputData = data.Table1
+                       var cashFlowData = [{
+                           period: "Opening\nBalance:" + OutputData[0].CTC / 100000 + "L",
+                           amount: OutputData[0].CTC
+                       }, {
+                               period: "New Joinee:" + OutputData[1].Value + "\nCTC:" + OutputData[1].CTC/100000 + "L",
+                               amount: OutputData[1].CTC
+                               
+                       }, {
+                               period: "Transfer In:" + OutputData[2].Value + '\n' + "CTC:" + OutputData[2].CTC / 100000 + "L",
+                               amount: OutputData[2].CTC
+                       }, {
+                               period: "Transfer Out:" + OutputData[3].Value + '\n' + "CTC:" + OutputData[3].CTC / 100000 + "L",
+                               amount: OutputData[3].CTC
+                       }, {
+                               period: "Resigned:" + OutputData[4].Value + "\nCTC:" + OutputData[4].CTC / 100000 + "L",
+                               amount: OutputData[4].CTC
+                           },
+                           {
+                               period: "Package Change:" + OutputData[4].Value + "\nCTC:" + OutputData[5].CTC / 100000 + "L",
+                           },
+                       {
+                           period: "Closing\nBalance:" + OutputData[5].CTC / 100000 + "L",
+                           summary: "total"
+                           }];
+                       var palette = ["#4F81BC", "#C0504E", "#9BBB57","#9BBB57", "#C0504E", "#4F81BC"];
+                       $("#chartCTCReconCount_Output").kendoChart({
+
+                           dataSource: {
+                               data: cashFlowData
+                           },
+
+                           legend: {
+                               visible: false
+                           },
+                           series: [{
+                               type: "waterfall",
+                               field: "amount",
+                               categoryField: "period",
+                               summaryField: "summary",
+                               color: function (point) {
+                                   return palette[point.index % palette.length];
+                               }
+                               //,
+                               //labels: {
+                               //    visible: true,
+                               //    format: "{0}",
+                               //    position: "insideEnd",
+                               //    background: "transparent",
+                               //    color: "white"
+                               //}
+                           }],
+                           valueAxis: {
+                               labels: {
+                                   format: "{0}"
+                               }
+                           },
+                           
+                           categoryAxis:
+                           {
+                               labels:
+                               {
+                                   rotation: -60
+                               }
+                           },
+                           tooltip: {
+                               visible: true,
+                               template: "#= category #"
+                           },
+                           chartArea: {
+                               margin: 0,
+                               background: "#fff",
+                               padding: 0,
+                               width: 500,
+                               height: 300, /* add this option */
+                               bottom: 65
+                           }
+                       });
+         });
+        }
+
+
+    // OUTPUT HEADCOUNT DASHBOARD
+
+    function createHeadCountChart_Output() {
+                   $.get("@Url.RouteUrl("GetHeadCountDB")", {}, function (response) {
+                       var Headcount_Output = $.parseJSON(response.Data);
+                       var data = Headcount_Output.Table1;
+                       var cashFlowData = [{
+                           period: "Opening\nBalance:" + data[0].Value,
+                           amount: data[0].Value,
+                           CTC: data[0].CTC
+                       }, {
+                               period: "New Joinee:" + data[1].Value + "\nCTC:" + data[1].CTC/100000 + "L",
+                               amount: data[1].Value,
+                               CTC: data[1].CTC
+                       }, {
+                               period: "Transfer In:" + data[2].Value + '\n' + "CTC:" + data[2].CTC / 100000 + "L",
+                               amount: data[2].Value,
+                               CTC: data[2].CTC
+                       }, {
+                               period: "Transfer Out:" + data[3].Value + '\n' + "CTC:" + data[3].CTC / 100000 + "L",
+                               amount: data[3].Value,
+                               CTC: data[3].CTC
+                       }, {
+                               period: "Resigned:" + data[4].Value + "\nCTC:" + data[4].CTC / 100000 + "L",
+                               amount: data[4].Value,
+                               CTC: data[4].CTC
+                       },
+                       {
+                           period: "Closing\nBalance:" + data[5].Value,
+                           summary: "total"
+                           }];
+                       var palette = ["#4F81BC", "#C0504E", "#9BBB57","#9BBB57", "#C0504E", "#4F81BC"];
+                       $("#chartHeadCount_Output").kendoChart({
+
+                           dataSource: {
+                               data: cashFlowData
+                           },
+
+                           legend: {
+                               visible: false
+                           },
+                           series: [{
+                               type: "waterfall",
+                               field: "amount",
+                               categoryField: "period",
+                               summaryField: "summary",
+                               color: function (point) {
+                                   return palette[point.index % palette.length];
+                               }
+                               //,
+                               //labels: {
+                               //    visible: true,
+                               //    format: "{0}",
+                               //    position: "insideEnd",
+                               //    background: "transparent",
+                               //    color: "white"
+                               //}
+                           }],
+                           valueAxis: {
+                               labels: {
+                                   format: "{0}"
+                               }
+                           },
+                           categoryAxis:
+                           {
+                               labels:
+                               {
+                                   rotation: -60
+                               }
+                           },
+                           tooltip: {
+                               visible: true,
+                               template: "#= category #"
+                           },
+                           chartArea: {
+                               margin: 0,
+                               background: "#fff",
+                               padding: 0,
+                               width: 500,
+                               height: 300, /* add this option */
+                               bottom: 65
+                           }
+                       });
+         });
+        }
+
+
+
+    // OUTPUT EXCEPTION DASHBOARD
+    function createChartException_Output() {
+            $("#dverrorchart_Output").kendoChart({
+                title: {
+                    // text: "What is you favourite sport?"
+                },
+                legend: {
+                    visible: true,
+                    position: "bottom"
+                },
+                seriesDefaults: {
+                    labels: {
+                        //template: "#= category # - #= kendo.format('{0:P}', percentage)#",
+                        template: "#= value #",
+                        position: "center",
+                        font: "14px sans-serif",
+                        visible: true,
+                        background: "transparent"
+                    }
+                },
+                series: [{
+                    type: "pie",
+                    data: [{
+                        category: "Incentive Exception count",
+                        color: "#003f5c",
+                        value: 15
+                    }, {
+                            category: "Min Wage Exception count",
+                        color: "#ffa600",
+                        value: 18
+                    }]
+                }],
+                tooltip: {
+                    visible: true,
+                    template: "#= category # : #= value #"
+                    // template: "#= category # - #= kendo.format('{0:P}', percentage) #"
+                },
+                chartArea: {
+                    margin: 0,
+                    background: "#fff",
+                    padding: 0,
+                    width: 300,
+                    height: 250, /* add this option */
+                    bottom: 65
+                }
+            });
+        }
+
+
+        // START FOR APPROVAL PROCESS
+
+        $(document).ready(function () {
+            $("#btnInputFileApproveModal").click(function () {
+                OpenModal("dvInputFileApprovalModal");
+            });
+            $("#btn_Input_FileApprove").click(function () {
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                var fileID = $("#hdnFilename_Input").val();
+                var Remarks = $("#txtRemarksInputApproval").val();
+                $.post("@Url.RouteUrl("Input_File_Approve")", { __RequestVerificationToken: token, FILETYPEID: fileID, Remarks: Remarks }, function (response) {
+                    if (response.IsSuccess == true) {
+                        HandleSuccessMessage(response, "btnReset");
+                        setTimeout(function () { window.location.href = '@Url.RouteUrl("PayrollCompDB")'; }, 2000);
+                    }
+                    else
+                        HandleSuccessMessage(response);
+                });
+            });
+
+            $("#btnInputFileDownload").click(function () {
+                var fileID = $("#hdnFilename_Input").val();
+                //'@Url.RouteUrl("DownLoadDataPayrollTrend")'
+                window.location = '@Url.RouteUrl("Input_File_Download")' + '?FILETYPEID=' + fileID;
+            });
+            $("#btnInputFileReconsiderModal").click(function () {
+                OpenModal("dvInputFileRejectionModal");
+            });
+            $("#btn_Input_FileReConsider").click(function () {
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                var fileID = $("#hdnFilename_Input").val();
+                var Remarks = $("#txtRemarksInputReconsider").val();
+                $.post("@Url.RouteUrl("Input_File_Reconsider")", { __RequestVerificationToken: token, FILETYPEID: fileID, Remarks: Remarks }, function (response) {
+                    if (response.IsSuccess == true) {
+                        HandleSuccessMessage(response, "btnReset");
+                        setTimeout(function () { window.location.href = '@Url.RouteUrl("PayrollCompDB")'; }, 2000);
+                    }
+                    else
+                        HandleSuccessMessage(response);
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#btnOutputReject").click(function () {
+                OpenModal("dvOutputFileReconsiderModal");
+            });
+            $("#btn_Output_FileReconsider").click(function () {
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                //var fileID = $("#hdnFilename").val();
+                var fileID = $("#hdnFilename_Output").val();
+                var Remarks = $("#txtRemarksOutputReconsider").val();
+                $.post("@Url.RouteUrl("Output_File_Reconsider")", { __RequestVerificationToken: token, FILETYPEID: fileID, Remarks: Remarks }, function (response) {
+                    if (response.IsSuccess == true) {
+                        HandleSuccessMessage(response, "btnReset");
+                        setTimeout(function () { window.location.href = '@Url.RouteUrl("PayrollCompDB")'; }, 2000);
+                    }
+                    else
+                        HandleSuccessMessage(response);
+                });
+            });
+
+
+            $("#btnOuputApprove").click(function () {
+                OpenModal("dvOutputFileApprovalModal");
+            });
+            $("#btn_Output_FileApprove").click(function () {
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                //var fileID = $("#hdnFilename").val();
+                var fileID = $("#hdnFilename_Output").val();
+                var Remarks = $("#txtRemarksOutputApproval").val();
+                $.post("@Url.RouteUrl("Output_File_Approve")", { __RequestVerificationToken: token, FILETYPEID: fileID, Remarks: Remarks }, function (response) {
+                    if (response.IsSuccess == true) {
+                        HandleSuccessMessage(response, "btnReset");
+                        setTimeout(function () { window.location.href = '@Url.RouteUrl("PayrollCompDB")'; }, 2000);
+                    }
+                    else
+                        HandleSuccessMessage(response);
+                });
+            });
+        });
+        $("#btnOutFileDownload").click(function () {
+            var fileID = $("#hdnFilename_Output").val();
+                //'@Url.RouteUrl("DownLoadDataPayrollTrend")'
+                window.location = '@Url.RouteUrl("Output_File_Download")' + '?FILETYPEID=' + fileID;
+        });
+
+        //btnOutFileDownload
+
+
+           KgridHC = "";
+        function BindHeadCountData_out() {
+            $.get("@Url.RouteUrl("GetHeadCountDataOutput")", {}, function (response) {
+
+                if (KgridHC != "") {
+                    $('#kgridHeadCount_Out').kendoGrid('destroy').empty();
+                }
+                if (response.IsSuccess) {
+                    BindGridDataHC(response);
+                }
+            });
+        }
+        function BindGridDataHC(response) {
+            var GridColumns =
+                [
+                    { field: "Type", title: "Type", width: 120 },
+                    { field: "INPUTCTC", title: "As Per Input", width: 100 },
+                    { field: "OUTPUTCTC", title: "As Per Output", width: 100 }
+                ];
+           
+            KgridHC = $("#kgridHeadCount_Out").kendoGrid({
+                dataSource: {
+                    data: JSON.parse(response.Data)
+                },
+                //  pageable: { pageSizes: true },
+                //filterable: true,
+                noRecords: true,
+                //resizable: true,
+                // height:240,
+                //sortable: true,
+                columns: GridColumns
+            });
+        }
+
+        // exception data grid
+
+         KgridEx = "";
+        function BindExceptionData_out () {
+            $.get("@Url.RouteUrl("GetExceptionDataOutput")", {}, function (response) {
+
+                if (KgridEx != "") {
+                    $('#kgridException_Out').kendoGrid('destroy').empty();
+                }
+                if (response.IsSuccess) {
+                    BindExcDataCTC(response);
+                }
+            });
+        }
+        function BindExcDataCTC(response) {
+            var GridColumns =
+                    [
+                    { field: "Type", title: "Type", width: 120 },
+                    { field: "TotalCount", title: "Total Count", width: 60 }
+
+                ];
+           
+            KgridEx = $("#kgridException_Out").kendoGrid({
+                dataSource: {
+                    data: JSON.parse(response.Data)
+                },
+              //  pageable: { pageSizes: true },
+                //filterable: true,
+                noRecords: true,
+                //resizable: true,
+               // height:240,
+                //sortable: true,
+                columns: GridColumns
+            });
+        }
+
+
+        // Statutory Deduction Summary
+
+         KgridSDS = "";
+        function BindStatutoryDeductionSummary_out () {
+            $.get("@Url.RouteUrl("GetSDSOutput")", {}, function (response) {
+
+                if (KgridSDS != "") {
+                    $('#KgrdSDS_output').kendoGrid('destroy').empty();
+                }
+                if (response.IsSuccess) {
+                    BindSDS(response);
+                }
+            });
+        }
+        function BindSDS(response) {
+            var GridColumns =
+                    [
+                    { field: "Type", title: "Employee Contribution", width: 120 },
+                    { field: "TotalCount", title: "As per Salary Register", width: 60 }
+
+                ];
+           
+            KgridSDS = $("#KgrdSDS_output").kendoGrid({
+                dataSource: {
+                    data: JSON.parse(response.Data)
+                },
+                noRecords: true,
+                columns: GridColumns
+            });
+        }
+
+
+         // ONE TIME EARNING DEDUCTION-dvEarning Deduction
+
+        function BindOneTimeEarningDeduction() {
+             $.get("@Url.RouteUrl("GetOneTimeEarningDeduction")", {}, function (response) {
+                 var data = $.parseJSON(response);
+                 if (data.series == 'null' || data.series == null) {
+                     $("#dvEarningDeduction").hide();
+                    // $("#dvSummaryChart").hide();
+                     return;
+                 }
+
+                 $("#dvEarningDeduction").kendoChart({
+                        series: data.series,
+                        seriesDefaults: {
+                            type: "column",
+                            stack: true,
+                            width: 5,
+                            gap: 5
+                        },
+                        valueAxis: {
+                            line: {
+                                visible: false
+                            },
+                            minorGridLines: {
+                                visible: false
+                            },
+                            labels: {
+                                //template: "#= shortLabels(value) #"
+                                template: "#=value#"
+                            }
+                        },
+                        legend: {
+                            position: "right"
+                        },
+                        categoryAxis: {
+                            categories: data.categorise,
+                            majorGridLines: {
+                                visible: false
+                            }
+                        },
+                        seriesColors: ["#f3ac32", "#b8b8b8", "#bb6e36", "#cd1533", "#d43851", "#cd1533", "#d43851", "#e47f8f", "#eba1ad", "#9C27B0", "#1B5E20", "#00ACC1"],
+                        tooltip: {
+                            visible: true,
+                            template: "#= series.name #: #= value #"
+                        }
+                        ,
+                        chartArea: {
+                            margin: 0,
+                            background: "#fff",
+                            padding: 0,
+                            width: 500,
+                            height: 300, /* add this option */
+                            bottom: 65
+                        }
+                    });
+
+                });
+        }
+
+
+         KgridOTED = "";
+        function BindOneTimeEarningDeduction () {
+            $.get("@Url.RouteUrl("GetOneTimeEarningDeduction")", {}, function (response) {
+
+                if (KgridOTED != "") {
+                    $('#dvEarningDeduction').kendoGrid('destroy').empty();
+                }
+                if (response.IsSuccess) {
+                    BindOTED(response);
+                }
+            });
+        }
+        function BindOTED(response) {
+            var GridColumns =
+                    [
+                    { field: "Type", title: "Head Count", width: 120 },
+                    { field: "TotalCount", title: "Amount", width: 60 }
+
+                ];
+           
+            KgridOTED = $("#dvEarningDeduction").kendoGrid({
+                dataSource: {
+                    data: JSON.parse(response.Data)
+                },
+                noRecords: true,
+                columns: GridColumns
+            });
+        }
+
+         // OUTPUT VARIANCE DASHBOARD
+
+    function BindVariance_Output() {
+             $.get("@Url.RouteUrl("GetVariance_Output")", {}, function (response) {
+                 var data = $.parseJSON(response);
+                 if (data.series == 'null' || data.series == null) {
+                    // $("#dvVarianceDB_Output").hide();
+                    // $("#dvSummaryChart").hide();
+                     return;
+                 }
+
+                 $("#dvVarianceDB_Output").kendoChart({
+                        series: data.series,
+                        seriesDefaults: {
+                            type: "column",
+                            stack: true,
+                            width: 5,
+                            gap: 5
+                        },
+                        valueAxis: {
+                            line: {
+                                visible: false
+                            },
+                            minorGridLines: {
+                                visible: false
+                            },
+                            labels: {
+                                //template: "#= shortLabels(value) #"
+                                template: "#=value#"
+                            }
+                        },
+                        legend: {
+                            position: "right"
+                        },
+                        categoryAxis: {
+                            categories: data.categorise,
+                            majorGridLines: {
+                                visible: false
+                            }
+                        },
+                        seriesColors: ["#f3ac32", "#b8b8b8", "#bb6e36", "#cd1533", "#d43851", "#cd1533", "#d43851", "#e47f8f", "#eba1ad", "#9C27B0", "#1B5E20", "#00ACC1"],
+                        tooltip: {
+                            visible: true,
+                            template: "#= series.name #: #= value #"
+                        },
+                        chartArea: {
+                            margin: 0,
+                            background: "#fff",
+                            padding: 0,
+                            width: 500,
+                            height: 300, /* add this option */
+                            bottom: 65
+                        }
+                    });
+
+                });
+        }
+
+    </script>
+
+}

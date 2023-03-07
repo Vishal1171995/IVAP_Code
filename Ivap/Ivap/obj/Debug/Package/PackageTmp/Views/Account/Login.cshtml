@@ -1,0 +1,212 @@
+﻿@model  Ivap.ViewModel.LoginVM
+@{
+    Layout = null;
+    
+}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Log in</title>
+    @Styles.Render("~/Content/css/LoginCss")
+    <!-- Bootstrap -->
+    @*<link href="~/Content/css_Idea/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css_Idea/CustomStyle.css" rel="stylesheet" />
+    <link href="~/Content/css_Idea/TextBoxEffect.css" rel="stylesheet" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="LoginPageYellowBg">
+        <div class="LoginPageLeft">
+            <h1>Welcome to IVAP</h1>
+            <div class="clear0"></div>
+            <p>
+                Intelligent Validation and Audit Platform.
+            </p>
+
+            <div class="clear20"></div>
+            <div id="myCarousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+
+                    <div class="item active">
+
+                        <div class="delivery_truck_login">
+                            <img src="images/loginPageIcon1.png" alt="" />
+                        </div>
+                        <div class="clear30"></div>
+                        <h2> Input Submission </h2>
+
+                    </div>
+
+                    <div class="item">
+
+                        <div class="delivery_truck_login">
+                            <img src="images/loginPageIcon2.png" alt="" />
+                        </div>
+                        <div class="clear30"></div>
+                        <h2> Input Validation </h2>
+
+                    </div>
+
+                    <div class="item">
+
+                        <div class="delivery_truck_login">
+                            <img src="images/loginPageIcon3.png" alt="" />
+                        </div>
+                        <div class="clear30"></div>
+                        <h2> Reconciliation </h2>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="clear"></div>
+        </div>
+        <form action="/login" id="UserLoginForm" method="post" accept-charset="utf-8" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <div class="LoginPageRight">
+                <div class="LoginIdeaLogo">
+                    <img src="~/Content/images/Mynd_logo.png" alt="">
+                </div>
+
+                <div class="LoginAdityaBirlaLogo mg-top7">
+                    <img src="~/Content/images/iVap_loginlogo.png" alt="">
+                </div>
+                <div class="clear20"></div>
+                <h1>Login</h1>
+                <div class="clear"></div>
+                <p>Login to manage all the services and explore our tool</p>
+                <div class="clear"></div>
+                <div class="LoginFormMain">
+                    <div class="clear"></div>
+                    <div class="TextBoxMainMain">
+                        @Html.TextBoxFor(model => model.EntityCode, new { @autocomplete = "off", @class = "effect-16 question UserName", @placeholder = "" })
+                        <label>Entity Code</label>
+                        @Html.ValidationMessageFor(model => model.EntityCode)
+                    </div>
+                    
+                    <div class="TextBoxMainMain">
+                        @Html.TextBoxFor(model => model.UserName, new { @autocomplete = "off", @class = "effect-16 question UserName", @placeholder = "" })
+                        <label>User name</label>
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </div>
+                    <div class="clear10"></div>
+                    <div class="TextBoxMainMain">
+                        @*<input type="text" name="name" class="question Password" required autocomplete="off" />*@
+                        @Html.PasswordFor(model => model.Password, new
+                       {
+                           @name = "password",
+                           @autocomplete = "off",
+                           @class = "effect-16 question Password",
+                           @placeholder = ""
+                       })
+                        @*@Html.ValidationMessageFor(model => model.Password)*@
+                        <label>Password</label>
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                    <div class="clear10"></div>
+                    <div class="srybtn">
+                        <p>@Html.ValidationSummary(true)</p>
+                    </div>
+                    @*<div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="">
+                            <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                            Remember Me for 30 days
+                        </label>
+                    </div>*@
+                    <a class="LoginForgotPassword" href='@Url.RouteUrl("ForgotPasswordView")'>Forgot Password ?</a>
+                </div>
+                <div class="clear"></div>
+                <button type="submit" class="btn btn-primary SignInBtn">Sign In</button>
+                <div class="clear"></div>
+                <img class="LoginPageRightCurveImg" src="~/Content/images/LoginPageRightCurveImg.png" alt="" />
+            </div>
+        </form>
+           
+            <div class="clear"></div>
+</div>
+</body>
+
+</html>
+@*<script src="~/Scripts/html5shiv.min.js"></script>*@
+@Scripts.Render("~/Scripts/LoginScript")
+<script src="~/Scripts/html5shiv.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.dropdown-menu li a').click(function (event) {
+            var option = $(event.target).text();
+            $(event.target).parents('.btn-group').find('.dropdown-toggle').html(option + ' <span class="caret caretBlue"></span>');
+        });
+    });
+
+    // Link to open the dialog
+    $("#load").click(function (event) {
+        $("#dvForgetPassdtl").show();
+        $("#dvForgetPassMsg").hide();
+        $("#txtUserName").val("");
+        $("#pmsg").html("");
+        $("#dvForgetPass").dialog({
+            autoOpen: false,
+            width: 450,
+            title: "Forget Password",
+            closeText: "",
+        });
+        $("#dvForgetPass").dialog("open");
+        event.preventDefault();
+    });
+
+    $("#btnForgotPass").click(function () {
+        var UserName = $("#txtUserName").val();
+        if (UserName.trim() == "") {
+            alert("Please enter your user name");
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.RouteUrl("ForgetPassword")",
+            contentType: "application/json; charset=utf-8",
+            data: { UserName: UserName },
+            success: function (response) {
+
+                $("#pmsg").html(response.Message);
+                $("#dvForgetPassdtl").hide();
+                $("#dvForgetPassMsg").show();
+            }
+
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+            $(".TextBoxMainMain input").val("");
+            $(".TextBoxMainMain input").on("blur", function () {
+                if ($(this).val() != "") {
+                    $(this).addClass("has-content");
+                } else {
+                    $(this).removeClass("has-content");
+                }
+            });
+        });
+</script>

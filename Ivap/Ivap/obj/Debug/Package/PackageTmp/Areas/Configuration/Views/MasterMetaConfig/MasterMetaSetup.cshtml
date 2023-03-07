@@ -1,0 +1,155 @@
+﻿@model Ivap.Areas.Configuration.Models.MasterMetaModel
+@{
+    ViewBag.Title = "Master Meta SetUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>Master Meta SetUp</strong></h3></div>
+    <div class="panel-body">
+        @*<div class="pull-right VendorSiteBtnRightMain">
+               @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewUser", area = string.Empty });}
+                <button type="button" id="dvimport" class="btn btn-primary TransparantBtnBlue">Import Excel</button>
+                    <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+                <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+            </div>*@
+        <div class="row form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Master Name</label>
+            <div class="col-sm-4">
+                @Html.DropDownListFor(m => m.SCREEN_NAME, new SelectList(Model.SCREEN_NAMEList, "Value", "Text", "0"), new { @class = "form-control", @placeholder = "Master Name" })
+                @Html.ValidationMessageFor(m => m.SCREEN_NAME, "", new { @class = "" })
+            </div>
+        </div>
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@Scripts.Render("~/Scripts/commanscript")
+<script type="text/javascript">
+    var GetMasterMetaURL = '@Url.RouteUrl("GetMasterMeta")';
+    var UpdateMasterMetaURL = '@Url.RouteUrl("UpdateMasterMeta")';
+    $(document).ready(function () {
+        $("#li_Configuration").addClass("active");
+        $("#anch_MasterMetaSetup").addClass("CurantPageIcon");
+        //Changelabelgrid();
+                });
+
+                //function customBoolEditor(container, options) {
+                //    var guid = kendo.guid();
+                //    $('<input class="k-checkbox" id="' + guid + '" type="checkbox" name="Discontinued" data-type="boolean" data-bind="checked:Discontinued">').appendTo(container);
+                //    $('<label class="k-checkbox-label" for="' + guid + '">&#8203;</label>').appendTo(container);
+                //}
+    $("#SCREEN_NAME").change(function () {
+        MasterMetagrid();
+    });
+  
+    var Kgrid = "";
+    function MasterMetagrid() {
+        var ScreenName = $("#SCREEN_NAME").val();
+        if (Kgrid != "") {
+         //   $("#Kgrd").kendoGrid('destroy').empty();
+        }
+        dataSource = new kendo.data.DataSource({
+            //requestEnd: function (e) {
+            //    var response = e.response;
+            //    var type = e.type;
+            //    if (response.result == "Fail") {
+            //        alert("[ERROR]:" + response.error_msg);
+            //    }
+            //},
+            transport: {
+                read: {
+                    url: GetMasterMetaURL,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                },
+                update: {
+                    url: UpdateMasterMetaURL,
+                    type: "POST",
+                    complete: function (jqXhr, textStatus) {
+                        var res = jqXhr.responseJSON;
+                       // if (textStatus == 'success' && res.IsSuccess != false) {
+                            HandleSuccessMessage(res);
+                      //  }
+                    }
+                },
+                destroy: {
+                    url: GetMasterMetaURL,
+                    dataType: "jsonp"
+                },
+
+                parameterMap: function (options, operation) {
+                    if (operation === "read") {
+                        return JSON.stringify({
+                            Screen_Name: ScreenName,
+                        });
+                    }
+                    if (operation !== "read" && options.models) {
+                        return { Model:options.models };
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "TID",
+                    fields: {
+                        TID: { editable: false, nullable: true },
+                        DISPLAY_NAME: { validation: { required: true } },
+                        DISPLAY_ORDER: { type: "number", validation: { required: true, min: 1 } }
+                    }
+                },
+                data: function (data) {
+                    if (data.Data != "MasterMeta" && data.IsSuccess != false) {
+                        var res = JSON.parse(data.Data)
+                        // if (data.IsSuccess) {
+                        if (res.length > 0) {
+                            return res || [];
+                        }
+                        // }
+                        // else {
+                        //     alert(data);
+                        // }
+                    }
+                },
+            }
+        });
+
+        $("#Kgrd").kendoGrid({
+            dataSource: dataSource,
+            save: function (e) {
+                var field = Object.keys(e.values)[0];
+                var newVal = e.values[field];
+                var oldModel = e.sender.dataSource._pristineForModel(e.model);
+
+                if (oldModel[field] === newVal) {
+                    delete e.model.dirtyFields[field];
+                    if (Object.keys(e.model.dirtyFields).length === 0) {
+                        e.model.dirty = false;
+                    }
+                }
+            },
+            navigatable: true,
+            pageable: true,
+            height: 550,
+            toolbar: ["save", "cancel"],
+            columns: [
+                { field: "DISPLAY_NAME", title: "Display Name", width: 120 },
+                { field: "DISPLAY_ORDER", title: "Display Order", width: 120 },
+                // { field: "UnitsInStock", title: "Units In Stock", width: 120 },
+                // { field: "Discontinued", width: 120, editor: customBoolEditor },
+                //  { command: "destroy", title: "&nbsp;", width: 150 }
+            ],
+            editable: true
+        });
+    }
+</script>

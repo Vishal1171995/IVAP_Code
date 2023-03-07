@@ -1,0 +1,517 @@
+﻿@model Ivap.Areas.Master.Models.DepartmentModel
+
+@{
+    ViewBag.Title = "Department";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewDepartment", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name</strong></h3></div>
+    <div class="panel-body">
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+<section class="content">
+    <div id="tab" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td> <label>@Model.DEPT_NAME_TEXT</label> </td>
+                                            <td><span id="lblDeptName"> </span></td>
+                                            <td> <label>@Model.ENTITY_ID_TEXT</label> </td>
+                                            <td><span id="lblEntityName"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.PAY_DEPT_CODE_TEXT</label> </td>
+                                            <td><span id="lblPDeptCode"> </span></td>
+                                            <td> <label>@Model.ERP_DEPT_CODE_TEXT</label> </td>
+                                            <td><span id="lblEDeptCode"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.ISACTIVE_TEXT</label> </td>
+                                            <td><span id="lblStatus"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="kgrdHistory"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dvAddUpdateDept" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdateDepartment", new AjaxOptions { OnSuccess = "SuccessMessage", OnFailure = "FailMessage", OnBegin = "Validate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body horizontalscroll">
+                        <div class="row form-group">
+                            <label for="DEPT_NAME" class="col-sm-4 control-label">@Model.DEPT_NAME_TEXT<span class="text-red">*</span></label>
+                            <div class="col-sm-8">
+                                @Html.HiddenFor(m => m.DEPTID, new { id = "hdnDeptID" })
+                                @Html.TextBoxFor(m => m.DEPT_NAME, new { @class = "form-control", @placeholder = @Model.DEPT_NAME_TEXT })
+                                @Html.ValidationMessageFor(m => m.DEPT_NAME)
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="PAY_DEPT_CODE" class="col-sm-4 control-label">@Model.PAY_DEPT_CODE_TEXT<span class="text-red">*</span></label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.PAY_DEPT_CODE, new { @class = "form-control", @placeholder = @Model.PAY_DEPT_CODE_TEXT })
+                                @Html.ValidationMessageFor(m => m.PAY_DEPT_CODE)
+                            </div>
+                            
+                        </div>
+                        <div class="row form-group">
+                            <label for="ERP_DEPT_CODE" class="col-sm-4 control-label">@Model.ERP_DEPT_CODE_TEXT<span class="text-red">*</span></label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.ERP_DEPT_CODE, new { @class = "form-control", @placeholder = @Model.ERP_DEPT_CODE_TEXT })
+                                @Html.ValidationMessageFor(m => m.ERP_DEPT_CODE)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="IsActive" class="col-sm-4 control-label">@Model.ISACTIVE_TEXT</label>
+                            <div class="col-sm-8">
+                                @Html.CheckBoxFor(m => m.IsActive)
+                            </div>
+                        </div>
+                        @*<div class="row form-group">
+                            </div>*@
+                    </div>
+                    <div class="clear"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                    </div>
+                    <div class="clear20"></div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="clearfix"></div>
+                    <div class="row top_content">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <label>select a XLSX file</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                                <input type="file" name="files" id="files" target-control="hdnFileName">
+                                <input type="hidden" id="hdnFileName" />
+                            </div>
+                            <div class="clear20"></div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                                <div class="reset_btn" align="right">
+                                    <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                    <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                                </div>
+
+                            </div>
+                            @*</div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="log" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Log</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="clearfix"></div>
+                    <div class="row top_content">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                                <label class="headtag">Total Success</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label id="lblTotSuccess" class="feedback_content">500</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label class="headtag">Total Loss</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label id="lblTotFailed" class="feedback_content">500</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="reset_btn" align="right">
+                                    <input type="hidden" id="hdnresultFile" />
+                                    <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@Scripts.Render("~/Scripts/commanscript")
+
+<script type="text/javascript">
+        var ExportDeptURL = '@Url.RouteUrl("ExportDepartment")'
+        var getDeprtmentURL = '@Url.RouteUrl("getDepartment")'
+    var getDeptHistoryURL = '@Url.RouteUrl("GetDeptHistory")'
+
+
+        var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadDepartmentDetailsURL = "@Url.RouteUrl("UploadDepartmentDetails")"
+        var DownLoadResultFileURL= '@Url.RouteUrl("DownLoadResultFileForExcel")'
+</script>
+<script type="text/javascript">
+
+     $(document).ready(function () {
+         $("#li_Master").addClass("active");
+         $("#anch_ViewDepartment").addClass("CurantPageIcon");
+           BindGrid();
+           $("#dvExport").bind("click", {}, function DownLoadAll() {
+               var URL = ExportDeptURL;
+               window.location = URL;
+               return false;
+           });
+           //$("#dvimport").bind("click", {}, OpenUploadPopup);
+           $("#add").click(function () {
+               $("#btnReset").click();
+               $("#btnSubmit").val("Submit");
+               $("#hdnDeptID").val(0);
+               OpenModal("dvAddUpdateDept", 700, "Add Department");
+           });
+    });
+
+    $("#dvimport").bind("click", {}, function () {
+        OpenModal("Uploaddialog", 500, "Upload Plant");
+    });
+    var form = $('#__AjaxAntiForgeryForm');
+    var token = $('input[name="__RequestVerificationToken"]', form).val();
+    $("#files").kendoUpload({
+        async: {
+            saveUrl: FilesUploadURL,
+            //removeUrl: "remove",
+            autoUpload: true
+        },
+        upload: function (e) {
+            e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+        },
+        select: function (event) {
+            var notAllowed = false;
+            $.each(event.files, function (index, value) {
+                if (value.extension !== '.xlsx') {
+                    alert("Plese select a xlsx file only!");
+                    notAllowed = true;
+                }
+            });
+            var breakPoint = 0;
+            if (notAllowed == true) e.preventDefault();
+        },
+        multiple: false,
+        success: onSuccessForUpload,
+        remove: onRemoveForUpload,
+        showFileList: false
+    });
+    $("#btnUpload").click(function (event) {
+        var fileName = $("#hdnFileName").val();
+        if (fileName.trim() == "") {
+            alert("Please select a xlsx file");
+            return false;
+        }
+        var form = $('#__AjaxAntiForgeryForm');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        var Data = { __RequestVerificationToken: token, FileName: fileName };
+        $.ajax({
+            type: "POST",
+            url: UploadDepartmentDetailsURL,
+            contentType: "application/x-www-form-urlencoded",
+            //data: Data,
+            data: {
+                __RequestVerificationToken: token,
+                FileName: fileName
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess == true) {
+                    var Data = JSON.parse(response.Data);//.split(",");
+                    $("#lblTotSuccess").html(Data["Success"]);
+                    $("#lblTotFailed").html(Data["Failed"]);
+                    $("#hdnresultFile").val(Data["FileName"]);
+                    $("#Uploaddialog").modal("hide");
+                    OpenModal("log", 500, "Result");
+                    BindGrid();
+                }
+                else {
+                    //FailResponse(response);
+                    alert(response.Message);
+                }
+                $("#dvDetails").show();
+            }
+        });
+    });
+
+
+    function DownLoadSample() {
+        var URL = DownLoadSampleURL + '?TableName=IVAP_MST_DEPARTMENT &ActionName=ViewDepartment&SampleName=DepartmentMaster.xlsx';
+        window.location = URL;
+        return false;
+    }
+    function DownLoadResultFile() {
+        var FileName = $("#hdnresultFile").val();
+        var Data = { FileName: FileName };
+        var URL = DownLoadResultFileURL + '?FileName=' + FileName;
+        window.location = URL;
+        return false;
+    }
+
+    function DownLoadAll() {
+        var URL = DownloadAllDivisionURL;
+        window.location = URL;
+        return false;
+    }
+
+
+
+var Kgrid = "";
+        function BindGrid() {
+            var DepartmentID = 0;
+            $.get(getDeprtmentURL, { DeptID: DepartmentID }, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrd').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+                    { field: "ENTITY_NAME", title: "Entity Name", width: 150 },
+                    { field: "DEPT_NAME", title: '@Model.DEPT_NAME_TEXT', width: 150 },
+                    { field: "PAY_DEPT_CODE", title: '@Model.PAY_DEPT_CODE_TEXT', width: 130 },
+                    { field: "ERP_DEPT_CODE", title: '@Model.ERP_DEPT_CODE_TEXT', width: 130 },
+                    { field: "STATUS", title: '@Model.ISACTIVE_TEXT', width: 100, template: "<span class= #if(STATUS=='Active'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:STATUS#</span>" },
+               
+
+                ];
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditHandler;
+                        else if (response.Command.command[i].name == "View")
+                            response.Command.command[i].click = ViewHandler;
+                    }
+                    GridColumns.push(response.Command);
+                }
+                Kgrid = $("#Kgrd").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+
+        }
+
+
+
+function SuccessMessage(res) {
+    if ($("#hdnDeptID").val() > 0)
+        $("#dvAddUpdateDept").modal('hide');
+    HandleSuccessMessage(res, "btnReset");
+    BindGrid();
+}
+function FailMessage() {
+    // alert("Fail Post");
+}
+function Validate() {
+    return true;
+}
+
+
+var ViewHandler = function ViewHandler(e) {
+    e.preventDefault();
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var TID = dataItem.TID;
+    $.get(getDeprtmentURL, { DeptID: TID }, function (response) {
+
+        var Data = $.parseJSON(response.Data);
+        $("#lblPDeptCode").html(htmlEncode(Data[0].PAY_DEPT_CODE));
+        $("#lblEDeptCode").html(htmlEncode(Data[0].ERP_DEPT_CODE));
+        $("#lblDeptName").html(htmlEncode(Data[0].DEPT_NAME));
+        $("#lblEntityName").html(Data[0].ENTITY_NAME);
+        var IsAct = Data[0].ISACTIVE;
+        (IsAct == 1) ? $('#lblStatus').html('Active') : $('#lblIsAct').html('In Active');
+        HistoryGridData(TID);
+
+
+    });
+}
+
+//function DownLoadAll() {
+
+//    var URL = DownloadAllMapppingUserUrl
+//    window.location = URL;
+//    return false;
+//}
+
+
+    function HistoryGridData(TID) {
+    $.ajax({
+        type: "GET",
+        url: getDeptHistoryURL,
+        contentType: "application/json; charset=utf-8",
+        data: { "DeptID": TID },
+        dataType: "json",
+        success: function (response) {
+            HistorybindGrid(response.Data);
+            OpenModal("tab", 910, "Cost Centre");
+        },
+        error: function (data) {
+            alert("something went wrong");
+        }
+    });
+}
+
+var histkgrid = "";
+function HistorybindGrid(Data1) {
+    if (histkgrid != "") {
+        $('#kgrdHistory').kendoGrid('destroy').empty();
+    }
+    histkgrid = $("#kgrdHistory").kendoGrid({
+        dataSource: {
+            pageSize: 10,
+            data: JSON.parse(Data1)
+        },
+        columns: [
+            { field: "DEPT_NAME", title: '@Model.DEPT_NAME_TEXT', width: 150 },
+            { field: "PAY_DEPT_CODE", title: '@Model.PAY_DEPT_CODE_TEXT', width: 150 },
+            { field: "ERP_DEPT_CODE", title: '@Model.ERP_DEPT_CODE_TEXT', width: 150 },
+            { field: "ENTITY_NAME", title: "Entity Name", width: 130 },
+                       //  { field: "UPDATE_ON", title: "Updated On", width: 120 },
+                       //{ field: "CREATE_ON", title: "Created On", width: 120 },
+                       //{ field: "ACTION", title: "Action", width: 100 },
+        ],
+        dataBound: function (e) {
+            var grid = e.sender;
+            if (grid.dataSource.total() == 0) {
+                var colCount = grid.columns.length;
+                //$(e.sender.wrapper)
+                //    .find('tbody')
+                //    .append('<tr class="kendo-data-row"><td colspan="' + colCount + '" class="no-data"><span style="margin-left:46%;">No data found.</span></td></tr>');
+            }
+            else {
+                var rows = grid.dataSource.total();
+                var colCount = grid.columns.length;
+                for (var i = rows - 1; i > 0 ; i--) {
+                    for (var k = 0; k < colCount; k++) {
+
+                        if (grid.tbody[0].children[i].cells[k].innerText != grid.tbody[0].children[i - 1].cells[k].innerText) {
+                            grid.tbody[0].children[i - 1].cells[k].bgColor = "red";
+                        }
+                    }
+                }
+            }
+        },
+        noRecords: true,
+        filterable: true,
+        sortable: true,
+        pageable: true,
+        reorderable: true,
+        resizable: true,
+
+
+
+
+    });
+}
+
+
+var EditHandler = function EditHandler(e) {
+    $("#btnReset").click();
+    e.preventDefault();
+    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+    var DepartmentID = dataItem.TID;
+    $.get(getDeprtmentURL, { DeptID: DepartmentID }, function (response) {
+
+        var Data = $.parseJSON(response.Data);
+        $("#hdnDeptID").val(DepartmentID);
+
+        $("#PAY_DEPT_CODE").val(htmlEncode(Data[0].PAY_DEPT_CODE));
+        $("#ERP_DEPT_CODE").val(htmlEncode(Data[0].ERP_DEPT_CODE));
+        $("#DEPT_NAME").val(htmlEncode(Data[0].DEPT_NAME));
+        var IsAct = Data[0].ISACTIVE;
+        (IsAct == 1) ? $('#IsActive').prop('checked', true) : $('#IsActive').prop('checked', false);
+        $("#btnSubmit").val("Update");
+        OpenModal("dvAddUpdateDept", 700, "Edit Department");
+
+    });
+}
+
+
+
+</script>
+

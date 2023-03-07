@@ -1,0 +1,981 @@
+﻿@model Ivap.Areas.CAPA.Models.CapaModel
+@{
+    ViewBag.Title = "UpdateCapaReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "CapaReport", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>Update CAPA Report</strong></h3></div>
+   
+        <div class="modal-dialog" style="width:100%;">
+            <!-- Modal content-->
+          
+              
+                <div class="modal-body">
+                    @using (Ajax.BeginForm("UpdateCapaReport", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @*<div class="modal-body">*@
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Issue<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+                                    @Html.TextAreaFor(m => m.Issue, new { @class = "form-control", @placeholder = "Issue" })
+                                    @Html.ValidationMessageFor(m => m.Issue)
+                                </div>
+                                <label for="inputEmail3" class="col-sm-2 control-label">Issue Description<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+                                    @Html.HiddenFor(m => m.TID)
+                                    @Html.TextAreaFor(m => m.Issue_Description, new { @class = "form-control", @placeholder = "Issue Description" })
+                                    @Html.ValidationMessageFor(m => m.Issue_Description)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Customer Impact<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+
+                                    @Html.TextBoxFor(m => m.Customer_Impact, new { @class = "form-control", @placeholder = "Customer Impact" })
+                                    @Html.ValidationMessageFor(m => m.Customer_Impact)
+                                </div>
+                                <label for="inputEmail3" class="col-sm-2 control-label">Sequence of events<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+
+                                    @Html.TextBoxFor(m => m.Sequence_of_events, new { @class = "form-control", @placeholder = "Sequence of events" })
+                                    @Html.ValidationMessageFor(m => m.Sequence_of_events)
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Communication Process used<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+
+                                    @Html.TextBoxFor(m => m.Communication_process, new { @class = "form-control", @placeholder = "Communication Process used" })
+                                    @Html.ValidationMessageFor(m => m.Communication_process)
+                                </div>
+                                <label for="inputEmail3" class="col-sm-2 control-label">Root Cause<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+
+                                    @Html.TextBoxFor(m => m.Root_Cause, new { @class = "form-control", @placeholder = "Root Cause" })
+                                    @Html.ValidationMessageFor(m => m.Root_Cause)
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                <div class="panel-default">
+                                    <div class="cch-tab mdm-tab">
+                                        <ul class="nav nav-tabs NotificationsTabMain">
+                                            <li class="active"><a href="#Corrective" data-toggle="tab">Corrective</a></li>
+                                            <li><a href="#Preventive" data-toggle="tab">Preventive</a></li>
+                                        </ul>
+                                        <div class="panel-body">
+                                            <div class="tab-content clearfix">
+                                                <div class="tab-pane active" id="Corrective">
+
+                                                    <button type="button" class="btn btn-default" id="btnCorrective" data-toggle="modal" data-target="#CorrectiveModal1"> <i class="fa fa-plus"> </i> Show </button>
+                                                </div>
+
+                                                <div class="tab-pane" id="Preventive">
+
+                                                    <div class="pull-right">
+                                                        <button type="button" class="btn btn-default" id="btnPreventive" data-toggle="modal" data-target="#PreventiveModal1"> <i class="fa fa-plus"> </i> Show </button>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                        <div class="clear20"></div>
+
+                        <div class="modal fade PopUpMainDiv" id="CorrectiveModal" role="dialog">
+                            <div class="modal-dialog" style="width:60%;">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header pd-7">
+                                        <button type="button" class="close" id="btnDismiss">
+                                            <img src="~/Content/images/popup_close.png" alt="Close " />
+                                        </button>
+                                        <h4 class="modal-title">Corrective</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <label>Corrective Action<span class="text-red">*</span></label>
+                                                    @Html.HiddenFor(m => m.CorrectiveAction_Detail)
+                                                    @Html.HiddenFor(m => m.Corrective_ID)
+                                                    @Html.TextAreaFor(m => m.Corrective_Action, new { @class = "form-control", @placeholder = "Corrective Action" })
+                                                    @Html.ValidationMessageFor(m => m.Corrective_Action, "Required")
+
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <label>Action Text<span class="text-red">*</span></label>
+
+                                                    @Html.TextBoxFor(m => m.CorrectiveAction_Text, new { @class = "form-control", @placeholder = "Action Text" })
+                                                    @Html.ValidationMessageFor(m => m.CorrectiveAction_Text, "Required")
+
+                                                </div>
+                                            </div>
+                                            <div class="clear20"></div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                    <label>Action Owner<span class="text-red">*</span></label>
+
+                                                    @Html.TextBoxFor(m => m.CorrectiveAction_Owner, new { @class = "form-control", @placeholder = "Action Owner" })
+                                                    @Html.ValidationMessageFor(m => m.CorrectiveAction_Owner, "Required")
+
+                                                </div>
+                                            </div>
+                                            <div class="clear20"></div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="pull-left">
+                                                    <button type="button" id="btnUpdateCorrective" class="btn btn-primary">Update</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade PopUpMainDiv" id="PreventiveModal" role="dialog">
+                            <div class="modal-dialog" style="width:60%;">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header pd-7">
+                                        <button type="button" class="close" id="btnDismissPreventive">
+                                            <img src="~/Content/images/popup_close.png" alt="Close " />
+                                        </button>
+                                        <h4 class="modal-title">Preventive</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <label>Preventive Action</label>
+                                                    @Html.HiddenFor(m => m.PreventiveAction_Detail)
+                                                    @Html.HiddenFor(m => m.Preventive_ID)
+                                                    @Html.TextAreaFor(m => m.Preventive_Action, new { @class = "form-control", @placeholder = "Preventive Action" })
+                                                    @Html.ValidationMessageFor(m => m.Preventive_Action, "Required")
+
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <label>Action Text</label>
+
+                                                    @Html.TextBoxFor(m => m.PreventiveAction_Text, new { @class = "form-control", @placeholder = "Action Text" })
+                                                    @Html.ValidationMessageFor(m => m.PreventiveAction_Text, "Required")
+
+                                                </div>
+                                            </div>
+                                            <div class="clear20"></div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                    <label>Action Owner</label>
+
+                                                    @Html.TextBoxFor(m => m.PreventiveAction_Owner, new { @class = "form-control", @placeholder = "Action Owner" })
+                                                    @Html.ValidationMessageFor(m => m.PreventiveAction_Owner, "Required")
+
+                                                </div>
+                                            </div>
+                                            <div class="clear20"></div>
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <div class="pull-left">
+                                                    <button type="button" id="btnUpdatePreventive" class="btn btn-primary">Update</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="TableOuterDiv table-responsive" id="KapaCorrectiveUpdategrid">
+                            <div id="KapaCorrectiveUpdategrid"></div>
+                        </div>
+
+                        <div class="TableOuterDiv table-responsive" id="KapaPreventiveUpdategrid">
+                            <div id="KapaPreventiveUpdategrid"></div>
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Update" />
+                            </div>
+                        </div>
+                    }
+                    <div class="clear20"></div>
+                </div>
+          
+        </div>
+        <div class="clear"></div>
+   
+</div>
+
+
+<div class="modal fade PopUpMainDiv" id="EditCapaModal" style="display:none">
+    <div class="modal-dialog" style="width:100%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+            <div class="modal-header pd-7">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("UpdateCapa", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+                {
+                    @Html.AntiForgeryToken()
+                    @*<div class="modal-body">*@
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Issue<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.Issue, new { @class = "form-control", @placeholder = "Issue" })
+                                @Html.ValidationMessageFor(m => m.Issue)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">Issue Description<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.HiddenFor(m => m.TID)
+                                @Html.TextBoxFor(m => m.Issue_Description, new { @class = "form-control", @placeholder = "Issue Description" })
+                                @Html.ValidationMessageFor(m => m.Issue_Description)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Customer Impact<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+
+                                @Html.TextBoxFor(m => m.Customer_Impact, new { @class = "form-control", @placeholder = "Customer Impact" })
+                                @Html.ValidationMessageFor(m => m.Customer_Impact)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">Sequence of events<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+
+                                @Html.TextBoxFor(m => m.Sequence_of_events, new { @class = "form-control", @placeholder = "Sequence of events" })
+                                @Html.ValidationMessageFor(m => m.Sequence_of_events)
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Communication Process used<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+
+                                @Html.TextBoxFor(m => m.Communication_process, new { @class = "form-control", @placeholder = "Communication Process used" })
+                                @Html.ValidationMessageFor(m => m.Communication_process)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">Root Cause<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+
+                                @Html.TextBoxFor(m => m.Root_Cause, new { @class = "form-control", @placeholder = "Root Cause" })
+                                @Html.ValidationMessageFor(m => m.Root_Cause)
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <div class="panel-default">
+                                <div class="cch-tab mdm-tab">
+                                    <ul class="nav nav-tabs NotificationsTabMain">
+                                        <li class="active"><a href="#Corrective" data-toggle="tab">Corrective</a></li>
+                                        <li><a href="#Preventive" data-toggle="tab">Preventive</a></li>
+                                    </ul>
+                                    <div class="panel-body">
+                                        <div class="tab-content clearfix">
+                                            <div class="tab-pane active" id="Corrective">
+
+                                                <button type="button" class="btn btn-default" id="btnCorrective" data-toggle="modal" data-target="#CorrectiveModal1"> <i class="fa fa-plus"> </i> Show </button>
+                                            </div>
+
+                                            <div class="tab-pane" id="Preventive">
+
+                                                <div class="pull-right">
+                                                    <button type="button" class="btn btn-default" id="btnPreventive" data-toggle="modal" data-target="#PreventiveModal1"> <i class="fa fa-plus"> </i> Show </button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="clear20"></div>
+
+                    <div class="modal fade PopUpMainDiv" id="CorrectiveModal" role="dialog">
+                        <div class="modal-dialog" style="width:60%;">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header pd-7">
+                                    <button type="button" class="close" id="btnDismiss">
+                                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                                    </button>
+                                    <h4 class="modal-title">Corrective</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label>Corrective Action<span class="text-red">*</span></label>
+                                                @Html.HiddenFor(m => m.CorrectiveAction_Detail)
+                                                @Html.HiddenFor(m => m.Corrective_ID)
+                                                @Html.TextBoxFor(m => m.Corrective_Action, new { @class = "form-control", @placeholder = "Corrective Action" })
+                                                @Html.ValidationMessageFor(m => m.Corrective_Action, "Required")
+
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label>Action Text<span class="text-red">*</span></label>
+
+                                                @Html.TextBoxFor(m => m.CorrectiveAction_Text, new { @class = "form-control", @placeholder = "Action Text" })
+                                                @Html.ValidationMessageFor(m => m.CorrectiveAction_Text, "Required")
+
+                                            </div>
+                                        </div>
+                                        <div class="clear20"></div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                <label>Action Owner<span class="text-red">*</span></label>
+
+                                                @Html.TextBoxFor(m => m.CorrectiveAction_Owner, new { @class = "form-control", @placeholder = "Action Owner" })
+                                                @Html.ValidationMessageFor(m => m.CorrectiveAction_Owner, "Required")
+
+                                            </div>
+                                        </div>
+                                        <div class="clear20"></div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="pull-left">
+                                                <button type="button" id="btnUpdateCorrective" class="btn btn-primary">Update</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade PopUpMainDiv" id="PreventiveModal" role="dialog">
+                        <div class="modal-dialog" style="width:60%;">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header pd-7">
+                                    <button type="button" class="close" id="btnDismissPreventive">
+                                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                                    </button>
+                                    <h4 class="modal-title">Preventive</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label>Preventive Action</label>
+                                                @Html.HiddenFor(m => m.PreventiveAction_Detail)
+                                                @Html.HiddenFor(m => m.Preventive_ID)
+                                                @Html.TextBoxFor(m => m.Preventive_Action, new { @class = "form-control", @placeholder = "Preventive Action" })
+                                                @Html.ValidationMessageFor(m => m.Preventive_Action, "Required")
+
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <label>Action Text</label>
+
+                                                @Html.TextBoxFor(m => m.PreventiveAction_Text, new { @class = "form-control", @placeholder = "Action Text" })
+                                                @Html.ValidationMessageFor(m => m.PreventiveAction_Text, "Required")
+
+                                            </div>
+                                        </div>
+                                        <div class="clear20"></div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                                <label>Action Owner</label>
+
+                                                @Html.TextBoxFor(m => m.PreventiveAction_Owner, new { @class = "form-control", @placeholder = "Action Owner" })
+                                                @Html.ValidationMessageFor(m => m.PreventiveAction_Owner, "Required")
+
+                                            </div>
+                                        </div>
+                                        <div class="clear20"></div>
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="pull-left">
+                                                <button type="button" id="btnUpdatePreventive" class="btn btn-primary">Update</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="TableOuterDiv table-responsive" id="KapaCorrectiveUpdategrid">
+                        <div id="KapaCorrectiveUpdategrid"></div>
+                    </div>
+
+                    <div class="TableOuterDiv table-responsive" id="KapaPreventiveUpdategrid">
+                        <div id="KapaPreventiveUpdategrid"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <input type="submit" id="btnSubmit" class="btn btn-primary" value="Update" />
+                        </div>
+                    </div>
+                }
+                <div class="clear20"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="CapaDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">CAPA Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+
+                                        <td><label>Issue</label></td>
+                                        <td> <span id="lblissue"> </span></td>
+                                        <td><label>Issue Description</label> </td>
+                                        <td><span id="lbldescription"> </span></td>
+                                        <td><label>Customer Impact</label> </td>
+                                        <td><span id="lblcustomerImpact"> </span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td> <label>Sequence Of Events </label> </td>
+                                        <td><span id="lblSequence"></span></td>
+                                        <td><label>Communication Process</label> </td>
+                                        <td><span id="lblCommunication"> </span></td>
+                                        <td><label>Root Cause</label> </td>
+                                        <td><span id="lblroot"> </span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+    <script type="text/javascript">
+        var CapaCorrectiveUpdateDataSource = [];
+        var CapaPreventiveUpdateDatasource = [];
+        var GetCapaURL = "@Url.RouteUrl("GetEditCapa")"
+        var GetCapaHisURL = "@Url.RouteUrl("GetCapaHis")"
+         var GetCapaTestingURL = "@Url.RouteUrl("GetEditCapaTesting")"
+
+
+
+        $(document).ready(function () {
+            //BindGrid(); 
+          
+            var CapaID = parseInt($("#TID").val());
+          //  alert(CapaID);
+             $.get(GetCapaURL, { CapaID: CapaID }, function (response) {
+
+                var Getdata = $.parseJSON(response.Data);
+                 CapaCorrectiveUpdateDataSource = Getdata.CorrectiveData;
+                 CapaPreventiveUpdateDatasource = Getdata.PreventiveData;
+                 BindKapaCorrectiveUpdategrid(CapaCorrectiveUpdateDataSource);
+                 BindKapaPreventiveUpdategrid(CapaPreventiveUpdateDatasource);
+            });
+            $("#dvExport").hide();
+            $("#dvimport").hide();
+            $("#KapaCorrectiveUpdategrid").hide();
+            $("#KapaPreventiveUpdategrid").hide();
+
+
+    });
+
+    $("#btnDismiss").click(function () {
+        $('#CorrectiveModal').modal('hide');
+
+
+    });
+
+    $("#btnDismissPreventive").click(function () {
+
+        $('#PreventiveModal').modal('hide');
+
+    });
+
+    $("#btnCorrective").click(function () {
+
+        $("#KapaCorrectiveUpdategrid").show();
+        $("#KapaPreventiveUpdategrid").hide();
+        CapaCorrectiveUpdateDataSource = CapaCorrectiveUpdateDataSource.filter(function (item) {
+            return item.CAPA_ID == $("#TID").val();
+        });
+
+        BindKapaCorrectiveUpdategrid(CapaCorrectiveUpdateDataSource);
+    });
+
+    $("#btnPreventive").click(function () {
+        console.log($("#TID").val());
+        $("#KapaCorrectiveUpdategrid").hide();
+        $("#KapaPreventiveUpdategrid").show();
+        CapaPreventiveUpdateDatasource = CapaPreventiveUpdateDatasource.filter(function (item) {
+            return item.CAPA_ID == $("#TID").val();
+        });
+        console.log(CapaPreventiveUpdateDatasource);
+        BindKapaPreventiveUpdategrid(CapaPreventiveUpdateDatasource);
+    });
+
+    $("#btnUpdateCorrective").click(function () {
+        var return_val_corrective = ValidateCorrective();
+        if (return_val_corrective == false) {
+            $(this).css('box-shadow', '10px 10px 5px #888');
+            return;
+        }
+        for (var i = 0; i < CapaCorrectiveUpdateDataSource.length; i++) {
+            if (CapaCorrectiveUpdateDataSource[i].TID === parseInt($("#Corrective_ID").val())) {
+                CapaCorrectiveUpdateDataSource[i].CORRECTIVE_ACTION = $("#Corrective_Action").val();
+                CapaCorrectiveUpdateDataSource[i].ACTION_TEXT = $("#CorrectiveAction_Text").val();
+                CapaCorrectiveUpdateDataSource[i].ACTION_OWNER = $("#CorrectiveAction_Owner").val();
+                break;
+            }
+        }
+        $("#CorrectiveAction_Detail").val(JSON.stringify(CapaCorrectiveUpdateDataSource));
+        BindKapaCorrectiveUpdategrid(CapaCorrectiveUpdateDataSource);
+        $('#CorrectiveModal').modal('toggle');
+    });
+
+    $("#btnUpdatePreventive").click(function () {
+        var return_val_Preventive = ValidatePreventive();
+        if (return_val_Preventive == false) {
+            return;
+        }
+
+        for (var i = 0; i < CapaPreventiveUpdateDatasource.length; i++) {
+            if (CapaPreventiveUpdateDatasource[i].TID === parseInt($("#Preventive_ID").val())) {
+                CapaPreventiveUpdateDatasource[i].PREVENTIVE_ACTION = $("#Preventive_Action").val();
+                CapaPreventiveUpdateDatasource[i].ACTION_TEXT = $("#PreventiveAction_Text").val();
+                CapaPreventiveUpdateDatasource[i].ACTION_OWNER = $("#PreventiveAction_Owner").val();
+                break;
+            }
+        }
+        $("#PreventiveAction_Detail").val(JSON.stringify(CapaPreventiveUpdateDatasource));
+        BindKapaPreventiveUpdategrid(CapaPreventiveUpdateDatasource);
+        $('#PreventiveModal').modal('toggle');
+
+    });
+
+    $("#add").click(function (event) {
+        window.location.href = '/CAPA/CapaReport/';
+    });
+        $("#btnSubmit").click(function () {
+            CapaCorrectiveUpdateDataSource = CapaCorrectiveUpdateDataSource.filter(function (item) {
+                return item.CAPA_ID == $("#TID").val();
+            });
+
+            CapaPreventiveUpdateDatasource = CapaPreventiveUpdateDatasource.filter(function (item) {
+                return item.CAPA_ID == $("#TID").val();
+            });
+            $("#CorrectiveAction_Detail").val(JSON.stringify(CapaCorrectiveUpdateDataSource));
+            $("#PreventiveAction_Detail").val(JSON.stringify(CapaPreventiveUpdateDatasource));
+        });
+    //============================================Start Grid==================================
+        var EditKapagrid = "";
+        function BindGrid() {
+            var CapaID = 0;
+            $.get(GetCapaURL, { CapaID: CapaID }, function (response) {
+
+                var Getdata = $.parseJSON(response.Data);
+                CapaCorrectiveUpdateDataSource = Getdata.CorrectiveData;
+                CapaPreventiveUpdateDatasource = Getdata.PreventiveData;
+                BindKapaCorrectiveUpdategrid(CapaCorrectiveUpdateDataSource);
+                BindKapaPreventiveUpdategrid(CapaPreventiveUpdateDatasource);
+                if (EditKapagrid != "") {
+                    $('#EditKapagrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+                    { field: "ISSUE", title: "Issue", width: 100 },
+                    { field: "ISSUE_DESCRIPTION", title: "Description", width: 100 },
+                    { field: "CUSTOMER_IMPACT", title:"Customer Impact", width: 100 },
+                    { field: "SEQUENCE_OF_EVENT", title: "Sequence Of Event", width: 100 },
+                    { field: "COMMUNICATION_PROCESS", title: "Communication Process", width: 100 },
+                    { field: "ROOT_CAUSE", title: "Root Cause", width: 100 },
+
+                ];
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditCapaHandler;
+                        else if (response.Command.command[i].name == "View")
+                            response.Command.command[i].click = ViewCapaHandler;
+                    }
+                    GridColumns.push(response.Command);
+                }
+
+                EditKapagrid = $("#EditKapagrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: Getdata.CData
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+
+        var KapaCorrectiveUpdategrid = "";
+        function BindKapaCorrectiveUpdategrid(CapaCorrectiveUpdateDataSource) {
+            if (KapaCorrectiveUpdategrid != "") {
+                $('#KapaCorrectiveUpdategrid').kendoGrid('destroy').empty();
+            }
+
+            var GridColumns = [
+
+                { field: "CORRECTIVE_ACTION", title: "Corrective Action ", width: 100 },
+                { field: "ACTION_TEXT", title: "Action Text ", width: 100 },
+                { field: "ACTION_OWNER", title: "Action Owner", width: 100 },
+                { command: [{ name: "Edit", text: "", iconClass: "k-icon k-i-edit", click: CorrectiveEditHandler, title: "Edit" }], title: "Action", width: 50 }
+
+            ];
+            KapaCorrectiveUpdategrid = $("#KapaCorrectiveUpdategrid").kendoGrid({
+                dataSource: {
+                    data: CapaCorrectiveUpdateDataSource
+                },
+                editable: "inline",
+                height: 200,
+                noRecords: true,
+                resizable: true,
+                sortable: true,
+                columns: GridColumns,
+            });
+
+
+        }
+
+
+
+        var KapaPreventiveUpdategrid = "";
+        function BindKapaPreventiveUpdategrid(CapaPreventiveUpdateDatasource) {
+            if (KapaPreventiveUpdategrid != "") {
+                $('#KapaPreventiveUpdategrid').kendoGrid('destroy').empty();
+            }
+
+            var GridColumns = [
+
+                { field: "PREVENTIVE_ACTION", title: "Preventive Action ", width: 100 },
+                { field: "ACTION_TEXT", title: "Action Text ", width: 100 },
+                { field: "ACTION_OWNER", title: "Action Owner", width: 100 },
+                {
+                    command: [{ name: "Edit", text: "", iconClass: "k-icon k-i-edit", click: PreventiveEditHandler, title: "Edit" }
+                    ], title: "Action", width: 50
+                }
+
+            ];
+            editable: "inline"
+            KapaPreventiveUpdategrid = $("#KapaPreventiveUpdategrid").kendoGrid({
+                dataSource: {
+                    data: CapaPreventiveUpdateDatasource
+                },
+                editable: "inline",
+                height: 200,
+                noRecords: true,
+                resizable: true,
+                sortable: true,
+                columns: GridColumns,
+            });
+
+
+    }
+
+
+
+    var histkgrid = "";
+    function HistoryGridData(CapaID) {
+        $.ajax({
+            type: "GET",
+            url: GetCapaHisURL,
+            contentType: "application/json; charset=utf-8",
+            data: { "CapaID": CapaID },
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.IsSuccess) {
+                    if (histkgrid != "") {
+                        $('#GridHis').kendoGrid('destroy').empty();
+                    }
+                    histkgrid = $("#GridHis").kendoGrid({
+                        dataSource: {
+                            //pageSize: 10,
+                            data: JSON.parse(response.Data)
+                        },
+                        columns: [
+
+                            { field: "ISSUE", title: "Issue", width: 120 },
+                            { field: "ISSUE_DESCRIPTION", title: "Issue Description", width: 150 },
+                            { field: "CUSTOMER_IMPACT", title: "Customer Impact", width: 200 },
+                            { field: "SEQUENCE_OF_EVENT", title: "Sequence", width: 120 },
+                            { field: "COMMUNICATION_PROCESS", title: "Communication", width: 120 },
+                            { field: "ROOT_CAUSE", title: "Root Cause", width: 100 },
+                            { field: "CREATED_ON", title: "Created", width: 120 },
+                            { field: "UPDATE_ON", title: "UPDATED", width: 120 },
+                            { field: "ACTION", title: "Action", width: 100 },
+                        ],
+                        dataBound: function (e) {
+                            var grid = e.sender;
+                            if (grid.dataSource.total() != 0) {
+                                var rows = grid.dataSource.total();
+                                var colCount = grid.columns.length;
+                                for (var i = rows - 1; i > 0; i--) {
+                                    for (var k = 0; k < colCount; k++) {
+                                        if (grid.tbody[0].children[i].cells[k].innerText != grid.tbody[0].children[i - 1].cells[k].innerText) {
+                                            grid.tbody[0].children[i - 1].cells[k].bgColor = "red";
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        pageable: false,
+                        height: 350,
+                        sortable: true,
+                        resizable: true,
+                        noRecords: true
+                    });
+                    $("#GridHis .k-grid-content.k-auto-scrollable").css("height", "272px");
+                    OpenModal("CapaDetails", 909, "Class Details");
+                }
+                else {
+                    FailResponse(response);
+                }
+            }
+        });
+    }
+
+     //============================================End Grid==================================
+
+    //======================================= Start Edit Handler========================
+
+        var EditCapaHandler = function EditCapaHandler(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var CapaID = dataItem.TID;
+            //$.get(GetCapaURL, { CapaID: CapaID }, function (response) {
+
+            //    var Getdata = $.parseJSON(response.Data);
+            //    CapaCorrectiveDataSource = Getdata.CorrectiveData;
+            //    CapaPreventiveDatasource = Getdata.PreventiveData;
+            //    BindKapaCorrectivegrid(CapaCorrectiveDataSource);
+            //    BindKapaPreventivegrid(CapaPreventiveDatasource);
+            //});
+            window.location.href = GetCapaTestingURL + "?CapaID=" + CapaID;
+            //$("#TID").val(dataItem.TID)
+            //$("#Issue").val(dataItem.ISSUE)
+            //$("#Issue_Description").val(dataItem.ISSUE_DESCRIPTION)
+            //$("#Customer_Impact").val(dataItem.CUSTOMER_IMPACT)
+            //$("#Sequence_of_events").val(dataItem.SEQUENCE_OF_EVENT)
+            //$("#Communication_process").val(dataItem.COMMUNICATION_PROCESS)
+            //$("#Root_Cause").val(dataItem.ROOT_CAUSE)
+            //$('#EditCapaModal').modal('toggle');
+
+    }
+
+        var CorrectiveEditHandler= function CorrectiveEditHandler(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            console.log(dataItem);
+            var REditCID = dataItem.TID;
+            $("#btnSubmitCorrective").hide();
+            $("#btnUpdateCorrective").show();
+            $("#Corrective_ID").val(REditCID);
+            $("#Corrective_Action").val(dataItem.CORRECTIVE_ACTION);
+            $("#CorrectiveAction_Text").val(dataItem.ACTION_TEXT);
+            $("#CorrectiveAction_Owner").val(dataItem.ACTION_OWNER);
+            OpenModal("CorrectiveModal", 500, "Add Role");
+
+        }
+
+        var PreventiveEditHandler= function PreventiveEditHandler(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            console.log(dataItem);
+            var REditPID = dataItem.TID;
+            $("#btnSubmitPreventive").hide();
+            $("#btnUpdatePreventive").show();
+            $("#Preventive_ID").val(Number(REditPID));
+            $("#Preventive_Action").val(dataItem.PREVENTIVE_ACTION);
+            $("#PreventiveAction_Text").val(dataItem.ACTION_TEXT);
+            $("#PreventiveAction_Owner").val(dataItem.ACTION_OWNER);
+            OpenModal("PreventiveModal", 500, "Add Role");
+
+        }
+
+        var ViewCapaHandler=function ViewCapaHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var CapaID = dataItem.TID;
+            $.get(GetCapaURL, { CapaID: CapaID }, function (response) {
+                var Data = $.parseJSON(response.Data);
+                console.log(Data);
+                $("#lblissue").html(htmlEncode(Data.CData[0].ISSUE));
+                $("#lbldescription").html(htmlEncode(Data.CData[0].ISSUE_DESCRIPTION));
+                $("#lblcustomerImpact").html(htmlEncode(Data.CData[0].CUSTOMER_IMPACT));
+                $("#lblSequence").html(htmlEncode(Data.CData[0].SEQUENCE_OF_EVENT));
+                $("#lblCommunication").html(htmlEncode(Data.CData[0].COMMUNICATION_PROCESS));
+                $("#lblroot").html(htmlEncode(Data.CData[0].ROOT_CAUSE));
+            });
+            HistoryGridData(CapaID);
+            OpenModal("CapaDetails", 909, "Capa Details");
+    }
+
+
+     //======================================= End Edit Handler========================
+
+        function SuccessMessage(res) {
+            BindGrid();
+            $('#EditCapaModal').modal('toggle');
+            HandleSuccessMessage(res, "btnReset");
+    }
+
+    //=======================================start validation========================
+
+        function ValidateCorrective() {
+            event = event || window.event || event.srcElement;
+            var return_val = true;
+            if ($('#Corrective_Action').val().trim() == '') {
+                $('#Corrective_Action').next('span').show();
+                return_val = false;
+            } else {
+
+                $('#Corrective_Action').next('span').hide();
+            }
+            if ($('#CorrectiveAction_Text').val().trim() == '') {
+                $('#CorrectiveAction_Text').next('span').show();
+                return_val = false;
+            } else {
+                $('#CorrectiveAction_Text').next('span').hide();
+            }
+            if ($('#CorrectiveAction_Owner').val().trim() == '') {
+                $('#CorrectiveAction_Owner').next('span').show();
+                return_val = false;
+            } else {
+                $('#CorrectiveAction_Owner').next('span').hide();
+            }
+            return return_val;
+
+        }
+
+        function ValidatePreventive() {
+            event = event || window.event || event.srcElement;
+            var return_val = true;
+            if ($('#Preventive_Action').val().trim() == '') {
+                $('#Preventive_Action').next('span').show();
+                return_val = false;
+            } else {
+                $('#Preventive_Action').next('span').hide();
+            }
+            if ($('#PreventiveAction_Text').val().trim() == '') {
+                $('#PreventiveAction_Text').next('span').show();
+                return_val = false;
+            } else {
+                $('#PreventiveAction_Text').next('span').hide();
+            }
+            if ($('#PreventiveAction_Owner').val().trim() == '') {
+                $('#PreventiveAction_Owner').next('span').show();
+                return_val = false;
+            } else {
+                $('#PreventiveAction_Owner').next('span').hide();
+            }
+
+            return return_val;
+        }
+
+
+    //======================================= End Validation========================
+
+
+
+
+
+    </script>
+
+}
+

@@ -1,0 +1,73 @@
+﻿
+@model Ivap.Areas.CAPA.Models.ConversationCapaModel
+
+<div id="dvConversationCapa" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <form id="myForm" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Add Minutes Details</h4>
+                </div>
+                <div class="modal-body horizontalscroll">
+
+
+                    @*@Html.ValidationSummary()*@
+                    <div class="row form-group">
+                        <label for="Agenda" class="col-sm-2 control-label">Minutes<span class="text-red">*</span></label>
+                        <div class="col-sm-10">
+                          
+                            <textarea class="form-control valid" cols="20" data-val="true" data-val-required="Please enter minutes of meeting" id="Minutes" name="Minutes" placeholder="Minutes" rows="2"></textarea>
+                            @*@Html.TextArea("Minutes", new { @class = "form-control", @placeholder = "Minutes", @data - val = "true", @data - val - required = "Please enter Agenda of Meeting" })*@
+                            @*@Html.ValidationMessage("Minutes")*@
+                            <span class="field-validation-valid" data-valmsg-for="Minutes" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="Responsibilites" class="col-sm-2 control-label">Responsibility<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control valid" cols="20" data-val="true" data-val-required="Please enter responsible person name" id="Responsibility" name="Responsibility" placeholder="Responsibility" rows="2"></textarea>
+                            @*@Html.TextArea("Responsibility", new { @class = "form-control", @placeholder = "Responsibility" })*@
+                            <span class="field-validation-valid" data-valmsg-for="Responsibility" data-valmsg-replace="true"></span>
+                            @*@Html.ValidationMessage("Responsibility")*@
+                        </div>
+                        <label for="Status" class="col-sm-2 control-label">Status<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control valid MD selectbdr" data-val="true" data-val-required="Status required." id="Status" name="Status">
+                                <option value="">--Select--</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Closed">Closed</option>
+                                <option value="Discarded">Discarded</option>
+                            </select>
+                            <span class="field-validation-valid" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="Meeting Held" class="col-sm-2 control-label">Expected Closure Date<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <input class="form-control valid " onkeydown="return false" data-val="true" data-val-required="    Please enter expected closure date" id="Expected_Closure_Date" name="Expected_Closure_Date" placeholder="dd/MM/yyyy hh:mm:ss" />
+                            <span class="field-validation-valid" data-valmsg-for="Expected_Closure_Date" data-valmsg-replace="true"></span>
+                        </div>
+
+                        <label for="Meeting Held" class="col-sm-2 control-label">Actual Closure Date<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <input class="form-control valid " , onkeydown="return false" data-val="true" data-val-required="    Please enter actual closure date" id="Actual_Closure_Date" name="Actual_Closure_Date" placeholder="dd/MM/yyyy hh:mm:ss" />
+                            <span class="field-validation-valid" data-valmsg-for="Actual_Closure_Date" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="clear10"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnResetMinutes" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmitMinutes" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit Minutes" />
+
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>

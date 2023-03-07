@@ -1,0 +1,91 @@
+﻿@model Ivap.Areas.Configuration.Models.WFSettingModel
+@using Ivap.Repository;
+@using (Ajax.BeginForm("PayRollAddUpdateWorkFlowSetting", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.FILE_ID)
+    <div class="row">
+        <div class="col-md-12" style="padding-left:0;">
+            <div>
+                <ul class="progress-tracker progress-tracker--text progress-tracker--center trip-track">
+
+
+                    <li class="progress-step @Model.WorkflowSettingMaker.CompleteCssClass">
+                        @Html.CheckBoxFor(m => m.WorkflowSettingMaker.ISCheck, new { @class = "ChkWS", @attrchkid = "imgmaker" })
+                        <span class="progress-arrow"> </span>
+                        <span class="progress-circle"><img id="imgmaker" src="~/Content/images/@Model.WorkflowSettingMaker.Icon_Name" class="img-responsive">Maker</span>
+                        <span class="progress-text">
+                            <span class="author">Available Users <a href="javascript:void(0);" onclick="GetUserDate('@Model.WorkflowSettingMaker.USER_ROLE');">(@Model.WorkflowSettingMaker.UserCount)</a></span>
+                        </span>
+                        @Html.HiddenFor(m => m.WorkflowSettingMaker.USER_ROLE)
+                        @Html.HiddenFor(m => m.WorkflowSettingMaker.ORDERING)
+                    </li>
+
+
+                    <li class="progress-step @Model.WorkflowSettingChecker.CompleteCssClass">
+                        @Html.CheckBoxFor(m => m.WorkflowSettingChecker.ISCheck, new { @class = "ChkWS", @attrchkid = "imgchaker" })
+                        <span class="progress-arrow"> </span>
+                        <span class="progress-circle"> <img id="imgchaker" src="~/Content/images/@Model.WorkflowSettingChecker.Icon_Name" class="img-responsive"> Checker </span>
+                        <span class="progress-text">
+                            <span class="author">Available Users <a href="javascript:void(0);" onclick="GetUserDate('@Model.WorkflowSettingChecker.USER_ROLE');">(@Model.WorkflowSettingChecker.UserCount)</a> </span>
+                        </span>
+                        @Html.HiddenFor(m => m.WorkflowSettingChecker.USER_ROLE)
+                        @Html.HiddenFor(m => m.WorkflowSettingChecker.ORDERING)
+                    </li>
+
+                    <li class="progress-step @Model.WorkflowSettingClientAdmin.CompleteCssClass">
+                        @Html.CheckBoxFor(m => m.WorkflowSettingClientAdmin.ISCheck, new { @class = "ChkWS", @attrchkid = "imgCA" })
+                        <span class="progress-arrow"> </span>
+                        <span class="progress-circle"> <img id="imgCA" src="~/Content/images/@Model.WorkflowSettingClientAdmin.Icon_Name" class="img-responsive"> Client Admin </span>
+                        <span class="progress-text">
+                            <span class="author">Available Users <a href="javascript:void(0);" onclick="GetUserDate('@Model.WorkflowSettingClientAdmin.USER_ROLE');">(@Model.WorkflowSettingClientAdmin.UserCount)</a> </span>
+                        </span>
+                        @Html.HiddenFor(m => m.WorkflowSettingClientAdmin.USER_ROLE)
+                        @Html.HiddenFor(m => m.WorkflowSettingClientAdmin.ORDERING)
+                    </li>
+
+
+
+                    <li class="progress-step @Model.WorkflowSettingMyndMaker.CompleteCssClass">
+                        @Html.CheckBoxFor(m => m.WorkflowSettingMyndMaker.ISCheck, new { @class = "ChkWS", @attrchkid = "imgMMaker" })
+                        <span class="progress-arrow"> </span>
+                        <span class="progress-circle"><img id="imgMMaker" src="~/Content/images/@Model.WorkflowSettingMyndMaker.Icon_Name" class="img-responsive"> Mynd Maker </span>
+                        <span class="progress-text">
+                            <span class="author">Available Users <a href="javascript:void(0);" onclick="GetUserDate('@Model.WorkflowSettingMyndMaker.USER_ROLE');">(@Model.WorkflowSettingMyndMaker.UserCount)</a></span>
+                        </span>
+                        @Html.HiddenFor(m => m.WorkflowSettingMyndMaker.USER_ROLE)
+                        @Html.HiddenFor(m => m.WorkflowSettingMyndMaker.ORDERING)
+                    </li>
+
+
+                    <li class="progress-step @Model.WorkflowSettingMyndChcker.CompleteCssClass">
+                        @Html.CheckBoxFor(m => m.WorkflowSettingMyndChcker.ISCheck, new { @class = "ChkWS", @attrchkid = "imgMCk" })
+                        <span class="progress-arrow"> </span>
+                        <span class="progress-circle"> <img id="imgMCk" src="~/Content/images/@Model.WorkflowSettingMyndChcker.Icon_Name" class="img-responsive"> Mynd Checker </span>
+                        <span class="progress-text">
+                            <span class="author">Available Users <a href="javascript:void(0);" onclick="GetUserDate('@Model.WorkflowSettingMyndChcker.USER_ROLE');">(@Model.WorkflowSettingMyndChcker.UserCount)</a> </span>
+                        </span>
+                        @Html.HiddenFor(m => m.WorkflowSettingMyndChcker.USER_ROLE)
+                        @Html.HiddenFor(m => m.WorkflowSettingMyndChcker.ORDERING)
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="pull-right">
+                @if (AuthorizationRepo.IsValidAction("WorkFlowSetting", "CreateAction"))
+                {
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg" value="Submit" />
+                }
+            </div>
+        </div>
+    </div>
+}
+<script>
+            //function SuccessMessage()
+            //{
+            //    alert("hiiiiii");
+            //}
+
+</script>

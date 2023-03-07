@@ -1,0 +1,120 @@
+﻿@using System.Data;
+@model DataTable
+@{
+    Layout = null;
+}
+
+@{
+    //Getting Menu list from model
+    DataView dvAllMenu = new DataView(Model);
+    dvAllMenu.RowFilter = "Menu_Type='MENU'";
+    DataTable dt = dvAllMenu.ToTable();
+    DataView dv = new DataView(dt);
+    //Filtering All Parent Lavel Menu
+    dv.RowFilter = "Pmenu=0";
+    dv.Sort = "Display_Order ASC";
+    DataTable dtP = dv.ToTable();
+}
+        <!-- Sidebar user panel -->
+        <ul class="leftMenuList">
+            
+    @for (int i = 0; i < dtP.Rows.Count; i++)
+    {
+        string Cssclass = "";
+        string Route = "";
+
+        if (!string.IsNullOrEmpty(Convert.ToString(dtP.Rows[i]["Image"])))
+        {
+            Cssclass = " " + dtP.Rows[i]["Image"].ToString();
+        }
+        if (!string.IsNullOrEmpty(Convert.ToString(dtP.Rows[i]["ROUTE"])))
+        {
+            try
+            {
+                Route = Url.RouteUrl(Convert.ToString(dtP.Rows[i]["ROUTE"]));
+            }
+            catch
+            {
+                Route = "Javascript:void('0')";
+            }
+        }
+        else
+        {
+            Route = "Javascript:void('0')";
+        }
+        //string MenuID = "anch" + dtP.Rows[i]["tid"];
+        //string liID = "li" + dtP.Rows[i]["tid"];
+
+        //liID = "li_" + dtC.Rows[j]["ACTIONS_NAME"];
+        //string MenuID = "anch" + dtP.Rows[i]["tid"];
+        string MenuID = "anch_" + dtP.Rows[i]["ACTIONS_NAME"];
+        string liID = "li_" + dtP.Rows[i]["ACTIONS_NAME"];
+        <li id="@liID">
+            <a href="@Route" class="dropdown @Cssclass" title="@dtP.Rows[i]["Name"]" id="@MenuID">
+                <span>@dtP.Rows[i]["Name"]</span>
+            </a>
+            @{
+                DataView dvChild = new DataView(dt);
+                int Mid = Convert.ToInt32(dtP.Rows[i]["Tid"]);
+                dvChild.RowFilter = "Pmenu=" + Mid;
+                dvChild.Sort = "Display_Order ASC";
+                DataTable dtC = dvChild.ToTable();
+            }
+            @if (dtC.Rows.Count > 0)
+            {
+                <ul class="dropdownlist">
+                    @for (int j = 0; j < dtC.Rows.Count; j++)
+                    {
+                        Cssclass = "";
+                        if (!string.IsNullOrEmpty(Convert.ToString(dtC.Rows[j]["Image"])))
+                        {
+                            Cssclass = " " + dtC.Rows[j]["Image"].ToString();
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(dtC.Rows[j]["ROUTE"])))
+                        {
+                            try
+                            {
+                                Route = Url.RouteUrl(Convert.ToString(dtC.Rows[j]["ROUTE"]));
+                            }
+                            catch
+                            {
+                                Route = "Javascript:void('0')";
+                            }
+                        }
+                        else
+                        {
+                            Route = "Javascript:void('0')";
+                        }
+                        DataView dvChild2 = new DataView(dt);
+                        int Mid2 = Convert.ToInt32(dtC.Rows[j]["Tid"]);
+                        dvChild2.RowFilter = "Pmenu=" + Mid2;
+                        dvChild2.Sort = "Display_Order ASC";
+                        DataTable dtC2 = dvChild2.ToTable();
+                        //MenuID = "anch" + dtC.Rows[j]["tid"];
+                        MenuID = "anch_" + dtC.Rows[j]["ACTIONS_NAME"];
+                        //liID = "li" + dtC.Rows[j]["tid"];
+                        liID = "li_" + dtC.Rows[j]["ACTIONS_NAME"];
+                        <li id="@liID"><a href="@Route" class="@Cssclass" id="@MenuID"><span>@dtC.Rows[j]["Name"]</span></a></li>
+                    }
+                </ul>
+            }
+        </li>
+        
+    }
+    <li class="divider"></li>
+    @*<li>
+        <a href="#" class="dropdown LeftMenuIcon6"><span>Support</span></a>
+        <ul class="dropdownlist">
+            <li>
+                <a href="#" class="dropdown"><span>Link</span></a>
+                <ul class="dropdownlist">
+                    <li><a href="#"><span>Link</span></a></li>
+                    <li><a href="#"><span>Link</span></a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>*@
+    <li><a class="LeftMenuIcon8" href="@Url.RouteUrl("LogOut")"><span>Logout</span></a></li>
+    <li class="divider"></li>
+</ul>
+

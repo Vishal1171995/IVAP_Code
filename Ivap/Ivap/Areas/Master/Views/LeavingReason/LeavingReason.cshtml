@@ -1,0 +1,281 @@
+﻿@model Ivap.Areas.Master.Models.LeavingReasonModel
+@{
+    ViewBag.Title = "LeavingReason";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewLeavingReason", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="LeavingReasonDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>@Model.REASON_TEXT</label></td>
+                                            <td> <span id="lblReasonName"> </span></td>
+                                            <td><label>@Model.PAY_LEAVING_CODE_TEXT</label> </td>
+                                            <td><span id="lblPayLeavingCode"> </span></td>
+                                            <td><label>@Model.ERP_LEAVING_CODE_TEXT</label> </td>
+                                            <td><span id="lblErpLeavingCode"> </span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><label>@Model.VOL_TEXT</label></td>
+                                            <td> <span id="lblVolName"> </span></td>
+                                            <td> <label>@Model.ISACTIVE_TEXT</label> </td>
+                                            <td><span id="lblIsActive"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvLeavingReasonAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+                {@Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.REASON_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+
+                            @Html.TextBoxFor(m => m.REASON, new { @class = "form-control", @placeholder = @Model.REASON_TEXT })
+                            @Html.ValidationMessageFor(m => m.REASON)
+                        </div>
+
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.PAY_LEAVING_CODE_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.TID)
+                            @Html.TextBoxFor(m => m.PAY_LEAVING_CODE, new { @class = "form-control", @placeholder = @Model.PAY_LEAVING_CODE_TEXT })
+                            @Html.ValidationMessageFor(m => m.PAY_LEAVING_CODE)
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.ERP_LEAVING_CODE_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.TID)
+                            @Html.TextBoxFor(m => m.ERP_LEAVING_CODE, new { @class = "form-control", @placeholder = @Model.ERP_LEAVING_CODE_TEXT })
+                            @Html.ValidationMessageFor(m => m.ERP_LEAVING_CODE)
+                        </div>
+
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.VOL_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+
+                            @Html.TextBoxFor(m => m.VOL, new { @class = "form-control", @placeholder = "Voluntary/Non-Voluntary Name" })
+                            @Html.ValidationMessageFor(m => m.VOL)
+                        </div>
+
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">@Model.ISACTIVE_TEXT</label>
+                        <div class="col-sm-8">
+                            @Html.CheckBoxFor(m => m.IsActive)
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clear20"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Log</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                            <label class="headtag">Total Success</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotSuccess" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label class="headtag">Total Loss</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotFailed" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="reset_btn" align="right">
+                                <input type="hidden" id="hdnresultFile" />
+                                <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+
+
+
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetLeavingReasonURL = "@Url.RouteUrl("GetLeavingReason")"
+         var GetLeavingReasonHisURL = '@Url.RouteUrl("GetLeavingReasonHis")'
+        var DownloadAllLeavingReasonURL = '@Url.RouteUrl("DownloadAllLeavingReason")'
+
+         var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadLeavingReasonDetailsURL = "@Url.RouteUrl("UploadLeavingReasonDetails")"
+        var DownLoadResultFileURL= '@Url.RouteUrl("DownLoadResultFileForExcel")'
+     GetModel(@Html.Raw(Json.Encode(Model)));
+
+    </script>
+
+    @Scripts.Render("~/Scripts/LeavingReasonScript")
+
+}
+

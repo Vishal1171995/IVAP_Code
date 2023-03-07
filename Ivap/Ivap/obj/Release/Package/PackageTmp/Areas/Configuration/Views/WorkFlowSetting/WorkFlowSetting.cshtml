@@ -1,0 +1,174 @@
+﻿@model Ivap.Areas.Configuration.Models.WFSettingModel
+@{
+    ViewBag.Title = "WorkFlowSetting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel panel-default">
+    <div class="panel-heading"> <h3><strong>Workflow Setting</strong></h3> </div>
+    <div class="panel-body">
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="clear20"></div>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            <span class="bold">Payroll Input File  :</span>@Html.RadioButton("ProcessType", "Payroll Input File", new { @checked = true, @class = "PT" })
+                            <span class="bold">Payroll Output File :</span> @Html.RadioButton("ProcessType", "PMS Output File", new { @class = "PT" })
+                        </div>
+                        <div class="col-md-1"> <label for="File Type">File Type:</label></div>
+
+                        <div class="col-md-5">
+                            @*class="selectpicker mg - 0"*@
+                            @*@Html.DropDownListFor(m => m.FILE_ID, new SelectList(Model.FileList, "Value", "Text", 0), new { @class = "selectpicker mg - 0" })*@
+                            <select style="width:100%" id="ddlFileType"></select>
+                        </div>
+
+                    </div>
+                    <div class="clear40"></div>
+                    <div id="dvSetting"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="modal fade PopUpMainDiv popupindex" id="dvUser" role="dialog">
+    <div class="modal-dialog " style="width:50%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" id="ColourModel">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" id="ModalHeadingUser">User Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="TableOuterDiv table-responsive">
+                            <div id="KUsergrd"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvWorkflow" class="col-xs-12 col-sm-12 col-md-12 modal">
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="row top_content">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div id="dvResponse">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                    <div class="reset_btn" align="right">
+                        <input type="submit" value="Proceed" id="btnProceed" class="btn btn-primary BtnBlueLg" />
+                        <input type="submit" value="OK" id="btnResOk" class="btn btn-primary BtnBlueLg" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+@Html.AntiForgeryToken()
+}
+<style>
+
+    .dropdown-header {
+        border-width: 0 0 1px 0;
+        /*text-transform: uppercase;*/
+    }
+
+        .dropdown-header > span {
+            display: inline-block;
+            padding: 10px;
+        }
+
+            .dropdown-header > span:first-child {
+                width: 50px;
+            }
+
+
+
+    .selected-value {
+        display: inline-block;
+        vertical-align: middle;
+        width: 19px;
+        height: 18px;
+        background-size: 100%;
+        margin-right: 5px;
+        border-radius: 50%;
+    }
+
+    #ddlFileType_listbox .k-item {
+        line-height: 1em;
+        min-width: 300px;
+    }
+
+    /* Material Theme padding adjustment*/
+
+    .k-material #ddlFileType_listbox .k-item,
+    .k-material #ddlFileType_listbox .k-item.k-state-hover,
+    .k-materialblack #ddlFileType_listbox .k-item,
+    .k-materialblack #ddlFileType_listbox .k-item.k-state-hover {
+        padding-left: 5px;
+        border-left: 0;
+    }
+
+    #ddlFileType_listbox .k-item > span {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: top;
+        /*margin: 20px 10px 10px 5px;*/
+    }
+
+        #ddlFileType_listbox .k-item > span:first-child {
+            -moz-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+            -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+            box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+            margin: 10px;
+            width: 19px;
+            height: 18px;
+            border-radius: 50%;
+            background-size: 100%;
+            background-repeat: no-repeat;
+        }
+
+    #ddlFileType_listbox h5 {
+        font-size: 1.2em;
+        font-weight: normal;
+        margin: 0 0 1px 0;
+        padding: 0;
+    }
+
+    #ddlFileType_listbox p {
+        margin: 0;
+        padding: 0;
+        font-size: .8em;
+    }
+</style>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+    var GetWorkFlowSettingUrl = '@Url.RouteUrl("GetFlowSetting")';
+var AddUpdateWorkFlowUrl = '@Url.RouteUrl("AddUpdateWorkFlow")';
+var GETUserRoleWiseUrl = '@Url.RouteUrl("GETUserRoleWise")';
+        var GetPayRollWorkFlowSettingUrl = '@Url.RouteUrl("GetPAYRollFlowSetting")';
+
+        var GetWFFileType= '@Url.RouteUrl("GetWFFileType")'
+    </script>
+    @Scripts.Render("~/Scripts/WorkFlowSettingScript")
+
+
+}

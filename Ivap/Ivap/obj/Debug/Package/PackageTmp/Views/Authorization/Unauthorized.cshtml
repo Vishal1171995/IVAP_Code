@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Access Denied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    access h3{color:#FF0000!important;}
+    .access h3 span {color:#FF0000!important; text-transform:uppercase;font-size:14px;}
+</style>
+    <div class="LastLogin access">
+        <div class="clear10"></div>
+        <h3>
+            <strong>Unauthorized Access <span> You are not authorized to access the page you requested</span> </strong>
+        </h3>
+        <div class="clear10"></div>
+    </div>
+    <div class="clear20"></div>
+
+    <div class="panel panel-default Mdm-panel">
+
+        <div class="pd-0 panel-body">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="~/Content/images/unauthorized.jpg" class="img-responsive">
+                </div>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+
+
+@Scripts.Render("~/Scripts/commanscript")
+

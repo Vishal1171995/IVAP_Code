@@ -1,0 +1,353 @@
+﻿@model Ivap.Areas.Master.Models.PTAXModel
+@using Ivap.Repository;
+@{
+    ViewBag.Title = "PTAX";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @*@{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewPTAX", area = string.Empty });}*@
+        @if (AuthorizationRepo.IsValidAction("ViewPTAX", "ViewAction"))
+        {
+            <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction("ViewPTAX", "CreateAction"))
+        {
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+    </div>
+    <div class="panel-heading"><h3><strong>PTax Master</strong></h3></div>
+    <div class="panel-body">
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+<section class="content">
+    <div id="tab" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">PTax Master</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td> <label>State Name</label> </td>
+                                            <td><span id="lblSTATE_ID"> </span></td>
+                                            <td> <label>Ded Month</label> </td>
+                                            <td><span id="lblDED_MONTH"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>YTD Month From</label> </td>
+                                            <td><span id="lblYTD_MONTH_FROM"> </span></td>
+                                            <td> <label>YTD Month To</label> </td>
+                                            <td><span id="lblYTD_MONTH_TO"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>EFF From DT</label> </td>
+                                            <td><span id="lblEFF_FROM_DT"> </span></td>
+                                            <td> <label>EFF To DT</label> </td>
+                                            <td><span id="lblEFF_TO_DT"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>PT Sal From</label> </td>
+                                            <td><span id="lblPT_SAL_FROM"></span></td>
+                                            <td> <label>PT Sal To</label> </td>
+                                            <td><span id="lblPT_SAL_TO"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>Period Flag</label> </td>
+                                            <td><span id="lblPERIOD_FLAG"> </span></td>
+                                            <td> <label>Gender</label> </td>
+                                            <td><span id="lblGENDER"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>PTax</label> </td>
+                                            <td><span id="lblPTAX"> </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="kgrdHistory"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dvAddUpdatePTAX" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">PTAX Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdatePTAX", new AjaxOptions { OnSuccess = "SuccessMessage", OnFailure = "FailMessage", OnBegin = "Validate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body horizontalscroll">
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">State Name<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.HiddenFor(m => m.PTAXID, new { id = "hdnPTaxID" })
+                                @Html.DropDownListFor(m => m.STATE_ID, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = "State Name" })
+                                @Html.ValidationMessageFor(m => m.STATE_ID, "", new { @class = "" })
+                            </div>
+                            <div id="PeriodFlagID">
+                                <label for="inputPassword3" class="col-sm-2 control-label">DED Month</label>
+                                <div class="col-sm-4">
+                                    @Html.DropDownListFor(m => m.DED_MONTH, new SelectList(Model.DED_MONTHList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = "Deduction Month" })
+                                    @Html.ValidationMessageFor(m => m.DED_MONTH)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">YTD Month From<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(m => m.YTD_MONTH_FROM, new SelectList(Model.YTD_MONTH_FROMList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = "YTD Month From" })
+                                @Html.ValidationMessageFor(m => m.YTD_MONTH_FROM)
+                            </div>
+                            <label for="inputPassword3" class="col-sm-2 control-label">YTD Month To<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(m => m.YTD_MONTH_TO, new SelectList(Model.YTD_MONTH_TOList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = "YTD Month To" })
+                                @Html.ValidationMessageFor(m => m.YTD_MONTH_TO)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">EFF From DT<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.EFF_FROM_DT, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                                @Html.ValidationMessageFor(m => m.EFF_FROM_DT)
+                            </div>
+                            <label for="inputPassword3" class="col-sm-2 control-label">EFF To DT<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.EFF_TO_DT, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                                @Html.ValidationMessageFor(m => m.EFF_TO_DT)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">PT Sal From<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.PT_SAL_FROM, new { @class = "form-control", @placeholder = @Model.PT_SAL_FROM_TEXT, @Value = (Model.PT_SAL_FROM > 0 ? Model.PT_SAL_FROM.ToString() : string.Empty) })
+                                @Html.ValidationMessageFor(m => m.PT_SAL_FROM)
+                            </div>
+                            <label for="PT_SAL_TO" class="col-sm-2 control-label">PT Sal TO<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.PT_SAL_TO, new { @class = "form-control", @placeholder = @Model.PT_SAL_TO_TEXT, @Value = (Model.PT_SAL_TO > 0 ? Model.PT_SAL_TO.ToString() : string.Empty) })
+                                @Html.ValidationMessageFor(m => m.PT_SAL_TO)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">Period Flag<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(m => m.PERIOD_FLAG,
+                                                              new SelectList(new List<SelectListItem> {
+                                                              new SelectListItem { Text = "M(Monthly)", Value = "M"},
+                                                              new SelectListItem { Text = "H(Half Yearly)", Value = "H"},
+                                                              new SelectListItem { Text = "Q(Quarterly)", Value = "Q"},
+                                                              new SelectListItem { Text = "Y(Yearly)", Value = "Y"}
+                                                              }, "Value", "Text"),
+                                                              "Select",
+                                                              new { @class = "form-control selectbdr" })
+                                @Html.ValidationMessageFor(m => m.PERIOD_FLAG, "", new { @class = "" })
+                            </div>
+                            <label for="inputPassword3" class="col-sm-2 control-label">Gender<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(m => m.GENDER,
+                                                              new SelectList(new List<SelectListItem> {
+                                                              new SelectListItem { Text = "Male", Value = "Male"},
+                                                              new SelectListItem { Text = "Female", Value = "Female"},
+                                                              new SelectListItem { Text = "Both", Value = "Both"},
+                                                              }, "Value", "Text"),
+                                                              "Select",
+                                                              new { @class = "form-control selectbdr" })
+                                @Html.ValidationMessageFor(m => m.GENDER, "", new { @class = "" })
+                            </div>
+                        </div>
+
+
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">PTax<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.PTAX, new { @class = "form-control", @placeholder = @Model.PTAX_TEXT, @Value = (Model.PTAX > 0 ? Model.PTAX.ToString() : string.Empty) })
+                                @Html.ValidationMessageFor(m => m.PTAX)
+                            </div>
+                        </div>
+                        @*<div class="row form-group">
+                                <label for="IsActive" class="col-sm-2 control-label">Is Active<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+                                    @Html.CheckBoxFor(m => m.IsActive)
+                                    @Html.ValidationMessageFor(m => m.IsActive)
+                                </div>
+
+                            </div>*@
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" onclick="ValidateEndDate();" />
+                    </div>
+                    <div class="clear20"></div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload PTAX</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload PTAX</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">PTAX Log</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                            <label class="headtag">Total Success</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotSuccess" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label class="headtag">Total Loss</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotFailed" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="reset_btn" align="right">
+                                <input type="hidden" id="hdnresultFile" />
+                                <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+@Scripts.Render("~/Scripts/commanscript")
+
+<script type="text/javascript">
+        var ExportPTaxURL = '@Url.RouteUrl("ExportALLPTAX")'
+    var getPTaxURL = '@Url.RouteUrl("getPTax")'
+    var getPTaxHistoryURL = '@Url.RouteUrl("GetPTaxHistory")'
+
+     var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadPTAXDetailsURL = "@Url.RouteUrl("UploadPTAXDetails")"
+        var DownLoadResultFileURL= '@Url.RouteUrl("DownLoadResultFileForExcel")'
+   
+       
+
+</script>
+@Scripts.Render("~/Scripts/PtaxScript")
+
+
+

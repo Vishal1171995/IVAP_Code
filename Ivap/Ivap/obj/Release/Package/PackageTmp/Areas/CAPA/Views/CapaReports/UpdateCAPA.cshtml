@@ -1,0 +1,735 @@
+﻿
+@model Ivap.Areas.CAPA.Models.CapaModel
+@{
+    ViewBag.Title = "UpdateCapaReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .k-dropzone {
+        padding: .5em !important;
+    }
+</style>
+
+@using (Ajax.BeginForm("UpdateCapaReport", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="pull-right">
+            <div class="VendorSiteBtnRightMain">
+                <button id="btnBack" class="btn btn-primary BtnBlueLg BtnWidth150" type="button"> Back </button>
+            </div>
+        </div>
+        <div class="panel-heading"><h3><strong>Update CAPA</strong></h3></div>
+
+        <div class="panel-body">
+            <div class="row form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Category<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.Category,
+                                     new SelectList(new List<SelectListItem> {
+                                            new SelectListItem { Text = "Automation", Value = "AUTOMATION"},
+                                            new SelectListItem { Text = "Statutory compliance", Value = "STATUTORY COMPLIANCE"},
+                                              new SelectListItem { Text = "Security", Value = "SECURITY"},
+                                            new SelectListItem { Text = "User Error", Value = "USER ERROR"},
+                                              new SelectListItem { Text = "Treasury", Value = "TREASURY"},
+
+                                     }, "Value", "Text"),
+                                     "Select Category",
+                                     new { @class = "form-control selectbdr" })
+                    @Html.ValidationMessageFor(m => m.Category)
+                </div>
+                <label for="inputEmail3" class="col-sm-2 control-label">Stage<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.DropDownListFor(m => m.Stage,
+                                     new SelectList(new List<SelectListItem> {
+                                            new SelectListItem { Text = "Before Finalization", Value = "BEFORE FINALIZATION"},
+                                            new SelectListItem { Text = "After Finalization", Value = "AFTER FINALIZATION"},
+                                     }, "Value", "Text"),
+                                     "Select Stage Type",
+                                     new { @class = "form-control selectbdr" })
+                    @Html.ValidationMessageFor(m => m.Stage)
+
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Type<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.DropDownListFor(m => m.Finance_Type,
+                                   new SelectList(new List<SelectListItem> {
+                                          new SelectListItem { Text = "Financial", Value = "FINANCIAL"},
+                                          new SelectListItem { Text = "Non-Financial", Value = "NONFINANCIAL"},
+                                   }, "Value", "Text"),
+                                   "Select Finance Type",
+                                   new { @class = "form-control selectbdr" })
+                    @Html.ValidationMessageFor(m => m.Finance_Type)
+                </div>
+                @if (Model.Finance_Type == "FINANCIAL")
+                {
+                    <div id="FinanceAmount">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Finance Amount</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.Finance_Amount, new { type = "number", min = "0", step = "0.01", @class = "form-control", @placeholder = "Amount" })
+                            @Html.ValidationMessageFor(m => m.Finance_Amount)
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row form-group">
+
+                <label for="inputEmail3" class="col-sm-2 control-label">Issue<span class="text-red">*</span></label>
+                <div class="col-sm-10">
+                    @Html.TextAreaFor(m => m.Issue, new { @class = "form-control", @placeholder = "Issue" })
+                    @Html.ValidationMessageFor(m => m.Issue)
+                </div>
+
+
+            </div>
+
+            <div class="row form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Issue Description<span class="text-red">*</span></label>
+                <div class="col-sm-10">
+                    @Html.HiddenFor(m => m.TID)
+                    @Html.TextAreaFor(m => m.Issue_Description, new { @class = "form-control", @placeholder = "Issue Description" })
+                    @Html.ValidationMessageFor(m => m.Issue_Description)
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Customer Impact<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.TextBoxFor(m => m.Customer_Impact, new { @class = "form-control", @placeholder = "Customer Impact" })
+                    @Html.ValidationMessageFor(m => m.Customer_Impact)
+                </div>
+                <label for="inputEmail3" class="col-sm-2 control-label">Sequence of events<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.TextBoxFor(m => m.Sequence_of_events, new { @class = "form-control", @placeholder = "Sequence of events" })
+                    @Html.ValidationMessageFor(m => m.Sequence_of_events)
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Communication Process used<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.DropDownListFor(m => m.Communication_process,
+                                   new SelectList(new List<SelectListItem> {
+                                          new SelectListItem { Text = "Mail", Value = "MAIL"},
+                                          new SelectListItem { Text = "Phone", Value = "PHONE"},
+                                   }, "Value", "Text"),
+                                   "Select Communication Process",
+                                   new { @class = "form-control selectbdr" })
+                    @Html.ValidationMessageFor(m => m.Communication_process)
+                </div>
+                <label for="inputEmail3" class="col-sm-2 control-label">Root Cause<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.TextBoxFor(m => m.Root_Cause, new { @class = "form-control", @placeholder = "Root Cause" })
+                    @Html.ValidationMessageFor(m => m.Root_Cause)
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Impact Value<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.TextBoxFor(m => m.Impact_Value, new { type = "number", min = "0", step = "0.01", @class = "form-control", @placeholder = "Impact Value" })
+                    @Html.ValidationMessageFor(m => m.Impact_Value)
+                </div>
+                <label for="inputEmail3" class="col-sm-2 control-label">Incident Date<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.TextBoxFor(m => m.Incident_date, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/MM/YYYY" })
+                    @Html.ValidationMessageFor(m => m.Incident_date, "Required")
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="panel-default">
+                        <div class="cch-tab mdm-tab nobdr">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#Corrective" data-toggle="tab"><i class="fa fa-check"></i> &nbsp;Corrective</a></li>
+                                <li><a href="#Preventive" data-toggle="tab"><i class="fa fa-wrench"></i>&nbsp;Preventive</a></li>
+                            </ul>
+                            <div class="panel-body">
+                                <div class="tab-content clearfix">
+                                    <div class="tab-pane active" id="Corrective">
+                                        @*<button type="button" class="btn btn-default" id="btnCorrective" data-toggle="modal" data-target="#CorrectiveModal1"> <i class="fa fa-plus"> </i> Show </button>*@
+                                        <button type="button" class="btn btn-default" id="btnCorrectiveAdd" data-toggle="modal" data-target="#CorrectiveModal1"> <i class="fa fa-plus"> </i> Add Item </button>
+                                        <div class="clear10"></div>
+                                        <div class="TableOuterDiv table-responsive" id="KapaCorrectiveUpdategrid">
+                                            <div id="KapaCorrectiveUpdategrid"></div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-pane" id="Preventive">
+
+                                        <div class="pull-right">
+                                            @*<button type="button" class="btn btn-default" id="btnPreventive" data-toggle="modal" data-target="#PreventiveModal1"> <i class="fa fa-plus"> </i> Show </button>*@
+                                            <button type="button" class="btn btn-default" id="btnPreventiveAdd" data-toggle="modal" data-target="#PreventiveModal1"> <i class="fa fa-plus"> </i> Add Item </button>
+
+                                        </div>
+                                        <div class="clear10"></div>
+                                        <div class="TableOuterDiv table-responsive" id="KapaPreventiveUpdategrid">
+                                            <div id="KapaPreventiveUpdategrid"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="clear20"></div>
+
+            <div class="modal fade PopUpMainDiv" id="CorrectiveModal" role="dialog">
+                <div class="modal-dialog" style="width:60%;">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header pd-7">
+                            <button type="button" class="close" id="btnDismiss">
+                                <img src="~/Content/images/popup_close.png" alt="Close " />
+                            </button>
+                            <h4 class="modal-title">Corrective</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label>Corrective Action<span class="text-red">*</span></label>
+                                        @Html.HiddenFor(m => m.CorrectiveAction_Detail)
+                                        @Html.HiddenFor(m => m.Corrective_ID)
+                                        @Html.TextAreaFor(m => m.Corrective_Action, new { @class = "form-control", @placeholder = "Corrective Action" })
+                                        @Html.ValidationMessageFor(m => m.Corrective_Action, "Required")
+                                    </div>
+                                </div>
+                                <div class="clear20"></div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <label>Action Owner<span class="text-red">*</span></label>
+                                        @Html.TextBoxFor(m => m.CorrectiveAction_Owner, new { @class = "form-control", @placeholder = "Action Owner" })
+                                        @Html.ValidationMessageFor(m => m.CorrectiveAction_Owner, "Required")
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <label>Owner Email<span class="text-red">*</span></label>
+                                        @Html.TextBoxFor(m => m.CorrectiveAction_Email, new { @class = "form-control", @placeholder = "Email" })
+                                        @Html.ValidationMessageFor(m => m.CorrectiveAction_Email, "Required")
+
+                                    </div>
+                                </div>
+                                <div class="clear20"></div>                              
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <label>Creation Date<span class="text-red">*</span></label>
+                                        @Html.TextBoxFor(m => m.CorrectiveAction_Text, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/MM/YYYY" })
+                                        @Html.ValidationMessageFor(m => m.CorrectiveAction_Text, "Required")
+                                    </div>
+
+                                </div>
+                                <div class="clear20"></div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="pull-left">
+                                        <button type="button" id="btnUpdateCorrective" class="btn btn-primary">Update</button>
+
+                                        <button type="button" id="btnAddCorrective" class="btn btn-primary" style="display:none;">Add</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade PopUpMainDiv" id="PreventiveModal" role="dialog">
+                <div class="modal-dialog" style="width:60%;">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header pd-7">
+                            <button type="button" class="close" id="btnDismissPreventive">
+                                <img src="~/Content/images/popup_close.png" alt="Close " />
+                            </button>
+                            <h4 class="modal-title">Preventive</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label>Preventive Action<span class="text-red">*</span></label>
+                                        @Html.HiddenFor(m => m.PreventiveAction_Detail)
+                                        @Html.HiddenFor(m => m.Preventive_ID)
+                                        @Html.TextAreaFor(m => m.Preventive_Action, new { @class = "form-control", @placeholder = "Preventive Action" })
+                                        @Html.ValidationMessageFor(m => m.Preventive_Action, "Required")
+
+                                    </div>
+
+                                </div>
+                                <div class="clear20"></div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+
+                                        <label>Action Owner<span class="text-red">*</span></label>
+
+                                        @Html.TextBoxFor(m => m.PreventiveAction_Owner, new { @class = "form-control", @placeholder = "Action Owner" })
+                                        @Html.ValidationMessageFor(m => m.PreventiveAction_Owner, "Required")
+
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <label>Owner Email<span class="text-red">*</span></label>
+
+                                        @Html.TextBoxFor(m => m.PreventiveAction_Email, new { @class = "form-control", @placeholder = "Email" })
+                                        @Html.ValidationMessageFor(m => m.PreventiveAction_Email, "Required")
+
+                                    </div>
+                                </div>
+                                <div class="clear20"></div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <label>Creation Date<span class="text-red">*</span></label>
+
+                                        @Html.TextBoxFor(m => m.PreventiveAction_Text, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/MM/YYYY" })
+                                        @Html.ValidationMessageFor(m => m.PreventiveAction_Text, "Required")
+
+                                    </div>
+                                </div>
+                                    <div class="clear20"></div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="pull-left">
+                                            <button type="button" id="btnUpdatePreventive" class="btn btn-primary">Update</button>
+                                            <button type="button" id="btnAddPreventive" class="btn btn-primary" style="display:none;">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear20"></div>
+            <div class="col-md-12">
+                <div class="pull-right">
+                    @*<input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth99" />*@
+                    <input type="submit" id="btnSubmit" class="btn btn-primary  BtnBlueLg BtnWidth99" value="Update" />
+                </div>
+            </div>
+        </div>
+        </div>
+}
+
+
+<div id="CapaDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">CAPA Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+
+                                        <td><label>Issue</label></td>
+                                        <td> <span id="lblissue"> </span></td>
+                                        @*<td><label>Issue Description</label> </td>
+                                            <td><span id="lbldescription"> </span></td>*@
+                                        <td><label>Customer Impact</label> </td>
+                                        <td><span id="lblcustomerImpact"> </span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td> <label>Sequence Of Events </label> </td>
+                                        <td><span id="lblSequence"></span></td>
+                                        <td><label>Communication Process</label> </td>
+                                        <td><span id="lblCommunication"> </span></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><label>Root Cause</label> </td>
+                                        <td><span id="lblroot"> </span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvDeleteCapaList" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                    <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
+                        <div id="dvConfirmationTxt">
+                            <table class="table table-bordered table-hover">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">
+                                            <label>Are you sure want to delete this item.</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clear20"></div>
+
+                        <input type="submit" id="btnDeleteReject" class="btn btn-primary BtnWhiteLg BtnWidth99" value="Cancel" />
+                        <input type="submit" id="btnDeleteAccept" class="btn btn-primary BtnBlueLg BtnWidth99" value="Delete" />
+
+                        <div class="clear20"></div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvConversationGrid" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="pull-right close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="pull-left">
+                    <button type="button" id="BtnAddRemarkCorrective" class="btn btn-primary BtnBlueLg">Add Conversation</button>
+                </div>
+                <div class="clear20"></div>
+                <div class="row horizontalscroll">
+                    <div id="CorrectiveListView"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="CorrectiveTemplate">
+    <div class="product">
+        <div class="mesgs">
+            <div class="msg_history">
+                <div class="incoming_msg">
+                    <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                    <div class="received_msg">
+                        <div class="received_withd_msg">
+                            <label>User Name :</label><p>#:NAME#</p><br />
+                            <label>Remark :</label> <p>#:REMARK#</p><br />
+                            <label>Status :</label><p>#:STATUS#</p><br />
+                            <label>Closure Date :</label><p>#:CLOSURE_DATE#</p><br />
+                            @*<label>Attachment :</label><div class="cellClicKCorrectiveAttachmentdiv" style='cursor: pointer'><button class="btn btn-default" value="#:ATTACHMENT#"> Download </button></div>*@
+                            <label>Attachment :</label><button class="btn btn-info cellClicKCorrectiveAttachmentdiv" value="#:ATTACHMENT#"> Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div id="dvConversationPreventiveGrid" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+            </div>
+            <div class="modal-body ">
+                <div class="pull-left">
+                    <div> <button type="button" id="BtnAddRemarkPreventive" class="btn btn-primary BtnBlueLg">Add Conversation</button></div>
+                </div>
+                <div class="clear20"></div>
+                <div class="row horizontalscroll">
+                    <div id="PreventiveListView"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-kendo-template" id="PreventiveTemplate">
+    <div class="product">
+        <div class="mesgs">
+            <div class="msg_history">
+                <div class="incoming_msg">
+                    <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                    <div class="received_msg">
+                        <div class="received_withd_msg">
+                            <label>User Name : </label><p>#:NAME#</p><br />
+                            <label>Remark :</label> <p>#:REMARK#</p><br />
+                            <label>Status : </label><p>#:STATUS#</p><br />
+                            <label>Closure Date :</label><p>#:CLOSURE_DATE#</p><br />
+                            @*<label>Attachment :</label><div class='cellClicKPreventiveAttachmentdiv' style='cursor: pointer'><button class="btn btn-default" value="#:ATTACHMENT#"> Download </button></div>*@
+                            <label>Attachment :</label><button class="btn btn-info cellClicKPreventiveAttachmentdiv" value="#:ATTACHMENT#"> Download </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div id="dvConversationCapa" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <form id="myForm" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="BtnCloseRemarkGrid">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Add Conversation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-group">
+                        <label for="Agenda" class="col-sm-2 control-label">Remark</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control valid" cols="20" data-val="true" data-val-required="Please enter Remark" id="Remark" name="Remark" placeholder="Remark" rows="2"></textarea>
+                            <span class="field-validation-valid" data-valmsg-for="Remark" data-valmsg-replace="true"></span>
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+
+                        <label for="Status" class="col-sm-2 control-label">Status</label>
+                        <div class="col-sm-4">
+                            <select class="form-control valid MD selectbdr" data-val="true" data-val-required="Status required." id="Status" name="Status">
+                                <option value="">--Select--</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Closed">Closed</option>
+                                <option value="Discarded">Discarded</option>
+                            </select>
+                            <span class="field-validation-valid" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                        </div>
+                        <label for="Meeting Held" class="col-sm-2 control-label">Closure Date</label>
+                        <div class="col-sm-4">
+                            <input class="form-control valid " onkeydown="return false" data-val="true" data-val-required="    Please enter  closure date" id="Closure_Date" name="Closure_Date" placeholder="dd/MM/yyyy" />
+                            <span class="field-validation-valid" data-valmsg-for="Closure_Date" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="Responsibilites" class="col-sm-2 control-label">Attachment</label>
+                        <div class="col-md-3 pd-right">
+                            <div class="demo-section k-content kendo-multiselect" id="DivFileUpload">
+                                <input type="file" id="fileToUpload" name="fileToUpload" target-control="hdnTempFileName" target-control-orignal="hdnOriginalFileName" />
+                                <input type="hidden" id="hdnTempFileName" />
+                                <input type="hidden" id="hdnOriginalFileName" />
+
+                            </div>
+                        </div>
+                        <div class="col-md-1 pd-left">
+                            <button type="button" id="BtnAttach" class="btn btn-default btn-lg pd-7" data-toggle="tooltip" title="Download Attachment"><i class="fa fa-download"></i></button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="pull-right">
+                                <input type="hidden" id="RemarkTID" />
+                                <input type="hidden" id="RemarkCAPAID" />
+                                <input type="hidden" id="Item_Name" />
+                                <input type="hidden" id="ConversationID" />
+                                <input type="button" id="btnSubmitRemark" class="btn btn-primary BtnBlueLg" value="Submit Conversation" />
+                                <input type="button" id="btnUpdateRemark" style="display:none" class="btn btn-primary BtnBlueLg" value="Update Conversation" />
+                                <input type="reset" id="btnResetRemark" value="Reset" class="btn btn-primary BtnWhiteLg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear50"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<style>
+    img {
+        max-width: 100%;
+    }
+
+    .inbox_msg {
+        border: 1px solid #c4c4c4;
+        clear: both;
+        overflow: hidden;
+    }
+
+    .incoming_msg_img {
+        display: inline-block;
+        width: 6%;
+    }
+
+    .received_msg {
+        display: inline-block;
+        padding: 0 0 0 10px;
+        vertical-align: top;
+        width: 80%;
+    }
+
+    .received_withd_msg p {
+        font-size: 13px;
+        margin: 0;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
+
+    .sender_name {
+        font-size: 14px;
+        color: #464646;
+    }
+
+    .time_date {
+        color: #747474;
+        display: block;
+        font-size: 12px;
+        margin: 8px 0 0;
+    }
+
+    /*.received_withd_msg {
+        width: 100%;
+    }*/
+    .received_withd_msg label {
+        float: left;
+        font-size: 14px;
+        margin: 5px;
+    }
+
+    .mesgs {
+        padding: 15px 15px 15px 25px;
+    }
+
+    .sent_msg p {
+        background: #05728f none repeat scroll 0 0;
+        border-radius: 3px;
+        font-size: 14px;
+        margin: 0;
+        color: #fff;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
+
+    .outgoing_msg {
+        overflow: hidden;
+        margin: 26px 0 26px;
+    }
+
+    .sent_msg {
+        float: right;
+        width: 46%;
+    }
+
+    .input_msg_write input {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        border: medium none;
+        color: #4c4c4c;
+        font-size: 15px;
+        min-height: 48px;
+        width: 100%;
+    }
+
+    .type_msg {
+        border-top: 1px solid #c4c4c4;
+        position: relative;
+    }
+
+    .msg_send_btn {
+        background: #05728f none repeat scroll 0 0;
+        border: medium none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        font-size: 17px;
+        height: 33px;
+        position: absolute;
+        right: 0;
+        top: 11px;
+        width: 33px;
+    }
+
+    .msg_history {
+        height: auto;
+        overflow-y: auto;
+    }
+    /*popup ends */
+</style>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+    <script type="text/javascript">
+        var CapaCorrectiveRemarkAddHandler = [];
+        var CapaPreventiveRemarkAddHandler = [];
+        var CapaCorrectiveUpdateDataSource = [];
+        var CapaPreventiveUpdateDatasource = [];
+        var CapaConversationCorrective = [];
+        var CapaConversastionPreventive = [];
+        var GetCapaURL = "@Url.RouteUrl("GetEditCapa")"
+        var GetCapaHisURL = "@Url.RouteUrl("GetCapaHis")"
+        var GetCapaTestingURL = "@Url.RouteUrl("GetEditCapaTesting")"
+        var DeleteCAPADetailURL = "@Url.RouteUrl("DeleteCAPAItemDetails")"
+        var AddCorrectiveURL = "@Url.RouteUrl("AddCorrective")"
+        var AddPreventiveURL = "@Url.RouteUrl("AddPreventive")"
+        var UploadFileCapaConversationURL = "@Url.RouteUrl("UploadFileCapaConversation")"
+        var AddUpdateConversationRemarkURL="@Url.RouteUrl("AddUpdateConversationRemark")"
+        var FilesUploadForOtherURL = "@Url.RouteUrl("FilesUploadForOther")"
+        var Download_File_AttachmentURL = "@Url.RouteUrl("DownloadFileAttachment")"
+         var RemoveFileURL="@Url.RouteUrl("RemoveFiles")"
+
+    </script>
+    @Scripts.Render("~/Scripts/UpdateCapaJSScript")
+}

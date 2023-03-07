@@ -1,0 +1,151 @@
+﻿@model Ivap.Areas.Configuration.Models.MonthCloseModel
+@using Ivap.Repository;
+@{
+    ViewBag.Title = "Month Close";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @if (AuthorizationRepo.IsValidAction("MonthClose", "CreateAction"))
+        {
+            <button type="button" id="btnSetDefaultMonth" class="btn btn-primary BtnBlueLg">Add Current Default Month</button>
+        }
+    </div>
+    <div class="panel-heading"><h3><strong>Month Close</strong></h3></div>
+    <div class="panel-body">
+
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div id="dvMonthCLoseDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Month Close History</h4>
+            </div>
+            <div class="modal-body">
+                <div id="GridHis"></div>
+                @*<div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>Entity Name</label> </td>
+                                            <td><span id="lblENTITY_NAME"> </span></td>
+                                            <td><label>Month</label></td>
+                                            <td> <span id="lblMonth"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Year</label></td>
+                                            <td> <span id="lblYear"> </span></td>
+                                            <td> <label>Open Date</label> </td>
+                                            <td><span id="lblOpenDate"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>Closed Date</label></td>
+                                            <td> <span id="lblClosedDate"> </span></td>
+                                            <td> <label>Status</label> </td>
+                                            <td><span id="lblStatus"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>Is Active</label> </td>
+                                            <td><span id="lblActive"></span></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvConfirm" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Confirmation!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvOPMsg" style="display:none;text-align:center;">
+                    Are you sure you want to change the status?
+                </div>
+                <div class="clear20"></div>
+                <div id="dvPOButtons" style="text-align:center;">
+                    <input type="button" class="btn btn-primary BtnBlueLg" value="OK" id="btnOPok" />
+                    <input type="button" data-dismiss="modal" class="btn btn-primary BtnBlueLg" value="Cancel" id="btnOPCancel" />
+                </div>
+                <div id="dvLoader" style="text-align:center;display:none;">
+                    <img src="../Images/preloader22.gif" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvSetDefaultMonth" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Confirmation!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvOPMsg" style="display:block;text-align:center;">
+                    Are you sure you want to set default current month?
+                </div>
+                <div class="clear20"></div>
+                <div id="dvPOButtons" style="text-align:center;">
+                    <input type="button" class="btn btn-primary BtnBlueLg" value="OK" id="btnOKSetDefault" />
+                    <input type="button" data-dismiss="modal" class="btn btn-primary BtnBlueLg" value="Cancel" id="btndefaultCancel" />
+                </div>
+                <div id="dvLoader" style="text-align:center;display:none;">
+                    <img src="../Images/preloader22.gif" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetMonthCloseURL = "@Url.RouteUrl("GetMonthClose")"
+        var GetMonthCloseHistoryURL = "@Url.RouteUrl("GetMonthCloseHistory")";
+        var SetStatus = '@Url.RouteUrl("SetStatus")';
+        var SetDefaultMonth = '@Url.RouteUrl("SetDefaultMonth")';
+
+        var SetDefaultCurrentMonth='@Url.RouteUrl("SetDefaultCurrentMonth")'
+
+    </script>
+    @Scripts.Render("~/Scripts/MonthCloseScript")
+  
+}
+

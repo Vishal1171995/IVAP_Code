@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "MyRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h2>My Request</h2>
+        <div class="clear5"></div>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="clear20"></div>
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="TableOuterDiv table-responsive">
+                            <div id="Kgrid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+
+        var GetRequestURL = "@Url.RouteUrl("GetRequest")"
+        var File_ID_DownloadURL = "@Url.RouteUrl("FileDownload")"
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            BindGrid();
+        });
+
+        var Kgrid = "";
+        function BindGrid() {
+
+            $.get(GetRequestURL, {}, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [{ field: "FILE_NAME", title: "File Name",  width: 200 },
+                    { field: "COUNTROW", title: "NO. OF Records", width: 200 },
+
+                    {
+                        command:
+                            [
+                            { name: "Download", text: "", iconClass: "kIcon  k-icon k-Download", click: DownLoadSample, title: "DownLoad" },
+                                { name: "Approve", text: "", iconClass: "kIcon k-Approve", click: ApprovedFile, title: "Approve" },
+
+                            ], title: "Action", width: 140
+                    },
+                ];
+
+
+
+                Kgrid = $("#Kgrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+
+        var DownLoadSample = function DownLoadSample(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            //var FileID = dataItem.TID;
+            var FILE_ID = dataItem.FILE_ID;
+            var URL = File_ID_DownloadURL + '?FILE_ID=' + FILE_ID;
+            window.location = URL;
+        }
+
+          function ApprovedFile(e)
+        {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var FILE_ID = dataItem.FILE_ID;
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.RouteUrl("SendToApproved")",
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    __RequestVerificationToken: token,
+                    FILE_ID: FILE_ID
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess == true) {
+                        BindGrid();
+                        HandleSuccessMessage(response);
+                    }
+                    else {
+                        //FailResponse(response);
+                        alert("Some thing went wrong..");
+                    }
+
+                }
+            });
+        }
+    </script>
+}

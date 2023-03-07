@@ -1,0 +1,233 @@
+
+#timeline .timeline-item:after, header:before, #timeline .timeline-item:before {
+  content: '';
+  display: block;
+  width: 100%;
+  clear: both;
+}
+
+#timeline:before {
+    content: "";
+    width: 2px;
+    height: 86%;
+    background: #ddd;
+    top: 0;
+    position: absolute;
+}
+*, *:before, *:after {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.project-name {
+  text-align: center;
+  padding: 10px 0;
+}
+
+#timeline {
+  width: 100%;
+  position: relative;
+  margin-left:26px;
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+
+#timeline:after {
+  content: "";
+  clear: both;
+  display: table;
+  width: 100%;
+}
+#timeline .timeline-item {
+  margin-bottom:35px;
+  position: relative;
+}
+#timeline .timeline-item .timeline-icon {
+    background: #ffffff;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #cccccc;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    margin-left: -5px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}
+#timeline .startsource .timeline-icon {
+  width: 16px;
+   height: 16px;
+   margin-left: -7px;
+}
+
+#timeline .timeline-item .timeline-icon svg {
+  position: relative;
+  top: 14px;
+  left: 14px;
+}
+#timeline .timeline-item .timeline-content {
+  width: 93%;
+  background: #fff;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+#timeline .timeline-item .timeline-content h2 {
+  padding: 15px;
+  background: #0071bc;
+  color: #fff;
+  margin: -20px -20px 0 -20px;
+  font-weight: 300;
+  -webkit-border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  -ms-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+}
+
+#timeline .timeline-item .timeline-content.right {
+  float: right;
+  margin-top:-4px;
+}
+
+
+@media screen and (max-width: 768px) {
+  #timeline {
+    margin: 30px;
+    padding: 0px;
+    width: 90%;
+  }
+  #timeline:before {
+    left: 0;
+  }
+  #timeline .timeline-item .timeline-content {
+    width: 90%;
+    float: right;
+  }
+  #timeline .timeline-item .timeline-content:before, #timeline .timeline-item .timeline-content.right:before {
+    left: 10%;
+    margin-left: -6px;
+    border-left: 0;
+    border-right: 7px solid #ee4d4d;
+  }
+  #timeline .timeline-item .timeline-icon {
+    left: 0;
+  }
+}
+
+
+/* horigental timeline */
+
+.timeline {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  width:100%;
+  padding-left: 65px;
+}
+.timestamp> .author{ font-weight:bold;}
+.li {
+  transition: all 200ms ease-in;
+  width:100%;
+}
+
+.timestamp {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 100;
+  margin-left: -32%;
+}
+
+.status {
+  display: flex;
+  padding-top:20px;
+  justify-content: left;
+  border-top: 2px solid #D6DCE0;
+  position: relative;
+  transition: all 200ms ease-in;
+}
+.status h4 {
+  font-weight: 600;
+  margin:0;
+  padding:10px 0 0 0;
+  text-align:center;
+  font-size:14px!important;
+  
+}
+.timestamp span{text-align:center;}
+.status:before {
+  content: "";
+  width: 19px;
+  height: 19px;
+  background-color: white;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  position: absolute;
+  top: -12px;
+  left:0;
+  transition: all 200ms ease-in;
+}
+
+.li.complete .status {
+  border-top: 2px solid #0071bc;
+}
+.viewall{
+	position: absolute;
+    bottom: 27px;
+    right: 25px;
+    font-weight: 600;
+    font-family: arial;
+	}
+.li.complete .status:before {
+	background:url(../images/approve.png) no-repeat;
+  border: none;
+  transition: all 200ms ease-in;
+}
+.li.pending .status:before {
+  background:#0071bc;
+  border:6px solid #fff!important;
+  border: none;
+  box-shadow: 0 0 10px 0 rgba(0, 113, 188, 0.4);
+  transition: all 200ms ease-in;
+}
+.li.pending .status h4 {
+  color: #0071bc;
+}
+.li.complete .status h4 {
+  color: #0071bc;
+}
+
+@media (min-device-width: 320px) and (max-device-width: 700px) {
+  .timeline {
+    list-style-type: none;
+    display: block;
+  }
+
+  .li {
+    transition: all 200ms ease-in;
+    display: flex;
+    width: inherit;
+  }
+
+  .timestamp {
+    width: 100px;
+  }
+
+  .status:before {
+    left: -8%;
+    top: 30%;
+    transition: all 200ms ease-in;
+  }
+}

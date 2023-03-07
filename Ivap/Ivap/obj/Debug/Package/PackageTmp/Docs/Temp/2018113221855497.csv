@@ -1,0 +1,8 @@
+RegionID,COMP_NAME,REGION_CODE,REGION_NAME,Status,Response,Message
+"0","MYND","Reg002","Test Region 1","1","Failed","Duplicate"
+"","","Reg003","Test Region 2","1","Failed","Please select company."
+"","","Reg004","Test Region 3","1","Failed","Please select company."
+"","","Reg005","Test Region 4","1","Failed","Please select company."
+"","","Reg006","Test Region 5","1","Failed","Please select company."
+"","","Reg006","Test Region 6","1","Failed","Please select company."
+"","","Reg006","Test Region 7","","Failed","Please select company."

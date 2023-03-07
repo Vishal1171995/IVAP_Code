@@ -1,0 +1,585 @@
+﻿@using Ivap.Repository;
+@model Ivap.Areas.MOM.Models.CreateMOM
+@{
+    /**/
+
+    ViewBag.Title = "CreateMOM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .k-dropzone {
+        padding: .5em !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+@using (Ajax.BeginForm("AddMom", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", OnFailure = "FailMessage", OnBegin = "validateMOM" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="panel panel-default">
+        <div class="pull-right VendorSiteBtnRightMain">
+            <button id="btnCreateBack" type="button" onclick="location.href='@Url.RouteUrl("ViewMom")'" class="btn btn-primary BtnBlueLg BtnWidth150">Back</button>
+        </div>
+        <div class="panel-heading"><h2>Create New Minutes Of Meeting</h2></div>
+        <div class="panel-body pd-7">
+
+
+            <div class="row form-group">
+                <label for="Agenda" class="col-sm-2 control-label">Agenda<span class="text-red">*</span></label>
+                <div class="col-sm-10">
+                    @*@Html.HiddenFor(m => m.Status)*@
+                    @Html.HiddenFor(m => m.MID)
+                    @Html.HiddenFor(m => m.MinutesDetail, new { id = "AddMinutesDetail" })
+                    @Html.TextAreaFor(m => m.Agenda, new { @class = "form-control", @placeholder = "Agenda" })
+                    @Html.ValidationMessageFor(m => m.Agenda)
+                </div>
+
+            </div>
+            <div class="row form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Attendees<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+                    @Html.TextAreaFor(m => m.Meeting_Attendees, new { @class = "form-control", @placeholder = "Meeting Attendees" })
+                    @Html.ValidationMessageFor(m => m.Meeting_Attendees)
+                </div>
+                <label for="Address" class="col-sm-2 control-label">Address<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address" })
+                    @Html.ValidationMessageFor(m => m.Address)
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="Meeting Held" class="col-sm-2 control-label">Meeting Held<span class="text-red">*</span></label>
+                <div class="col-sm-4">
+
+                    @Html.TextBoxFor(m => m.MeetingHeld, "{0:dd/MM/yyyy hh:mm:ss}", new { @class = "form-control", @onkeydown = "return false", @placeholder = "dd/MM/yyyy hh:mm:ss" })
+                    @Html.ValidationMessageFor(m => m.MeetingHeld)
+                </div>
+                @Html.HiddenFor(m => m.IsActive)
+                @*<label for="inputPassword3" class="col-sm-2 control-label">MoM Activation</label>
+                <div class="col-sm-4">
+                    <label class="switch">
+                        @Html.HiddenFor(m => m.IsActive, new { id = "HdnMomActivate" })
+                        <input type="checkbox" id="ActivateMom" />
+                        <span class="slider round"></span>
+                    </label>
+                </div>*@
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="pull-left">
+                <h2> Meeting Details</h2>
+            </div>
+            <div class="pull-right btnAddMinutes">
+                <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
+            </div>
+            <div class="clear">
+
+            </div>
+        </div>
+
+        <div class="panel-body pd-7">
+            <div class="row form-group">
+                <div class="col-md-12 col-sm-12">
+                    <div id="KgridAddMinutes"></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                @if (AuthorizationRepo.IsValidAction("AddMom", "CreateAction"))
+                {
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<div id="dvAddMinutes" class="modal fade PopUpMainDiv" role="dialog">
+
+    <div class="modal-dialog">
+        <form id="myForm" action="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Add Minutes Details</h4>
+                </div>
+                <div class="modal-body horizontalscroll">
+
+
+                    @*@Html.ValidationSummary()*@
+                    <div class="row form-group">
+                        <label for="Agenda" class="col-sm-2 control-label">Minutes<span class="text-red">*</span></label>
+                        <div class="col-sm-10">
+                            @Html.Hidden("ITEM_ID")
+                            <textarea class="form-control valid" cols="20" data-val="true" data-val-required="Please enter minutes of meeting" id="Minutes" name="Minutes" placeholder="Minutes" rows="1"></textarea>
+                            @*@Html.TextArea("Minutes", new { @class = "form-control", @placeholder = "Minutes", @data - val = "true", @data - val - required = "Please enter Agenda of Meeting" })*@
+                            @*@Html.ValidationMessage("Minutes")*@
+                            <span class="field-validation-valid" data-valmsg-for="Minutes" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="Responsibilites" class="col-sm-2 control-label">Responsibility<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control valid" cols="20" data-val="true" data-val-required="Please enter responsible person name" id="Responsibility" name="Responsibility" placeholder="Responsibility" rows="1"></textarea>
+                            @*@Html.TextArea("Responsibility", new { @class = "form-control", @placeholder = "Responsibility" })*@
+                            <span class="field-validation-valid" data-valmsg-for="Responsibility" data-valmsg-replace="true"></span>
+                            @*@Html.ValidationMessage("Responsibility")*@
+                        </div>
+                        <label for="Status" class="col-sm-2 control-label">Status<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <select class="form-control valid MD selectbdr" data-val="true" data-val-required="Status required." id="Status" name="Status">
+                                <option value="">--Select--</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Closed">Closed</option>
+                                <option value="Discarded">Discarded</option>
+                            </select>
+                            <span class="field-validation-valid" data-valmsg-for="Status" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="Meeting Held" class="col-sm-2 control-label">Expected Closure Date<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <input class="form-control valid " onkeydown="return false" data-val="true" data-val-required="    Please enter expected closure date" id="Expected_Closure_Date" name="Expected_Closure_Date" placeholder="dd/MM/yyyy hh:mm:ss" />
+                            <span class="field-validation-valid" data-valmsg-for="Expected_Closure_Date" data-valmsg-replace="true"></span>
+                        </div>
+
+                        <label for="Meeting Held" class="col-sm-2 control-label closed">Actual Closure Date<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            <input class="form-control valid closed" , onkeydown="return false" data-val="true" data-val-required="    Please enter actual closure date" id="Actual_Closure_Date" name="Actual_Closure_Date" placeholder="dd/MM/yyyy hh:mm:ss" />
+                            <span class="field-validation-valid" data-valmsg-for="Actual_Closure_Date" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="remarks" class="col-sm-2 control-label closed">Remarks<span class="text-red">*</span></label>
+                        <div class="col-sm-10">
+                            <textarea cols="2" rows="1" class="form-control valid closed" data-val="true" data-val-required="Please enter remarks" id="closedRemarks" name="closedRemarks" placeholder="remarks"></textarea>
+                            <span class="field-validation-valid closed" data-valmsg-for="closedRemarks" data-valmsg-replace="true"></span>
+                        </div>
+
+                    </div>
+                    <div class="row form-group closed">
+                        <label for="attachment" class="col-sm-2 control-label">Attachment</label>
+                        <div class="col-md-3 closed pd-right">
+
+                            <div class="demo-section k-content kendo-multiselect" id="DivFileUpload">
+                                <input type="file" id="files" name="files" target-control="System_Document" target-control-orignal="Original_Document_Name" />
+                                <input type="hidden" id="System_Document" />
+                                <input type="hidden" id="Original_Document_Name" />
+                            </div>
+                        </div>
+                        <div class="col-md-1 pd-left">
+                            <button type="button" class="btn btn-default btn-lg btnDownload"><i class="fa fa-download"></i></button>
+                        </div>
+                    </div>
+
+
+                    <div class="clear10"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnResetMinutes" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmitMinutes" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit Minutes" />
+
+                    </div>
+                    <div class="clear10"></div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+<div id="dvDeleteCreateCom" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                    <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
+                        <div id="dvConfirmationTxt">
+                            <label id="SpnComponentName"></label>
+                        </div>
+                        <div class="clear20"></div>
+                        <input type="submit" id="btnGCCancle" class="btn btn-primary BtnWhiteLg BtnWidth99" value="Cancel" />
+                        <input type="submit" id="btnGCDelete" class="btn btn-primary BtnBlueLg BtnWidth99" value="Delete" />
+                        <div class="clear20"></div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var FilesUploadForOtherURL = "@Url.RouteUrl("FilesUploadForOther")"
+
+        $("#Status").change(function () {
+            showhideClosure();
+        });
+        function showhideClosure() {
+            if ($("#Status").prop('selectedIndex') == 2 || $("#Status").prop('selectedIndex') == 3) {
+                $(".closed").show();
+                var today = new Date();
+                var day = today.getDate();
+                var month = today.getMonth();
+                var year = today.getFullYear();
+                var d = new Date(year, month, day, today.getHours(), today.getMinutes());
+                d.setHours(d.getHours() + Math.round(d.getMinutes() / 60));
+                d.setMinutes(00);
+                $("#Actual_Closure_Date").kendoDateTimePicker({
+                    value: d,//new Date(year, month, day),
+                    min: d,//new Date(year, month, day),
+                    format: "dd/MM/yyyy hh:mm:ss"
+                    //dateInput: true,
+                });
+            }
+            else {
+                $(".closed").hide();
+                $("#Actual_Closure_Date").val("");
+                $("#closureRemarks").val("");
+            }
+        }
+        var AddMinutesglobalDatasource = [];
+        var MID = 0;
+        $(document).ready(function () {
+            $(".btnDownload").click(function () {
+                var systemFileName = $("#System_Document").val();
+                var originalFileName = $("#Original_Document_Name").val();
+                if (systemFileName == undefined || systemFileName == "") {
+                    alert("Please upload file");
+                    return false;
+                }
+                var URL = "@Url.RouteUrl("DownloadFileMOM")" + '?MOMID=' + 0 + ' &System_File_Name=' + systemFileName + '&Original_File_Name=' + originalFileName;
+              window.location = URL;
+
+            });
+            $("#files").kendoUpload({
+                async: {
+                    saveUrl: FilesUploadForOtherURL,
+                    removeUrl: "@Url.RouteUrl("RemoveFiles")",
+                    autoUpload: true
+
+                },
+                upload: function (e) {
+                    var form = $('#__AjaxAntiForgeryForm');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+                }, select: function (event) {
+                },
+                remove: function (e) {
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp", System_FileName: e.files[0].System_FileName };
+                },
+                select: function (event) {
+                   
+                },
+                multiple: false,
+                success: onSuccessForUpload,
+                 remove: onRemoveForUploadInput,
+                showFileList: true
+        });
+        function onRemoveForUploadInput(e) {
+            var name = this.name;
+            var target = $("#" + name).attr("target-control");
+            $("#" + target).val("");
+            $("#System_Document").val("");
+            $("#Original_Document_Name").val("");
+            $("#Log").hide();
+            }
+
+            $("#btnSubmitMinutes").click(function (evt) {
+                evt.preventDefault();
+                var $form = $('#myForm');
+
+                $form.data("validator").settings.ignore = ".data-val-ignore, :hidden, :disabled";
+                if ($form.valid()) {
+                    //Ajax call here
+                    var UpdateMID = $("#MID").val();
+                    var Item_ID = $("#ITEM_ID").val();
+                    MID = Number(UpdateMID) + 1;
+                    //if (Number(UpdateMID) == 0) {
+                    //    MID = Number(UpdateMID) + 1;
+                    //}
+                    $("#MID").val(MID);
+                    var Minutes = $("#Minutes").val();
+                    var Responsibility = $("#Responsibility").val();
+                    var Status = $(".MD").val();
+                    var Expected_Closure_Date = $("#Expected_Closure_Date").val();
+                    var Actual_Closure_Date = $("#Actual_Closure_Date").val();
+                    var closedRemarks = $("#closedRemarks").val();
+                    var systemFileName = $("#System_Document").val();
+                    var originalFileName = $("#Original_Document_Name").val();
+
+                    if ($("#btnSubmitMinutes").val() == "Update Minutes") {
+                        AddMinutesglobalDatasource = AddMinutesglobalDatasource.filter(function (obj) {
+                            return obj.MID != UpdateMID;
+                        });
+                        var tempPreventive = { "MID": Number(UpdateMID), "ITEM_ID": Item_ID, "MINUTES": Minutes, "RESPONSIBILITY": Responsibility, "MINUTES_STATUS": Status, "E_C_D": Expected_Closure_Date, "A_C_D": Actual_Closure_Date, "closedRemarks": closedRemarks, "systemFileName": systemFileName, "originalFileName":originalFileName }
+                    }
+                    else {
+                        var tempPreventive = { "MID": Number(MID), "ITEM_ID": 0, "MINUTES": Minutes, "RESPONSIBILITY": Responsibility, "MINUTES_STATUS": Status, "E_C_D": Expected_Closure_Date, "A_C_D": Actual_Closure_Date, "closedRemarks": closedRemarks, "systemFileName": systemFileName, "originalFileName": originalFileName}
+                    }
+                    AddMinutesglobalDatasource.push(tempPreventive)
+                    $("#AddMinutesDetail").val(JSON.stringify(AddMinutesglobalDatasource));
+                    BindAddMinutes(AddMinutesglobalDatasource);
+                    $("#dvAddMinutes").modal("hide");
+                }
+            });
+
+            $(".btnAddMinutes").click(function () {
+                $(".k-upload-files").remove();
+                $(".k-upload-status").remove();
+                $("#System_Document").val("");
+                $("#Original_Document_Name").val("");
+                $("#closedRemarks").val("");
+                $("#btnSubmitMinutes").val("Submit Minutes");
+                var today = new Date();
+                var day = today.getDate();
+                var month = today.getMonth();
+                var year = today.getFullYear();
+                var d = new Date(year, month, day, today.getHours(), today.getMinutes());
+                d.setHours(d.getHours() + Math.round(d.getMinutes() / 60));
+                d.setMinutes(00);
+                $("#Minutes").val("");
+                $("#Responsibility").val("");
+                $(".MD").val("");
+                $("#Expected_Closure_Date").kendoDateTimePicker({
+                    value: d,//new Date(year, month, day),
+                    min: d,//new Date(year, month, day),
+                    format: "dd/MM/yyyy hh:mm:ss"
+                });
+                $("#Actual_Closure_Date").kendoDateTimePicker({
+                    value: d,//new Date(year, month, day),
+                    min: d,//new Date(year, month, day),
+                    format: "dd/MM/yyyy hh:mm:ss"
+                    //dateInput: true,
+                });
+                showhideClosure();
+                OpenModal("dvAddMinutes", 700, "Add MOM");
+            });
+
+            //$("#ActivateMom").click(function () {
+            //    if ($('#ActivateMom').is(":checked")) {
+            //        $("#HdnMomActivate").val(true);
+            //    }
+            //    else {
+            //        $("#HdnMomActivate").val(false);
+            //    }
+            //});
+            AddMinutesglobalDatasource = [];
+            BindAddMinutes(AddMinutesglobalDatasource);
+            var today = new Date();
+            var day = today.getDate();
+            var month = today.getMonth();
+            var year = today.getFullYear();
+            var d = new Date(year, month, day, today.getHours(), today.getMinutes());
+            d.setHours(d.getHours() + Math.round(d.getMinutes() / 60));
+            d.setMinutes(00);
+            $("#MeetingHeld").kendoDateTimePicker({
+                value: d,//new Date(year, month, day),
+                min: d,//new Date(year, month, day),
+                format: "dd/MM/yyyy hh:mm:ss"
+                //dateInput: true,
+            });
+        });
+        function validateMOM() {
+            //it is commented because by default functionality will be active while creating
+            //if ($('#ActivateMom').is(":checked")) {
+            //    $("#HdnMomActivate").val(true);
+            //    $("#IsActive").val(true);
+
+            //}
+            //else {
+            //    $("#HdnMomActivate").val(false);
+            //    $("#IsActive").val(false);
+            //}
+            if ($("#AddMinutesDetail").val() == "") {
+                alert("Please add at least one meeting");
+                return false;
+            }
+            return true;
+        }
+        KgridAddMinutes = "";
+        function BindAddMinutes(AddMinutesglobalDatasource) {
+            if (KgridAddMinutes != "") {
+                $('#KgridAddMinutes').kendoGrid('destroy').empty();
+            }
+
+            var GridColumns = [{ field: "MINUTES", title: "Minutes", width: 200 },
+            { field: "RESPONSIBILITY", title: "Responsible Person", width: 130 },
+            { field: "MINUTES_STATUS", title: "Status", width: 130 },
+            { field: "E_C_D", title: "Expected Closure Date", width: 130 },
+            { field: "A_C_D", title: "Actual Closure Date", width: 130 },
+            {
+                command: [{ name: "Delete", text: "", iconClass: "k-icon k-i-delete", click: AddMinutesDeleteHandler, title: "Delete" },
+                { name: "Edit", text: "", iconClass: "k-icon k-i-edit", click: AddMinutesEditHandler, title: "Edit" },], title: "Action", width: 100
+            }
+            ];
+            KgridAddMinutes = $("#KgridAddMinutes").kendoGrid({
+                dataSource: {
+                    data: AddMinutesglobalDatasource
+                },
+                height: 280,
+                noRecords: true,
+                resizable: true,
+                sortable: true,
+                columns: GridColumns,
+
+            });
+
+            //});
+        }
+        var dataItem = "";
+        function AddMinutesDeleteHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+            $("#SpnComponentName").html('Are you sure you want to delete MOM ?');
+            OpenModal("dvDeleteCreateCom", 150, "Delete Confirmation");
+            //ConfirmDialog("Are you sure, you want to delete ", dataItem);
+            //alert("Product has been sucessfully deleted !!!");
+        }
+        $("#btnGCCancle").click(function () {
+            $('#dvDeleteCreateCom').modal('toggle');
+        })
+        $("#btnGCDelete").click(function () {
+            var MID = dataItem.MID;
+            AddMinutesglobalDatasource = AddMinutesglobalDatasource.filter(function (obj) {
+                return obj.MID !== MID;
+            });
+            $("#AddMinutesDetail").val(JSON.stringify(AddMinutesglobalDatasource));
+            BindAddMinutes(AddMinutesglobalDatasource);
+            var ITEM_ID = dataItem.ITEM_ID;
+            if (ITEM_ID > 0) {
+                $.post(DeleteMOMItemDetailURL, { ItemID: ITEM_ID }, function (response) {
+
+                });
+            }
+            $('#dvDeleteCreateCom').modal('toggle');
+        })
+        function AddMinutesEditHandler(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var MID = dataItem.MID;
+            $(".k-upload-files").remove();
+            $(".k-upload-status").remove();
+            $("#System_Document").val("");
+            $("#Original_Document_Name").val("");
+            $("#System_Document").val(dataItem.systemFileName);
+            $("#Original_Document_Name").val(dataItem.originalFileName);
+            $("#MID").val(htmlEncode(dataItem.MID));
+            $("#ITEM_ID").val(htmlEncode(dataItem.ITEM_ID));
+            $("#Minutes").val(htmlEncode(dataItem.MINUTES));
+            $("#Responsibility").val(htmlEncode(dataItem.RESPONSIBILITY));
+            $(".MD").val(htmlEncode(dataItem.MINUTES_STATUS));
+            $("#Expected_Closure_Date").val(htmlEncode(dataItem.E_C_D));
+            $("#Actual_Closure_Date").val(htmlEncode(dataItem.A_C_D));
+            $("#Expected_Closure_Date").kendoDateTimePicker({
+                format: "dd/MM/yyyy hh:mm:ss"
+            });
+            $("#Actual_Closure_Date").kendoDateTimePicker({
+                format: "dd/MM/yyyy hh:mm:ss"
+            });
+            $("#Status").change();
+            $("#btnSubmitMinutes").val("Update Minutes");
+            OpenModal("dvAddMinutes", 700, "Edit MOM");
+        }
+        function SuccessMessage(res) {
+            //if ($("#hdnMID").val() > 0)
+            if (res.IsSuccess == true) {
+                HandleSuccessMessage(res);
+                setTimeout(function () { window.location.href = "ViewMom"; }, 5000);
+            }
+            else {
+                HandleSuccessMessage(res);
+            }
+        }
+
+        function FailMessage() {
+            // alert("Fail Post");
+        }
+
+    </script>
+}
+

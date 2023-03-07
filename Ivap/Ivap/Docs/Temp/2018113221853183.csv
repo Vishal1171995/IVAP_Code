@@ -1,0 +1,8 @@
+RegionID,COMP_NAME,REGION_CODE,REGION_NAME,Status,Response,Message
+"0","MYND","Reg002","Test Region 1","1","Failed","Duplicate"
+"","MYND","Reg003","Test Region 2","1","Success","Region created. Your transaction'-id is 3"
+"","MYND","Reg004","Test Region 3","1","Success","Region created. Your transaction'-id is 4"
+"","MYND","Reg005","Test Region 4","1","Success","Region created. Your transaction'-id is 5"
+"","MYND","Reg006","Test Region 5","1","Success","Region created. Your transaction'-id is 6"
+"","MYND","Reg006","Test Region 6","1","Success","Region created. Your transaction'-id is 7"
+"","MYND","Reg006","Test Region 7","","Success","Region created. Your transaction'-id is 8"

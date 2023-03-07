@@ -1,0 +1,161 @@
+﻿.k-grid tr td, .k-pivot-layout .k-grid tr td {
+    border-bottom-width: 1px !important;
+    border-style: solid !important;
+    vertical-align: middle !important;
+    text-align: left;
+}
+
+.k-button, .k-toolbar .k-button {
+    /*line-height: 15px;*/
+    padding: 0px 6px;
+}
+
+.k-grid .k-button {
+    line-height: 0px !important;
+    min-width: 0px !important;
+    border-radius: 4px;
+}
+
+.k-grid {
+    font-size: 12px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+    .k-grid td {
+        line-height: 12px;
+        vertical-align: middle;
+        border-style: solid !important;
+        border-width: 0 0 0 1px !important;
+    }
+
+    .k-grid th {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+.k-link {
+    padding: 0px 0px;
+}
+
+.k-view {
+    background-image: url(../../images/KviewIcon.png) !important;
+    background-repeat: no-repeat;
+    background-position: left center;
+    /*width: 25px;
+            height: 28px;*/
+}
+
+.k-config {
+    background-image: url(../../images/configuration.png) !important;
+    background-repeat: no-repeat;
+    background-position: left center;
+    /*width: 25px;
+            height: 28px;*/
+}
+/*Kendu New*/
+.ActionIconValidate {
+    background: url('../images/validate.png') no-repeat;
+    background-position: left center;
+}
+
+    .ActionIconValidate:hover {
+        background: url('../images/validate1.png') no-repeat;
+        background-position: left center;
+    }
+
+.ActionIconDelete {
+    background: url('../images/Delete.png') no-repeat;
+    background-position: left center;
+}
+
+.ActionIconDeleteRed {
+    background: url('../images/DeleteRed .png') no-repeat;
+    background-position: left center;
+}
+
+
+.ActionIconDelete:hover {
+    background: url('../images/Delete1.png') no-repeat;
+    background-position: left center;
+}
+
+.ActionIconDownload {
+    background: url('../images/Download.png') no-repeat;
+    background-position: left center;
+}
+
+.ActionIconDownload:hover {
+    background: url('../images/Download1.png') no-repeat;
+    background-position: left center;
+}
+
+.ActionIconProceed {
+    background: url('../images/Proceed.png') no-repeat;
+    background-position: left center;
+}
+
+.ActionIconProceed:hover {
+    background: url('../images/Proceed1.png') no-repeat;
+    background-position: left center;
+}
+.ActionIconMerge {
+    background: url('../images/merge.png') no-repeat;
+    background-position: left center;
+}
+
+    .ActionIconMerge:hover {
+        background: url('../images/merge1.png') no-repeat;
+        background-position: left center;
+    }
+
+
+/*Kendu End*/
+
+.k-grid-toolbar a {
+    float: right;
+}
+
+.k-multiselect-wrap {
+    /* enable scrollability */
+    overflow: auto;
+    /* control selected items' container - use height or min-height and/or max-height */
+    max-height: 100px;
+}
+
+    .k-multiselect-wrap .k-button {
+        /* force each selected item on a new line, if required */
+        clear: left;
+    }
+
+.k-ActivateUser {
+    background-image: url(../../images/act-user.png) !important;
+    background-repeat: no-repeat;
+    background-position: left center;
+    /*width: 25px;
+            height: 28px;*/
+}
+
+.k-RoleAssign {
+    background-image: url(../../images/role-assg.png) !important;
+    background-repeat: no-repeat;
+    background-position: left center;
+    /*width: 25px;
+            height: 28px;*/
+}
+.k-delete {
+    background-image: url(../../images/Delete.png) !important;
+    background-repeat: no-repeat;
+    background-position: left center;
+    /*width: 25px;
+            height: 28px;*/
+}
+.ActionIconReset {
+    background: url('../images/reset.png') no-repeat;
+    background-position: left center;
+}
+
+    .ActionIconReset:hover {
+        background: url('../images/reset1.png') no-repeat;
+        background-position: left center;
+    }
+

@@ -1,0 +1,402 @@
+﻿@using Ivap.Models;
+@{
+    ViewBag.Title = "FileExplorer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<style>
+    .k-grid-content { height:200px!important;}
+</style>*@
+<link href="~/Content/css/ListStyle.css" rel="stylesheet" />
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>Document Manager</strong></h3></div>
+    <div class="panel-body">
+        <div class="clear"></div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 no-padding bodbtt">
+                <div class="col-xs-12 col-sm-4 col-md-3 no-padding">
+                    <div class="col-xs-12 col-sm-6 col-md-6 no-padding">
+                        <div class="main-explore">
+                            <div id="dvDelete" class="icon-ex pull-left"> <span class="det-icon"></span> <label>Delete</label> </div>
+                            <div id="dvNewFolder" class="icon-ex pull-left mgfl"> <span class="folder-icon"></span> <label>New Folder</label> </div>
+                            <div id="dvRename" class="ex pull-right"> <span class="renm-icon"></span> <label>Rename</label> </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-6 no-padding">
+                        <div class="main-explore">
+                            <div id="dvDownload" class="ex pull-left"> <span class="dowld-icon"></span> <label>Download</label> </div>
+                            <div id="dvOpen" class="ex pull-left mgfl"> <span class="op-icon"></span> <label>Open</label> </div>
+                            <div id="dvViewFile" class="pull-right"> <span class="zipfolder-icon"></span> <label>Property</label> </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-7 col-md-8 no-padding">
+                    <div class="col-xs-12 col-sm-12 col-md-12 no-padding">
+                        <div class="main-explore" style="border-right:none;" id="DvMetaDetatype">
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-1 col-md-1 no-padding">
+                    <div class="col-xs-12 col-sm-12 col-md-12 no-padding">
+                        <div class="main-explore">
+                            <div class="pull-right" id="dvSearch"> <span class="filterexplo-icon"></span> <label>Filter</label> </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 no-padding">
+                <div class="tabinner-explorer">
+                    <ul id="ulFolder" class="breadcrumb crumb"></ul>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-5 col-md-3 grid-tree no-padding pull-left" style="box-shadow: 0 0 4px #ccc;min-height:50px;">
+                <!--accordian html starts -->
+                <div class="tree-view scrollbox3">
+                    <div id="dvTreeView"></div>
+                </div>
+                <!-- accordian html ends -->
+            </div>
+
+            <div class="col-xs-12 col-sm-7 col-md-9 extra pull-right" style="box-shadow: 0 0 4px #ccc;">
+                <div class="col-xs-12 col-sm-12 col-md-12 no-padding scrollbox3" style="height:400px;" id="myTable">
+                    <div class="middle-section" id="listView">
+                    </div>
+                </div>
+            </div>
+            <ul id="Treemenu" style="display:none;">
+                <li>
+                    <a tabindex="-1" href="#"><span class="sml_op-icon pull-left"></span> <label class="pull-right mg-top4" style="cursor:pointer;">Set Roles</label>
+                    </a>
+                    <div class="clear"></div>
+                </li>
+            </ul>
+
+            <ul id="contextMenu" class="dropdown-menu rtclick-tab" role="menu" style="display:none">
+                <li><a tabindex="-1" href="#"><span class="sml_op-icon pull-left"></span> <label class="pull-left">Open</label></a></li>
+                <li><a tabindex="-1" href="#"><span class="sml_folder-icon pull-left"></span> <label class="pull-left">New Folder</label></a></li>
+                <li><a tabindex="-1" href="#"><span class="sml_delete-icon pull-left"></span> <label class="pull-left">Delete</label></a></li>
+                <li><a tabindex="-1" href="#"><span class="sml_dowld-icon pull-left"></span> <label class="pull-left">Download</label></a></li>
+                <li><a tabindex="-1" href="#"><span class="sml_renm-icon pull-left"></span> <label class="pull-left">Rename</label></a></li>
+            </ul>
+            <input type="hidden" id="hdnParentId" value="0" />
+            <input type="hidden" id="hdnEID" value="0" />
+            <input type="hidden" id="hdnDeleteFolder" value="0" />
+            <input type="hidden" id="hdnOriginalFileName" />
+            <input type="hidden" id="hdnTempFileName" />
+            <input type="hidden" id="hdnRole" value="" />
+
+        </div>
+    </div>
+</div>
+@*=========Add New Folder Dialog HTML=================*@
+
+<div id="dvCreateNewFolder" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Create New Folder</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12 pd">
+                        <div class="col-xs-12 col-sm-5 col-md-5 allcreditionals">
+                            <label>New Folder<sup>*</sup></label>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-md-7 allcreditionals">
+                            <input type="text" id="txtNewFolder" class="form-control" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="submit" id="btnAddNewFolder" value="Add" class="btn btn-primary BtnBlueLg" style="width:70px;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*==========End New Folder Dialog HTML==================*@
+<div id="dvMetaDeta" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" id="FileMetaTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div id="dvContent" class="row top_content">
+                    <div class="appendDiv"></div>
+                    <div class="col-xs-6 col-sm-4 col-md-4 allcreditionals">
+                        <label>Uploader<sup>*</sup></label>
+                    </div>
+                    <div class="col-xs-6 col-sm-8 col-md-8 allcreditionals">
+                        <input type="file" name="fileToUpload" id="fileToUpload">
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                        <div class="reset_btn" align="right">
+                            <input type="submit" id="btnSubmit" value="Submit" class="btn btn-primary BtnBlueLg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="dvRenamePopup" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Rename Item</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div id="dvContent" class="row top_content">
+                    <div class="col-xs-6 col-sm-4 col-md-4 allcreditionals">
+                        <label>New Name<sup>*</sup></label>
+                    </div>
+                    <div class="col-xs-6 col-sm-8 col-md-8 allcreditionals">
+                        <input type="text" id="txtRename" class="form-control" />
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                        <div class="reset_btn" align="right">
+                            <input type="submit" id="btnRename" value="OK" class="btn btn-primary BtnBlueLg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvFile" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" id="dvFileTypeName">Rename Item</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div id="dvContent" class="row top_content">
+                    <div id="dvAppendFileInfo" class="col-xs-12 col-sm-12 col-md-12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvSearchPopup" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Search File</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div id="dvContent" class="row top_content">
+                    <div class="col-xs-6 col-sm-4 col-md-4 allcreditionals">
+                        <label>Search<sup>*</sup></label>
+                    </div>
+                    <div class="col-xs-6 col-sm-8 col-md-8 allcreditionals">
+                        <input type="text" id="txtSearch" class="form-control" />
+                    </div>
+                    <div class="clear20"></div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                        <div class="reset_btn" align="right">
+                            <input type="submit" id="btnSearch" value="Search" class="btn btn-primary BtnBlueLg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvSetRole" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Acess Role</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div id="dvContent" class="row top_content">
+                    <div id="kgrdRole"></div>
+                    <div class="clear20"></div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                        <div class="reset_btn" align="right">
+                            @if (((AppUser)Session["uBo"]).RoleName.ToUpper() == "CLIENT ADMIN")
+                            {
+                            <input type="submit" id="btnSubmitRole" value="Submit" class="btn btn-primary BtnBlueLg" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade PopUpMainDiv popupindex" id="dvError" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Error</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnError"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade PopUpMainDiv popupindex" id="dvSucess" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Sucess</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnSucess"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .k-context-menu.k-menu-vertical > .k-item > .k-link, .k-menu .k-menu-group .k-item > .k-link, .k-menu-scroll-wrapper .k-menu-group .k-item > .k-link, .k-popups-wrapper.vertical > .k-item > .k-link {
+        padding: .2em .9em .9em .5em;
+    }
+
+    #dvTreeView .k-sprite {
+        background-image: url("../MyKendu/content/web/treeview/coloricons-sprite.png");
+    }
+
+    .rootfolder {
+        background-position: 0 0;
+    }
+
+    .folder {
+        background-position: 0 -16px;
+    }
+
+    .pdf {
+        background-position: 0 -32px;
+    }
+
+    .html {
+        background-position: 0 -48px;
+    }
+
+    .image {
+        background-position: 0 -64px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script>
+        var UploadFileMetaDataURL = '@Url.RouteUrl("UploadFileMetaData")';
+
+        var GetEntityTreeViewURL = '@Url.RouteUrl("GetEntityTreeView")';
+        var GetFileMetaDataURL = '@Url.RouteUrl("GetFileMetaData")';
+
+        var RenmaeFileURL = '@Url.RouteUrl("RenmaeFile")';
+        var GetFileInfoURL = '@Url.RouteUrl("GetFileInfo")';
+
+        var AddFileURL = '@Url.RouteUrl("AddFile")';
+        var CreateNewFolderURL = '@Url.RouteUrl("CreateNewFolder")';
+
+
+        var DeleteFolderURL = '@Url.RouteUrl("DeleteFolder")';
+        var CreateZipAndDownloadURL = '@Url.RouteUrl("CreateZipAndDownload")';
+
+
+        var GetAllChildFileURL = '@Url.RouteUrl("GetAllChildFile")';
+        var GetMetaDetaFileForSearchURL = '@Url.RouteUrl("GetMetaDetaFileForSearch")';
+        var CreateZipAndDownloadURL = '@Url.RouteUrl("CreateZipAndDownload")';
+        var GetAcessRoleForFileExplorerURL = '@Url.RouteUrl("GetAcessRoleForFileExplorer")';
+        var SetUserRightsURL = '@Url.RouteUrl("SetUserRights")';
+    </script>
+    @Scripts.Render("~/Scripts/FileExplorerScript")
+}
+
+<script type="text/x-kendo-template" id="template">
+    #if (FileType=='Folder') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-fd"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.docx') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-wrd"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.doc') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-wrd"></span> <label>#=FileOriginalName#</label></div>
+    # } else if(FileType!='Folder' && FileExtention=='.xlsx') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-xlsx"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.xls') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-xls"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.csv') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-xls"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.pdf') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-pdfload"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.zip') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-zip"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.png') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-peeng"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.gif') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-giif"></span> <label>#=FileOriginalName#</label></div>
+    #} else if(FileType!='Folder' && FileExtention=='.jpg') {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-jeepg"></span> <label>#=FileOriginalName#</label></div>
+    #} else {#
+    <div class="col-xs-4 col-sm-3 col-md-2 tooltext pull-left DoubleClick"><span class="large-fd"></span> <label>#=FileOriginalName#</label></div>
+    #}#
+</script>

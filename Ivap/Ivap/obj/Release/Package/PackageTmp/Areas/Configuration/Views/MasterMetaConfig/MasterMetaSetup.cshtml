@@ -1,0 +1,41 @@
+﻿@model Ivap.Areas.Configuration.Models.MasterMetaModel
+@{
+    ViewBag.Title = "Master Meta SetUp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>Master Meta SetUp</strong></h3></div>
+    <div class="panel-body">
+        @*<div class="pull-right VendorSiteBtnRightMain">
+               @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewUser", area = string.Empty });}
+                <button type="button" id="dvimport" class="btn btn-primary TransparantBtnBlue">Import Excel</button>
+                    <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+                <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+            </div>*@
+
+        <div class="row form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Master Name</label>
+            <div class="col-sm-4">
+                @Html.DropDownListFor(m => m.SCREEN_NAME, new SelectList(Model.SCREEN_NAMEList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = "Master Name" })
+                @Html.ValidationMessageFor(m => m.SCREEN_NAME, "", new { @class = "" })
+            </div>
+        </div>
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@Scripts.Render("~/Scripts/commanscript")
+<script type="text/javascript">
+    var GetMasterMetaURL = '@Url.RouteUrl("GetMasterMeta")';
+    var UpdateMasterMetaURL = '@Url.RouteUrl("UpdateMasterMeta")';
+
+</script>
+@Scripts.Render("~/Scripts/MasterMetaScript")

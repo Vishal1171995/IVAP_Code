@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewBag.Title = "Manage Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .ActionIcondarrow {
+        background: url('../Content/images/downarrow.png') no-repeat;
+    }
+
+    .ActionIconuarrow {
+        background: url('../Content/images/uparrow.png') no-repeat;
+    }
+
+    .k-grouping-row .k-icon {
+        margin: 0 0 0 0;
+    }
+    /*.k-reset {
+        width:74.5%;
+    }*/
+
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>Menu Master</strong></h3></div>
+    <div class="panel-body">
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="kgrd"></div>
+        </div>
+        <div class="clear30"></div>
+    </div>
+</div>
+<div class="clear20"></div>
+<div id="doc" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Menu Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-4">
+                    <div class="">
+                        @*<div class="col-xs-12 box-header with-border">
+                                <h3 class="box-title">Menu Details :</h3>
+                            </div>*@
+                        <!-- /.box-header -->
+                        <form class="form-horizontal">
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label for="inputEmail3" class="col-sm-5 control-label">Menu Name:</label>
+                                    <div class="col-sm-7">
+                                        <input id="txtMName" class="form-control" placeholder="Menu Name" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.col -->
+                <div>
+                    <div class="">
+                        @*<div class="col-xs-12 box-header with-border">
+                                <h3>Manage Roles:</h3>
+                            </div>*@
+                        @*<div class="clear10"></div>*@
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <input type="hidden" id="hdnRole" value="" />
+                            <input type="hidden" id="hdnImage" />
+                            <input type="hidden" id="TID" value="0" />
+
+                            <input type="hidden" id="hdnParentMenu" />
+                            <input type="hidden" id="hdnCurGridId" />
+                            <div style="margin-top:20px; float:left;">
+                                <div id="kgrdRole"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear5"></div>
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                <div class="clear20"></div>
+
+                @*<div class="modal-footer">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-danger" />
+                        <input type="submit" id="btnSubmit" class="btn btn-danger" value="Submit" />
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvConfirm" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Menu Active_Inactive Confirmation!!!</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dvOPMsg" style="display:none;text-align:center;">
+                    Are you sure you want to change the status?
+                </div>
+                <div class="clear20"></div>
+                <div id="dvPOButtons" style="text-align:center;">
+                    <input type="button" class="btn btn-primary BtnBlueLg" value="OK" id="btnOPok" />
+                    <input type="button" class="btn btn-primary BtnBlueLg" value="Cancel" id="btnOPCancel" />
+                </div>
+                <div id="dvLoader" style="text-align:center;display:none;">
+                    <img src="../Images/preloader22.gif" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    @*@Scripts.Render("~/Scripts/LoginScript")*@
+    <script id="command-template" type="text/x-kendo-template">
+        #if(NAME == "0"){#
+        <a class="k-button Delete-button">Active</a>
+        #}
+
+        else {#
+        <a class="k-button Delete-button">In Active</a>
+        #}#
+    </script>
+
+    <script type="text/javascript">
+
+        // Link to open the dialog
+
+    </script>
+    <script type="text/javascript">
+        var GetRolesByMenu = "@Url.RouteUrl("GetRolesByMenu")";
+        var UpdateMenu = '@Url.RouteUrl("UpdateMenu")';
+        var GetMenu = '@Url.RouteUrl("GetMenu")';
+        var ActiveInactiveMenu = '@Url.RouteUrl("ActiveInactiveMenu")';
+        var SetDisplayOrder_UPURL = '@Url.RouteUrl("SetDisplayOrder_UP")';
+        var SetDisplayOrder_downURL = '@Url.RouteUrl("SetDisplayOrder_down")'
+
+
+    </script>
+    @Scripts.Render("~/Scripts/MenuScript")
+}

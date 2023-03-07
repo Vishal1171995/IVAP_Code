@@ -1,0 +1,8 @@
+DiviID,COMP_NAME,DIVI_CODE,DIVI_NAME,Status
+,,,,
+Display Name,Mandatory Fields,Data Type,Remarks,
+DiviID,,integer,Insert time 0 and updata time give CompID id,
+COMP_NAME,YES,Text,,
+DIVI_CODE,YES,Text,Minimum 4 character and Maximum can be 100 character,
+DIVI_NAME,YES,Text,,
+Status,YES,bool,,

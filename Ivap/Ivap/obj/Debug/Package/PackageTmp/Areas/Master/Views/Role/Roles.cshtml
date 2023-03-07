@@ -1,0 +1,356 @@
+﻿
+@model Ivap.Areas.Master.Models.RoleModel
+    @using Ivap.Repository
+@*@using Idea.Repository;*@
+@{
+    ViewBag.Title = "Manage Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @if (AuthorizationRepo.IsValidAction("ViewRoles", "ViewAction"))
+        {
+            <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction("ViewRoles", "CreateAction"))
+        {
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+
+
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="RoleDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>@Model.RoleName_TEXT</label> </td>
+                                            <td><span id="lblRoleName"> </span></td>
+                                            <td><label>@Model.RoleType_TEXT</label></td>
+                                            <td> <span id="lblRoleType"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>Status</label> </td>
+                                            <td><span id="lblStatus"></span></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvRoleAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+            {  @Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+                    @*<div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">Entity<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.EntityID, new SelectList(Model.EntityList, "Value", "Text", "0"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.EntityID)
+                        </div>
+                    </div>*@
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.RoleName_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.RoleID)
+                            @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control", @placeholder = "Role Name" })
+                            @Html.ValidationMessageFor(m => m.RoleName)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">@Model.RoleType_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.RoleType, new List<SelectListItem> {
+                                new SelectListItem { Text = "--Select--", Value = "" },
+                                new SelectListItem { Text = "ADMIN", Value = "ADMIN" },
+                                new SelectListItem { Text = "MAKER", Value = "MAKER" },
+                                new SelectListItem { Text = "CHECKER", Value = "CHECKER" },
+                                new SelectListItem { Text = "VIEWER", Value = "VIEWER" },
+                            }, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.RoleType)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">Is Active<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.CheckBoxFor(m => m.IsActive)
+                            @Html.ValidationMessageFor(m => m.IsActive)
+                        </div>
+                    </div>
+                </div>
+                    <div class="clear"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                    </div>
+                    <div class="clear20"></div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @*<div id="dvRoleAddEdit" class="modal">
+        @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+        {  @Html.AntiForgeryToken()
+            <div class="box-body">
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Role Name<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.RoleID)
+                        @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control", @placeholder = "Role Name" })
+                        @Html.ValidationMessageFor(m => m.RoleName)
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Role Type<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(m => m.RoleType, new List<SelectListItem> {
+                        new SelectListItem { Text = "--Select--", Value = "" },
+                        new SelectListItem { Text = "Internal", Value = "Internal" },
+                        new SelectListItem { Text = "External", Value = "External" },
+                    }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.RoleType)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Is Active<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                        @Html.ValidationMessageFor(m => m.IsActive)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-danger"> <i class="fa fa-ban"></i> Reset</button>
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-danger" />
+                @*<button type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Submit</button>*@
+    @*<input type="submit" id="btnSubmit" class="btn btn-danger" value="Submit" />*@
+    @*</div>*@
+    @*}
+        </div>*@
+</section>
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetRolesURL = "@Url.RouteUrl("GetRoles")"
+        var GetUserRoleHisURL = '@Url.RouteUrl("GetUserRoleHis")'
+        var DownloadAllRoleURL= '@Url.RouteUrl("DownloadAllRole")'
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#li_Master").addClass("active");
+            $("#anch_ViewRoles").addClass("CurantPageIcon");
+            BindGrid();
+            $("#dvExport").bind("click", {}, DownLoadAll);
+            $("#add").click(function (event) {
+                $("#btnReset").click();
+                $("#RoleID").val(0);
+                OpenModal("dvRoleAddEdit", 500, "Add Role");
+            });
+        });
+        var Kgrid = "";
+        function BindGrid() {
+            var RoleID = 0;
+            $.get(GetRolesURL, { RoleID: RoleID }, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+                                { field: "ROLENAME", title: '@Model.RoleName_TEXT', width: 200 },
+                                { field: "ROLETYPE", title: '@Model.RoleType_TEXT', width: 200 },
+                                { field: "STATUS", title: "Status", width: 100, template: "<span class= #if(STATUS=='Active'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:STATUS#</span>" },
+                    //{
+                    //    command: [{ name: "Edit", text: "", iconClass: "kIcon kIconEdit", click: EditHandler, title: "Edit" },
+                    //        { name: "View", text: "", iconClass: "kIcon kIconView", click: ViewHandler, title: "View" }], title: "Action", width: 60
+                    //}
+
+                ];
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditHandler;
+                        else if (response.Command.command[i].name == "View")
+                            response.Command.command[i].click = ViewHandler;
+                    }
+                    GridColumns.push(response.Command);
+                }
+                Kgrid = $("#Kgrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+        var EditHandler = function EditHandler(e) {
+            $("#btnReset").click();
+            e.preventDefault();
+            var dataItem = {};
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var RoleID = dataItem.TID;
+            $.ajax({
+                type: "GET",
+                url: GetRolesURL,
+                contentType: "application/json; charset=utf-8",
+                data: { RoleID: RoleID },
+                dataType: "json",
+                success: function (response) {
+                    var data1 = $.parseJSON(response.Data);
+                    if (data1.length > 0) {
+                        $("#RoleID").val(data1[0].TID);
+                        //$("#EntityID").val(htmlEncode(data1[0].ENTITY_ID));
+                        $("#RoleName").val(htmlEncode(data1[0].ROLENAME));
+                        $("#RoleType").val(htmlEncode(data1[0].ROLETYPE));
+                        var IsAct = htmlEncode(data1[0].ISACT);
+                        (IsAct == 1) ? $('#IsActive').prop('checked', true) : $('#IsActive').prop('checked', false);
+                        OpenModal("dvRoleAddEdit", 500, "Add Role");
+                    }
+                }
+            });
+        }
+        var ViewHandler = function ViewHandler(e) {
+
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var RoleID = dataItem.TID;
+            $.get(GetRolesURL, { RoleID: RoleID }, function (response) {
+                var Data = $.parseJSON(response.Data);
+                //$("#lblEntity").html(htmlEncode(Data[0].ENTITY_NAME));
+                $("#lblRoleName").html(htmlEncode(Data[0].ROLENAME));
+                $("#lblRoleType").html(htmlEncode(Data[0].ROLETYPE));
+                $("#lblStatus").html(htmlEncode(Data[0].STATUS));
+                HistoryGridData(RoleID);
+            });
+        }
+        function HistoryGridData(RoleID) {
+            $.ajax({
+                type: "GET",
+                url: GetUserRoleHisURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "RoleID": RoleID },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        HistorybindGrid(response.Data);
+                        OpenModal("RoleDetails", 909, "Role Details");
+                    }
+                    else {
+                        FailResponse(response);
+                    }
+                }
+            });
+        }
+        var histkgrid = "";
+        function HistorybindGrid(Data1) {
+            if (histkgrid != "") {
+                $('#GridHis').kendoGrid('destroy').empty();
+            }
+            histkgrid = $("#GridHis").kendoGrid({
+                dataSource: {
+                    //pageSize: 10,
+                    data: JSON.parse(Data1)
+                },
+                dataBound: function (e) {
+                    var grid = e.sender;
+                    if (grid.dataSource.total() != 0) {
+                        var rows = grid.dataSource.total();
+                        var colCount = grid.columns.length;
+                        for (var i = rows - 1; i > 0 ; i--) {
+                            for (var k = 0; k < colCount; k++) {
+                                if (grid.tbody[0].children[i].cells[k].innerText != grid.tbody[0].children[i - 1].cells[k].innerText) {
+                                    grid.tbody[0].children[i - 1].cells[k].bgColor = "red";
+                                }
+                            }
+                        }
+                    }
+                },
+                pageable: false,
+                height: 350,
+                sortable: true,
+                resizable: true,
+                noRecords: true
+            });
+            $("#GridHis .k-grid-content.k-auto-scrollable").css("height", "272px");
+        }
+        function DownLoadAll() {
+            var URL = DownloadAllRoleURL;
+            window.location = URL;
+            return false;
+        }
+        //HandleSuccessMessage
+        function SuccessMessage(res) {
+            //HandleSuccessMessage(res, resetbtn,actiontype,modaldv,func )
+            if ($("#RoleID").val() > 0 && res.IsSuccess)
+                $("#dvRoleAddEdit").modal("hide");
+            HandleSuccessMessage(res, "btnReset");
+            BindGrid();
+        }
+    </script>
+}
+

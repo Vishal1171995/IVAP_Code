@@ -1,0 +1,129 @@
+﻿
+@model Ivap.Areas.Configuration.Models.FileComponentModel
+@using Ivap.Repository;
+
+<div id="dvFile_Component_Edit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Edit Component Master</h4>
+            </div>
+            @using (Ajax.BeginForm("UpdateFileComponent", new AjaxOptions { OnSuccess = "SuccessMessage" }))
+            {
+                @Html.AntiForgeryToken();
+                <div class="modal-body horizontalscroll">
+
+                    <div class="row form-group">
+
+                        <label for="inputPassword3" class="col-sm-2 control-label">Display Name<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.COMPONENTID, new { value = Model.COMPONENTID })
+                            @Html.HiddenFor(m => m.COMPONENT_NAME, new { value = Model.COMPONENT_NAME })
+                            @Html.HiddenFor(m => m.Component_FieldNameShow, new { value = Model.Component_FieldNameShow })
+                            @Html.TextBoxFor(m => m.COMPONENT_DISPLAY_NAME, new { @class = "form-control", @placeholder = "Display Name" })
+                            @Html.ValidationMessageFor(m => m.COMPONENT_DISPLAY_NAME)
+                        </div>
+                        <div id="PMSCODEID">
+                            <label for="inputPassword3" class="col-sm-2 control-label">PMS Code</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.PMS_CODE, new { @class = "form-control", @placeholder = "PMS Code", @value = "0" })
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="EMPCODEANDPAYDATE">
+
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">GL Code</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.GL_Code, new { @class = "form-control", @placeholder = "GL Code", @value = "0" })
+
+                            </div>
+
+                            <label for="inputPassword3" class="col-sm-2 control-label">Data Type</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.COMPONENT_DATATYPE, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+
+
+                        @if (Model.COMPONENT_DATATYPE != "MASTER")
+                        {
+                            <div class="row form-group" id="GdivMinMax" style="">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Min Length<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+                                    @Html.HiddenFor(m => m.MIN_VALUE, new { value = Model.MIN_VALUE })
+                                    @Html.TextBoxFor(m => m.MIN_LENGTH, new { @class = "form-control", @placeholder = "Min Length", @value = "0" })
+                                    @Html.ValidationMessageFor(m => m.MIN_LENGTH)
+                                </div>
+                                <label for="inputPassword3" class="col-sm-2 control-label">Max Length<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+                                    @Html.HiddenFor(m => m.MAX_VALUE, new { value = Model.MAX_VALUE })
+                                    @Html.TextBoxFor(m => m.MAX_LENGTH, new { @class = "form-control", @placeholder = "Max Length", @value = "0" })
+                                </div>
+                            </div>
+                        }
+
+
+                        @if (Model.COMPONENT_DATATYPE == "MASTER")
+                        {
+                            <div class="row form-group">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Table Name</label>
+                                <div class="col-sm-4">
+
+                                    @Html.TextBoxFor(m => m.Component_TableName, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <label for="inputPassword3" class="col-sm-2 control-label">Component Field Name<span class="text-red">*</span></label>
+                                <div class="col-sm-4">
+
+                                    @Html.DropDownListFor(m => m.Component_FieldName, new List<SelectListItem> { new SelectListItem { Text = "-- First select Table Name  --", Value = "0" } }, new { @class = "form-control selectbdr" })
+                                    @Html.ValidationMessageFor(m => m.Component_FieldName)
+                                </div>
+                            </div>
+                        }
+
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">Extra Validation</label>
+                            <div class="col-sm-4">
+
+                                @Html.DropDownListFor(m => m.Extra_Validation, new SelectList(Model.Validation_List, "Value", "Text", "NO EXtra"), new { @class = "form-control selectbdr" })
+
+                            </div>
+                            <div id="RegularValidation">
+                                <label for="inputPassword3" class="col-sm-2 control-label">Regular Expression</label>
+                                <div class="col-sm-4">
+                                    @Html.TextBoxFor(m => m.Expression, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">ISACTIVE</label>
+                            <div class="col-sm-4">
+                                @Html.CheckBoxFor(m => m.IsActive)
+                            </div>
+                            <label for="inputPassword3" class="col-sm-2 control-label">Mandatory</label>
+                            <div class="col-sm-4">
+                                @Html.CheckBoxFor(m => m.MANDATORY)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clear10"></div>
+              
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Update" />
+                
+                <div class="clear20"></div>
+            }
+
+        </div>
+    </div>
+</div>
+
+

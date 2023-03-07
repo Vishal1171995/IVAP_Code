@@ -1,0 +1,95 @@
+﻿@model Ivap.Areas.Reports.Models.PayrollInputFileReportModel
+@{
+    ViewBag.Title = "Get PMS InputFile Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @Html.DropDownListFor(m => m.SelectedPayDate, new SelectList(Model.PayDateList, "Value", "Text", "0"), new { @class = "form-control payDate", @placeholder = "Pay Dates" })
+    </div>
+    <div class="panel-heading"><h3><strong> Payroll Engine Input File Report- Active Pay Period (@Model.PayDate.ToString("MMM-yyyy").ToUpper()) </strong></h3></div>
+    <div class="panel-body">
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="kGridAllData"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}   
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var Pay_Date = "";
+        $(".payDate").change(function () {
+             Pay_Date = $(this).val();
+            BindInputGridReport();
+
+        });
+        $(document).ready(function () {
+            BindInputGridReport();
+        });
+        var kGridAllDataGrid = "";
+        function BindInputGridReport() {
+            $.get("@Url.RouteUrl("GetInputReportFileData")", { PayDate: Pay_Date}, function (response) {
+                var kData = JSON.parse(response.Data);
+                if (kGridAllDataGrid != "") {
+                    $('#kGridAllData').kendoGrid('destroy').empty();
+                }
+                var Command = [];
+                if (kData.length > 0) {
+                    if (kData[0].Total_Uploaded_Count > 0) {
+                        Command = [
+                            //{ name: "Validate", text: "", iconClass: "kIcon ActionIconValidate", click: ValidateHandler, title: "Validate" },
+                            //{ name: "Delete", text: "", iconClass: "kIcon ActionIconDeleteRed", click: DeleteHandler, title: "Delete" },
+                            { name: "Download", text: "", iconClass: "kIcon ActionIconDownload", click: DownloadHandler, title: "Download" },
+                        ]
+                    }
+                }
+                var GridColumns = [
+                    { field: "File_Name", filterable: false, title: "File Name", width: 130 },
+                    { field: "Category", filterable: false, title: "File Category", width: 130 },
+                    { field: "Total_Uploaded_Count", filterable: false, title: "Uploaded Head Count", width: 130 },
+                    { field: "Total_Approved_Count", filterable: false, title: "Approved Head Count", width: 130 },
+                    {
+                        command: Command
+                        , title: "Download", width: 150
+                    },
+                ];
+                kGridAllDataGrid = $("#kGridAllData").kendoGrid({
+                    dataSource: {
+                        data: kData,
+                        pageSize: 15,
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+
+        }
+         var DownloadHandler = function DownloadHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+             var File_ID = dataItem.FileID;
+             var SubFileID = dataItem.SubFileID;
+             File_ID = File_ID == undefined ? 0 : File_ID;
+             SubFileID = SubFileID == undefined ? 0 : SubFileID;
+             var Pay_Date = $("#SelectedPayDate").val();
+             var URL = "@Url.RouteUrl("PayrollInputDownload")" + '?File_ID=' + File_ID +'&SubFile_ID='+SubFileID +'&Pay_Date='+ Pay_Date +'';
+            window.location = URL;
+        }
+    </script>
+}
+
+

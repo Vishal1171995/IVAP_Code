@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "PayrollProcessing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading"> <h2>PayRoll Processing</h2> </div>
+    <div class="panel-body">
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            <div id="Kgrid">
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+
+        var GetPayRollURL = "@Url.RouteUrl("GetPayRoll")"
+        var FileDownload_PayURL = "@Url.RouteUrl("FileDownload_Pay")"
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            BindGrid();
+        });
+
+        var Kgrid = "";
+        function BindGrid() {
+
+            $.get(GetPayRollURL, {}, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [{ field: "FILE_NAME", title: "FILE NAME", width: 200 },
+                    { field: "COUNTROW", title: "NO. OF ROW", width: 200 },
+
+                    {
+                        command:
+                            [
+                                { name: "Download", text: "", iconClass: "kIcon  k-icon k-i-excel ", click: DownLoadSample, title: "DownLoad" },                               
+
+                            ], title: "Action", width: 140
+                    },
+                ];
+
+
+
+                Kgrid = $("#Kgrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+
+        var DownLoadSample = function DownLoadSample(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            //var FileID = dataItem.TID;
+            var FILE_ID = dataItem.FILE_ID;
+            var URL = FileDownload_PayURL + '?FILE_ID=' + FILE_ID;
+            window.location = URL;
+        }
+
+
+    </script>
+}
+

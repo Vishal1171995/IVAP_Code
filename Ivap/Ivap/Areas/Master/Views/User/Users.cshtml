@@ -1,0 +1,372 @@
+﻿@model Ivap.Areas.Master.Models.UserModel
+@using Ivap.Repository;
+
+@{
+    ViewBag.Title = "User Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+@*<div class="ContentRightMain">*@
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewUser", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+<section class="content">
+    <div id="tab" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td> <label>@Model.EID_TEXT</label> </td>
+                                            <td><span id="lblEntity"> </span></td>
+                                            <td> <label>@Model.FirstName_Text</label> </td>
+                                            <td><span id="lblUserName"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.LastName_Text</label> </td>
+                                            <td><span id="lblLastName"> </span></td>
+                                            <td> <label>@Model.Email_Text</label> </td>
+                                            <td><span id="lblEmail"></span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.MobileNo_Text</label> </td>
+                                            <td><span id="lblMobileNo"></span></td>
+                                            <td> <label>@Model.Role_Text</label> </td>
+                                            <td><span id="lblRole"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.USERID_Text</label></td>
+                                            <td><span id="lblUSERID"></span></td>
+                                            <td><label>Is Active</label></td>
+                                            <td><span id="lblIsAct"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="kgrdHistory"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dvAddUpdateUser" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">User Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { OnSuccess = "SuccessMessage", OnFailure = "FailMessage", OnBegin = "Validate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body horizontalscroll">
+                        <div class="row form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">@Model.FirstName_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = @Model.FirstName_Text })
+                                @Html.ValidationMessageFor(m => m.FirstName)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">@Model.LastName_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = @Model.LastName_Text })
+                                @Html.ValidationMessageFor(m => m.LastName)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+
+                            <label for="inputPassword3" class="col-sm-2 control-label">@Model.Email_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Model.Email_Text })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">@Model.MobileNo_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", @placeholder = @Model.MobileNo_Text })
+                                @Html.ValidationMessageFor(m => m.MobileNo)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">@Model.Role_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(m => m.Role, new SelectList(Model.RoleList, "Value", "Text", "0"), new { @class = "form-control selectbdr", @placeholder = @Model.Role_Text })
+                                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "" })
+
+                            </div>
+                            <label for="inputPassword3" class="col-sm-2 control-label">@Model.USERID_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.HiddenFor(m => m.UID, new { id = "hdnUID" })
+                                @Html.TextBoxFor(m => m.USERID, new { @class = "form-control", @placeholder = @Model.USERID_Text })
+                                @Html.ValidationMessageFor(m => m.USERID)
+                                <br />
+                                @Html.CheckBox("chkIsEmail")
+                                <label for="inputPassword3" class="control-label">Same as Email</label>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">User Activation</label>
+                            <div class="col-sm-4">
+                                <label class="switch">
+                                    @Html.HiddenFor(m => m.IsActive, new { id = "HdnActivate" })
+                                    <input type="checkbox" id="ActivateUser" />
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                    </div>
+                    <div class="clear20"></div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Upload @Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="clearfix"></div>
+                    <div class="row top_content">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <label>select a XLSX file</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                                <input type="file" name="files" id="files" target-control="hdnFileName">
+                                <input type="hidden" id="hdnFileName" />
+                            </div>
+                            <div class="clear20"></div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                                <div class="reset_btn" align="right">
+                                    <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                    <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                                </div>
+
+                            </div>
+                            @*</div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="log" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="clearfix"></div>
+                    <div class="row top_content">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                                <label class="headtag">Total Success</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label id="lblTotSuccess" class="feedback_content">500</label>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label class="headtag">Total Loss</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label id="lblTotFailed" class="feedback_content"></label>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="reset_btn" align="right">
+                                    <input type="hidden" id="hdnresultFile" />
+                                    <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-danger" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<div id="dvActivateDeactivateUser" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Activation Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                    <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
+                        <div id="dvConfirmationTxt">
+                            < table class="table table-bordered table-hover">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">
+                                        < label > Are you sure  want to Activate/Deactivate user?</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                        <div class="clear20"></div>
+
+                        <input type="submit" id="btnReject" class="btn btn-primary BtnWhiteLg BtnWidth99" value="Cancel" />
+                        <input type="submit" id="btnAccept" class="btn btn-primary BtnBlueLg BtnWidth99" value="Delete" />
+
+                        <div class="clear20"></div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts
+{
+
+    @Scripts.Render("~/Scripts/commanscript")
+
+
+
+    <script type="text/javascript">
+      var ExportUserURL = '@Url.RouteUrl("ExportUser")'
+      var getGridUserURL = '@Url.RouteUrl("getGridUser")'
+      var getUserURL = '@Url.RouteUrl("getUser")'
+      var getUserHistoryURL = '@Url.RouteUrl("getUserHistory")'
+      var ChangeStatusURL = '@Url.RouteUrl("ChangeStatus")'
+      var ResetPasswordURL = '@Url.RouteUrl("ResetPassword")'
+      var FilesUploadURL = '@Url.RouteUrl("ExcelFilesUpload")'
+      var UploadUserDetailsURL = '@Url.RouteUrl("UploadUserDetails")'
+      var DownLoadResultFileURL = '@Url.RouteUrl("DownLoadResultFileForExcel")'
+      var DownLoadSampleURL= '@Url.RouteUrl("DownLoadSampleForExcel")'
+     GetModel(@Html.Raw(Json.Encode(Model)));
+    </script>
+    @Scripts.Render("~/Scripts/UserScript")
+}
+

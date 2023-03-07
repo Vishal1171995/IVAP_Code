@@ -1,0 +1,1027 @@
+﻿@model Ivap.Areas.Configuration.Models.FileSetupModel
+    @using Ivap.Repository;
+@{
+    ViewBag.Title = "File Setup List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .demo-section label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        display: inline-block;
+    }
+    #employees {
+    }
+    #example .demo-section {
+        max-width: none;
+    }
+    #example .k-listbox {
+        width: 100%;
+        height: 310px;
+    }
+
+        #example .k-listbox:first-of-type {
+            margin-right: 1px;
+        }
+
+    .k-ghost {
+        display: none !important;
+    }
+
+    .custom-placeholder {
+        opacity: 0.4;
+    }
+
+    #example .k-item {
+        line-height: 3em;
+    }
+    /* Material Theme padding adjustment*/
+
+    .k-material #example .k-item,
+    .k-material #example .k-item.k-state-hover,
+    .k-materialblack #example .k-item,
+    .k-materialblack #examplel .k-item.k-state-hover {
+        padding-left: 5px;
+        border-left: 0;
+    }
+
+    .k-item > span {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        display: inline-block;
+        vertical-align: top;
+        margin: 20px 10px 10px 5px;
+    }
+
+    #example .k-item > span:first-child,
+    .k-item.k-drag-clue > span:first-child {
+        -moz-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        -webkit-box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        box-shadow: inset 0 0 30px rgba(0,0,0,.3);
+        margin: 8px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        text-align:center;
+    }
+
+    #example h3,
+    .k-item.k-drag-clue h3 {
+        font-size: 1.2em;
+        font-weight: normal;
+        margin: 0 0 1px 0;
+        padding: 0;
+    }
+
+    /*.k-item {
+        line-height: 3em;
+        text-align: center;
+        margin-left: -211px;
+    }*/
+
+    #example p {
+        margin: 0;
+        padding: 0;
+        font-size: .8em;
+    }
+
+    h4 {
+        color: #3a3a3a;
+        margin: 0px;
+        padding: 0px;
+        font-size: 12px !important;
+        font-family: arial, sans-serif, Arial !important;
+        text-align: left;
+    }
+    .popupindex {
+        z-index: 9999999999 !important
+    }
+    /*.popupindex {
+        z-index: inherit !important;
+    }*/
+
+</style>
+<style>
+    .ActionIcondarrow {
+        background: url('../Content/images/downarrow.png') no-repeat;
+    }
+
+    .ActionIconuarrow {
+        background: url('../Content/images/uparrow.png') no-repeat;
+    }
+
+    .k-grouping-row .k-icon {
+        margin: 0 0 0 0;
+    }
+    /*.k-reset {
+        width:74.5%;
+    }*/
+</style>
+    <div class="panel panel-default">
+        <div class="pull-right VendorSiteBtnRightMain">
+            @if (AuthorizationRepo.IsValidAction("FileSetupList", "CreateAction"))
+            {
+                if (Convert.ToBoolean(ViewBag.IsPublished))
+                {
+                    <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+                }
+            }
+        </div>
+        <div class="panel-heading"><h3><strong>File Setup Master</strong></h3></div>
+        <div class="panel-body">
+            <div class="clear20"></div>
+            <div class="TableOuterDiv table-responsive">
+                <div id="Kgrid"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+<div id="dvFileAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close" />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Add File Setup</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateFileType", new AjaxOptions { OnSuccess = "SuccessMessage", OnFailure = "FailMessage" }))
+            {
+                @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">File Type<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.FileID, new { id = "hdnFileID" })
+                        @Html.HiddenFor(m => m.ENTITY_Component_ID, new { id = "hdnGlobalCompID" })
+                        @Html.DropDownListFor(m => m.FILE_TYPE,
+                                         new SelectList(new List<SelectListItem> {
+                                                new SelectListItem { Text = "Payroll Input File", Value = "Payroll Input File"},
+                                                new SelectListItem { Text = "PMS Input File", Value = "PMS Input File"},
+                                                new SelectListItem { Text = "PMS Output File", Value = "PMS Output File"},
+                                         }, "Value", "Text"),
+                                         "Select File Type",
+                                         new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FILE_TYPE)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">File Name<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.FILE_NAME, new { @class = "form-control", @placeholder = "File Name" })
+                        @Html.ValidationMessageFor(m => m.FILE_NAME)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">File Desc<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.FILE_DESC, new { @class = "form-control", @placeholder = "File Desc" })
+                        @Html.ValidationMessageFor(m => m.FILE_DESC)
+                    </div>
+                </div>
+                @*<div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Due Date</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.DUE_DATE, new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                        @Html.ValidationMessageFor(m => m.DUE_DATE)
+                    </div>
+                </div>*@
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Is Active</label>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                    </div>
+                </div>
+            </div>
+                <div class="clear10"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="dvDeleteEntityCom" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                    <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
+                        <div id="dvConfirmationTxt">
+                            <table class="table table-bordered table-hover">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">
+                                            <label>Are you sure you want to delete file setup?</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clear20"></div>
+                        <input type="submit" id="btnReject" class="btn btn-primary BtnWhiteLg BtnWidth99" value="Cancel" />
+                        <input type="submit" id="btnAccept" class="btn btn-primary BtnBlueLg BtnWidth99" value="Delete" />
+                        <div class="clear20"></div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvComponent" class="modal fade PopUpMainDiv popupindex" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Add Component</h4>
+            </div>
+            <div class="modal-body">
+                <div id="example" role="application">
+                    <div class="demo-section k-content">
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    @*<label for="optional" id="employees">Globle Component</label>*@
+                                    <input type="text" class="form-control" id="txtSearchComponent" style="margin-bottom: 5px;font-weight: bold;display: inline-block;" placeholder="Search Entity Component" />
+                                    @*<input type="text" />*@
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="selected">File Component</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <select id="ddlEntityComponent"></select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select id="selectedComponent"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear10"></div>
+            <div class="col-md-12">
+                <input type="button" id="btnEntityReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                <input type="submit" id="btnEntitySubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+            </div>
+            <div class="clear20"></div>
+        </div>
+    </div>
+</div>
+
+<div id="dvFileCompDtl" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">File Component Details</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hdnFileCompDtlID" />
+                <div class="pull-right" style="margin-top: -21px;">
+                    <input type="submit" id="btnAddFComp" class="btn btn-primary BtnBlueLg" value="Add File Component" />
+                </div>
+                <div id="dvdelbutton" class="pull-right" style="margin-top: -21px;">
+                    <input type="submit" id="btnDeleteFileDtl" class="btn btn-primary BtnGrayLg" value="Delete" />
+                </div>
+                <div class="clear5"></div>
+                <div id="KFileCompDtl"></div>
+            </div>
+                @*<div class="clear5"></div>*@
+
+                <div class="clear10"></div>
+            </div>
+    </div>
+</div>
+
+<div class="modal fade PopUpMainDiv popupindex" id="dvError" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Error</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnError"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvDeleteComp" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                    <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
+                        <div id="dvConfirmationTxt">
+                            <table class="table table-bordered table-hover">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">
+                                            <label>Are you sure you want to delete entity component?</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="clear20"></div>
+                        <input type="submit" id="btnDelCancel" data-dismiss="modal" class="btn btn-primary BtnWhiteLg BtnWidth99" value="Cancel" />
+                        <input type="submit" id="btnDelComp" class="btn btn-primary BtnBlueLg BtnWidth99" value="Delete" />
+                        <div class="clear20"></div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script>
+        var FileSetupSampleURL = "@Url.RouteUrl("FileSetupSample")"
+        var EntityTemplate = '<span>#:data.COMPONENT_NAME.charAt(0)#</span>' +
+            '<span class="k-state-default"><h4>#: data.COMPONENT_NAME # - #: data.COMPONENT_DISPLAY_NAME #</h4><p>#: data.COMPONENT_TYPE # #: data.COMPONENT_SUB_TYPE #</p></span>';
+        var ComponentListBox = "";
+        var Condition = 1;
+        $("#txtSearchComponent").keypress(function () {
+            var SearchText = $(this).val().trim();
+            if (SearchText.length > 2) {
+                if (SearchText.length == 3)
+                    BindGlobleComponent();
+            }
+        });
+        $("#txtSearchComponent").keyup(function (e) {
+            var SearchText = $(this).val().trim();
+            if (e.keyCode == 46 || e.keyCode == 8) {
+                if (SearchText.length == 0) {
+                    //ResetEntitySelect();
+                    BindGlobleComponent();
+                }
+            }
+        });
+
+        function BindGlobleComponent() {
+            var ddlEntitycomID = "";
+            var SplitedEntityComID = "";
+            if (Condition == 1) {
+                Condition = 2;
+            }
+            else {
+                ddlEntitycomID = GetArrayEntityComponent();
+                SplitedEntityComID = ddlEntitycomID.join(",", ddlEntitycomID);
+            }
+            var Search_Text = $("#txtSearchComponent").val().trim();
+            if (Search_Text == "*")
+                Search_Text = "";
+            var GetMasterMetaURL = '@Url.RouteUrl("GetEntityComponentsList")';
+            var FileID = $("#hdnFileID").val();
+            if (FileID == "")
+                FileID = 0;
+            $.get(GetMasterMetaURL, { Search_Text: Search_Text, EntityCompID: SplitedEntityComID, FileID: FileID }, function (response) {
+                if (ComponentListBox == "") {
+                    //$('#ddlGlobleComponent').kendoListBox('destroy').empty();
+                    ComponentListBox = $("#ddlEntityComponent").kendoListBox({
+                        dataTextField: "COMPONENT_NAME",
+                        dataValueField: "TID",
+                        template: EntityTemplate,
+                        //dataSource: {
+                        //    data: JSON.parse(response.Data)
+                        //},
+                        draggable: { placeholder: customPlaceholder },
+                        dropSources: ["selectedComponent"],
+                        connectWith: "selectedComponent",
+                        toolbar: {
+                            position: "right",
+                            tools: ["transferTo", "transferFrom", "transferAllTo", "transferAllFrom", "remove"]
+                        }
+                    });
+                    $("#ddlEntityComponent").data("kendoListBox").dataSource.data(JSON.parse(response.Data));
+                }
+                else
+                {
+                    $("#ddlEntityComponent").data("kendoListBox").setDataSource(new kendo.data.DataSource({
+                        data: JSON.parse(response.Data)
+                    }));
+                }
+            });
+        }
+        function customPlaceholder(draggedItem) {
+            return draggedItem
+                .clone()
+                .addClass("custom-placeholder")
+                .removeClass("k-ghost");
+        }
+        var selectedComponentList = "";
+        $(document).ready(function () {
+            BindGlobleComponent();
+            selectedComponentList=   $("#selectedComponent").kendoListBox({
+                dataTextField: "COMPONENT_NAME",
+                dataValueField: "TID",
+                template: EntityTemplate,
+                //draggable: { placeholder: customPlaceholder },
+                //dropSources: ["ddlGlobleComponent"],
+                connectWith: "ddlEntityComponent"
+            });
+
+        });
+        var FileType = "";
+        $("#btnHRComponent,#btnSalComponent").click(function () {
+            FileType = $(this).attr("data-field");
+            OpenModal("dvComponent", 909, "Entity Details");
+            $("#dvComponent").appendTo("body");
+            $("#txtSearchComponent").val('');
+            ResetEntitySelect();
+
+        })
+
+        function ClearList() {
+            $("#txtSearchComponent").val('');
+            //  FileType = "";
+            // BindGlobleComponent();
+            var SelectComp = $("#selectedComponent").data("kendoListBox");
+            SelectComp.dataSource.read();
+            SelectComp.refresh();
+            var SelectGlobalComp = $("#ddlEntityComponent").data("kendoListBox");
+            SelectGlobalComp.dataSource.read();
+            SelectGlobalComp.refresh();
+        }
+
+          //////////////////
+        $("#btnEntitySubmit").click(AddEntityComponent);
+         function GetArrayEntityComponent() {
+             var listBox = $("#selectedComponent").data("kendoListBox");
+             var Data = listBox.dataSource.data();
+             var EntityComponentID = [];
+             for (var i = 0; i < Data.length; i++) {
+                 var TID = Data[i].TID;
+                 EntityComponentID.push(TID);
+             }
+             return EntityComponentID;
+         }
+         function AddEntityComponent() {
+             var EntitycomID = GetArrayEntityComponent();
+             var form = $('#__AjaxAntiForgeryForm');
+             var token = $('input[name="__RequestVerificationToken"]', form).val();
+             var FileID = $("#hdnFileID").val();
+             if (EntitycomID == "") {
+                 $("#spnError").html("Please add entity component.");
+                 OpenModal("dvError", 500, "Add Plant");
+                 return false;
+             }
+             $.post("@Url.RouteUrl("AddUpdateFileCompDetail")", { __RequestVerificationToken: token, EntityCompID: EntitycomID, FileID: FileID }, function (response) {
+                 HandleSuccessMessage(response);
+                 $("#dvajaxmsg").addClass('popupindex');
+                 $("#hdnFileID").val(FileID);
+                 BindFileCompDtl(FileID);
+            });
+        }
+
+
+        ////////////////////
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#li_Configuration").addClass("active");
+            $("#anch_FileSetupList").addClass("CurantPageIcon");
+            $("#add").click(function (event) {
+                $("#btnReset").click();
+                $("#hdnFileID").val(0);
+                $("#btnSubmit").val("Submit");
+                OpenModal("dvFileAddEdit", 500, "Add Plant");
+            });
+            //$("#DUE_DATE").datepicker({
+            //    dateFormat: 'dd/mm/yy',
+            //    //minDate: 0
+            //});
+            BindFileTypeGrid();
+            //BindSalaryComponentGrid();
+            $("#btnEntityReset").click(ResetEntitySelect);
+         });
+        var ComponentFileType = "";
+        $("#HRTab,#SalaryTab").click(function () {
+            ComponentFileType = $(this).attr("data-field");
+        })
+        //HRComponent Area////////////////////////////////////////
+        var HRComponentgrid = "";
+        function BindFileTypeGrid() {
+            var FileID = 0;
+            $.get("@Url.RouteUrl("GetFileType")", { FileID: FileID }, function (response) {
+                if (HRComponentgrid != "") {
+                    $('#Kgrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+
+                    { field: "ENTITY_NAME", title: "Entity", width: 130 },
+                    { field: "FILE_TYPE", title: "File Type", width: 150 },
+                    { field: "FILE_NAME", title: "File Name", width: 150 },
+                    //{
+                    //    command:
+                    //    [
+                    //            { name: "Edit", text: "", iconClass: "kIcon  kIconEdit ", click: EditHandler, title: "Edit" },
+                    //            { name: "Delete", text: "", iconClass: "kIcon kdelete ", click: DeleteHandler, title: "Delete" },
+                    //            //{ name: "AddEntityComp", text: "", iconClass: "k-icon k-i-plus-circle", click: AddEntityComp, title: "AddEntityComp" },
+                    //            { name: "ViewFileCompDtl", text: "", iconClass: "kIcon kIconView ", click: ViewFileCompDtl, title: "ViewFileCompDtl" },
+                    //            { name: "DownLoadSample", text: "", iconClass: "kIcon k-icon k-i-excel " , click: DownLoadSample, title: "DownLoadSample" },
+                    //    ], title: "Action", width: 140
+                    //},
+                ];
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditHandler;
+                        else if (response.Command.command[i].name == "Delete")
+                            response.Command.command[i].click = DeleteHandler;
+                        else if (response.Command.command[i].name == "ViewFileCompDtl")
+                            response.Command.command[i].click = ViewFileCompDtl;
+                        else if (response.Command.command[i].name == "DownLoadSample")
+                            response.Command.command[i].click = DownLoadSample;
+                    }
+                    GridColumns.push(response.Command);
+                }
+                HRComponentgrid = $("#Kgrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+       //End HRComponent Area////////////////////////////////////////
+
+       //SalaryComponent Area////////////////////////////////////////
+        var SalaryComponentgrid = "";
+        function BindSalaryComponentGrid() {
+            var EntityComponentID = 0;
+            $.get("@Url.RouteUrl("getEntityComponent")", { EntityCompID: EntityComponentID ,COMPONENT_FILE_TYPE:"PAYMAST" }, function (response) {
+                if (SalaryComponentgrid != "") {
+                    $('#SalaryComponentKgrd').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+
+                    { field: "COMPONENT_TYPE", title: "Component Type", width: 130 },
+                    { field: "COMPONENT_SUB_TYPE", title: "Component Sub Type", width: 150 },
+                    { field: "COMPONENT_NAME", title: "Component Name", width: 150 },
+                    {
+                        command:
+                        [
+                            { name: "Edit", text: "", iconClass: "kIcon  kIconEdit ", click: EditHandler, title: "Edit" },
+                            { name: "Delete", text: "", iconClass: "kIcon kdelete ", click: DeleteHandler, title: "Delete" },
+                                
+                        ], title: "Action", width: 140
+                    },
+
+                ];
+                SalaryComponentgrid = $("#SalaryComponentKgrd").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+       //End HRComponent Area////////////////////////////////////////
+
+
+        function SuccessMessage(res) {
+            if ($("#hdnEntityCompID").val() > 0)
+                $("#dvEntityComponent").modal('hide');
+            HandleSuccessMessage(res, "btnReset");
+            BindFileTypeGrid();
+        }
+                var DeEntityCompID = '';
+                var DeleteHandler = function DeleteHandler(e) {
+                    e.preventDefault();
+                    dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    DeEntityCompID = dataItem.TID;
+                    // OpenModal("dvDeleteEntityCom");
+                    OpenModal("dvDeleteEntityCom", 100, "Delete Confirmation");
+                }
+
+        $("#btnAccept").click(function () {
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $.post("@Url.RouteUrl("DeleteFileType")", { __RequestVerificationToken: token, FileID: DeEntityCompID }, function (response) {
+                if (response.IsSuccess) {
+                    HandleSuccessMessage(response);
+                    $('#dvDeleteEntityCom').modal('toggle');
+                    BindFileTypeGrid();
+                }
+            });
+        });
+        $("#btnDeleteFileDtl").click(function () {
+            var FileDtlCompID = $("#hdnFileCompDtlID").val();
+            if (FileDtlCompID == "") {
+                $("#spnError").html("Please select component.");
+                OpenModal("dvError", 500, "Add Plant");
+                return false;
+            }
+            OpenModal("dvDeleteComp", 500, "Edit EntityComponent");
+            $("#btnDelComp").unbind().bind("click", function () {
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                $.post("@Url.RouteUrl("DeleteFileCompDtl")", { __RequestVerificationToken: token, FileCompDtlIDs: FileDtlCompID }, function (response) {
+                    if (response.IsSuccess) {
+                        HandleSuccessMessage(response);
+                        FileID = $("#hdnFileID").val();
+                        BindFileCompDtl(FileID);
+                        $("#dvDeleteComp").modal('hide');
+                    }
+                });
+            });
+        });
+        $("#btnAddFComp").unbind().bind('click', function () {
+            OpenModal("dvComponent", 909, "Entity Details");
+            $("#txtSearchComponent").val('');
+            ResetEntitySelect();
+            BindGlobleComponent();
+        });
+        $("#btnReject").click(function () {
+            $('#dvDeleteEntityCom').modal('toggle');
+        })
+
+        var EditHandler = function EditHandler(e) {
+            $("#btnReset").click();
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var FileID = dataItem.TID;
+            $.get('@Url.RouteUrl("GetFileType")', { FileID: FileID }, function (response) {
+
+                var Data = $.parseJSON(response.Data);
+                $("#hdnFileID").val(htmlEncode(Data[0].TID));
+                //$("#hdnEntityCompID").val(EntityComponentID);
+                $("#FILE_TYPE").val(htmlEncode(Data[0].FILE_TYPE));
+                $("#FILE_NAME").val(htmlEncode(Data[0].FILE_NAME));
+                $("#FILE_DESC").val(htmlEncode(Data[0].FILE_DESC));
+                //$("#DUE_DATE").val(htmlEncode(Data[0].DUE_DATE));
+                var IsAct = Data[0].ISACTIVE;
+                (IsAct == 1) ? $('#IsActive').prop('checked', true) : $('#IsActive').prop('checked', false);
+                $("#btnSubmit").val("Update");
+                //BindModelGrid();
+                OpenModal("dvFileAddEdit", 500, "Edit EntityComponent");
+
+            });
+        }
+        var AddEntityComp = function AddEntityComp(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var FileID = dataItem.TID;
+            $("#hdnFileID").val(FileID);
+            //FileType = $(this).attr("data-field");
+            OpenModal("dvComponent", 909, "Entity Details");
+            $("#txtSearchComponent").val('');
+            ResetEntitySelect();
+        };
+        var FileCompDtlGrid = "";
+        var ViewFileCompDtl = function ViewFileCompDtl(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var FileID = dataItem.TID;
+            $("#hdnFileID").val(FileID);
+            BindFileCompDtl(FileID);
+            OpenModal("dvFileCompDtl", 300, "Entity Details");
+
+        };
+
+        var DownLoadSample = function DownLoadSample(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var FileID = dataItem.TID;
+            var File_Name = dataItem.FILE_NAME;
+            var URL = FileSetupSampleURL + '?FileID=' + FileID + ' &File_Name=' + File_Name+'';
+            window.location = URL;
+        }
+        var Kgrid = "";
+        function BindFileCompDtl(FileID) {
+            if (Kgrid != "") {
+                $("#KFileCompDtl").kendoGrid('destroy').empty();
+            }
+            dataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: '@Url.RouteUrl("GetFileCompDtl")',
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                    },
+                    update: {
+                        url: '@Url.RouteUrl("SetDisplayOrder_FileCompDtl")',
+                        type: "POST",
+                        complete: function (jqXhr, textStatus) {
+                            var res = jqXhr.responseJSON;
+                            // if (textStatus == 'success' && res.IsSuccess != false) {
+                            HandleSuccessMessage(res);
+                            //  }
+                        }
+                    },
+                    destroy: {
+                        url: '@Url.RouteUrl("GetFileCompDtl")',
+                        dataType: "jsonp"
+                    },
+
+                    parameterMap: function (options, operation) {
+                        if (operation === "read") {
+                            return JSON.stringify({
+                                FileID: FileID,
+                            });
+                        }
+                        if (operation !== "read" && options.models) {
+                            return { Model: options.models };
+                        }
+                    }
+                },
+                batch: true,
+                //pageSize: 20,
+                schema: {
+                    model: {
+                        id: "TID",
+                        fields: {
+                            TID: { editable: false, nullable: true },
+                            COMPONENT_DISPLAY_NAME: { editable: false },
+                            Display_Order: { type: "number", validation: { required: true, min: 1 } }
+                        }
+                    },
+                    data: function (data) {
+                        if (data.Data != "Display Order" && data.IsSuccess != false) {
+                            var res = JSON.parse(data.Data)
+                            if (res.length > 0) {
+                                return res || [];
+                            }
+                        }
+                    },
+                }
+            });
+            Kgrid= $("#KFileCompDtl").kendoGrid({
+                dataSource: dataSource,
+                navigatable: true,
+                //pageable: false,
+                persistSelection: true,
+                height: 400,
+                noRecords: true,
+                scrollable: true,
+                resizable: true,
+                toolbar: ["save", "cancel"],
+                columns: [
+                    { selectable: true, width: 40 },
+                    //{ field: "COMPONENT_NAME", title: "Component Name", width: 120 }, COMPONENT_DISPLAY_NAME
+                    { field: "COMPONENT_DISPLAY_NAME", title: "Component Name", width: 120 },
+                    { field: "Display_Order", title: "Display Order", width: 120 },
+                    {
+                        command: [
+                            { name: "Up", text: "", iconClass: "kIcon ActionIconuarrow", click: SetDisplayOrder_UP, title: "Up" },
+                            { name: "Down", text: "", iconClass: "kIcon ActionIcondarrow", click: SetDisplayOrder_down, title: "Down" }], title: "Action", width: 100}
+
+                ],
+                editable: true,
+                change: onChange,
+                dataBound: function (e) {
+                    var grid = $("#KFileCompDtl").data("kendoGrid");
+                    var gridData = grid.dataSource.view();
+                    for (var i = 0; i < gridData.length; i++) {
+                        var currentUid = gridData[i].uid;
+                        if (gridData[i].COMPONENT_NAME == "EMP_CODE") {
+                            var currentRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                            $(currentRow).find('.k-checkbox').remove();
+                            $(currentRow).attr("title", "This component can not be selected.");
+                            $(currentRow).find('.k-checkbox-label').click(function () {
+                                $("#spnError").html("This component can not be selected.");
+                                OpenModal("dvError", 500, "Confirm");
+                            });
+                        }
+                    }
+                }
+            });
+            $("#KFileCompDtl .k-grid-content.k-auto-scrollable").css("height", "350px");
+        }
+
+
+
+
+        function BindFileCompDtl_1(FileID) {
+            $("#dvdelbutton").show();
+            $("#hdnFileCompDtlID").val("");
+            $.get('@Url.RouteUrl("GetFileCompDtl")', { FileID: FileID }, function (response) {
+                if (JSON.parse(response.Data).length == 0) {
+                    $("#dvdelbutton").hide();
+                }
+                if (FileCompDtlGrid != "") {
+                    $('#KFileCompDtl').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+                    { selectable: true, width: 40 },
+                    //{ field: "FILE_NAME", title: "File Name", width: 100 },
+                    { field: "COMPONENT_NAME", title: "Component Name", width: 200 },
+                    {
+                        field: "Display_Order",
+                        title: "Display Order",
+                        template: "<input value='#=Display_Order#' style='width:80px;' data-bind='value:Display_Order' type='number' data-role='numerictextbox' />",
+                        width: 100
+                    },
+                ];
+                var CommanObj = {
+                    command: [
+                    { name: "Up", text: "", iconClass: "kIcon ActionIconuarrow", click: SetDisplayOrder_UP, title: "Up" },
+                    { name: "Down", text: "", iconClass: "kIcon ActionIcondarrow", click: SetDisplayOrder_down, title: "Down" }], title: "Action", width: 100
+                };
+                GridColumns.push(CommanObj);
+                FileCompDtlGrid = $("#KFileCompDtl").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data),
+                        schema: {
+                            model: {
+                                id: "TID"
+                            }
+                        }
+                    },
+                    pageable: { pageSizes: true },
+                    //height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    persistSelection: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    change: onChange,
+                    columns: GridColumns,
+                });
+                
+            });
+        }
+        var selectedOrders = [];
+        var idField = "TID";
+        function onChange(arg) {
+            var ids = this.selectedKeyNames();
+            var grid = arg.sender;
+            var items = grid.items();
+            items.each(function (idx, row) {
+                var idValue = grid.dataItem(row).get(idField);
+                var COMPONENT_NAME = grid.dataItem(row).get("COMPONENT_NAME");
+                if (row.className.indexOf("k-state-selected") >= 0) {
+                    if (COMPONENT_NAME != "EMP_CODE") {
+                        selectedOrders[idValue] = idValue;
+                    }
+                    else {
+                        $(row).removeClass("k-state-selected");
+                        delete selectedOrders[idValue];
+                    }
+                    //selectedOrders[idValue] = true;
+                } else if (selectedOrders[idValue]) {
+                    delete selectedOrders[idValue];
+                }
+            });
+            var ids = "";
+            for (var i = 0; i < selectedOrders.length; i++) {
+                if (selectedOrders[i] != undefined) {
+                    if (ids == "")
+                        ids = selectedOrders[i];
+                    else
+                        ids += ", " + selectedOrders[i];
+                }
+            }
+
+            //$("#hdnFileCompDtlID").val(this.selectedKeyNames().join(", "));
+            $("#hdnFileCompDtlID").val(ids);
+            if ($("#hdnFileCompDtlID").val() != "")
+                $("#btnDeleteFileDtl").removeClass('BtnGrayLg').addClass("BtnBlueLg");
+            else
+                $("#btnDeleteFileDtl").removeClass('BtnBlueLg').addClass("BtnGrayLg");
+        }
+        function ResetEntitySelect() {
+            if (ComponentListBox != "") {
+                $('#ddlEntityComponent').data("kendoListBox").dataSource.data([]);
+            }
+            $('#selectedComponent').data("kendoListBox").dataSource.data([]);
+        }
+        var TID = '';
+        var SetDisplayOrder_UP = function SetDisplayOrder_UP(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            TID = dataItem.TID;
+            FileID = dataItem.FILE_ID;
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $.post('@Url.RouteUrl("SetOrderFileCompDtl_UP")', { __RequestVerificationToken: token, TID: TID, FileID: FileID }, function (response) {
+                if (response.IsSuccess) {
+                    BindFileCompDtl(FileID);
+                }
+            });
+        }
+
+        // DOWN QUESTION HANDLER
+
+        var TID = '';
+        var SetDisplayOrder_down = function SetDisplayOrder_down(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            TID = dataItem.TID;
+            FileID = dataItem.FILE_ID;
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $.post('@Url.RouteUrl("SetOrderFileCompDtl_Down")', { __RequestVerificationToken: token, TID: TID, FileID: FileID }, function (response) {
+                if (response.IsSuccess) {
+                    BindFileCompDtl(FileID);
+                }
+            });
+        }
+    </script>
+    <script>
+             var Kgrid = "";
+        function BindModelGrid() {
+            var EntityComponentID = 0;
+          //  $.get("@Url.RouteUrl("getEntityComponent")", { EntityCompID: 0 }, function (response) {
+                if (Kgrid != "") {
+                    $('#KModelgrd').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+
+                    { field: "COMPONENT_TYPE", title: "Component Type", width: 130 },
+                    { field: "COMPONENT_SUB_TYPE", title: "Component Sub Type", width: 150 },
+                    { field: "COMPONENT_NAME", title: "Component Name", width: 150 },
+
+                ];
+                Kgrid = $("#KModelgrd").kendoGrid({
+                    pageable: { pageSizes: true },
+                   // height: auto,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            //});
+
+        }
+    </script>
+}

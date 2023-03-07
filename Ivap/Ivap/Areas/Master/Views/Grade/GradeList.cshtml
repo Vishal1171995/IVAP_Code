@@ -1,0 +1,273 @@
+﻿@model Ivap.Areas.Master.Models.GradeModel
+@{
+    ViewBag.Title = "Grade List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        <div class="pull-right VendorSiteBtnRightMain">
+            @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "GradeList", area = string.Empty });}
+        </div>
+    </div>
+    <div class="panel-heading"> <h3><strong> @Model.Screen_Name Master</strong></h3> </div>
+    <div class="panel-body">
+        <div class="clear20"></div>
+        @*<div class="row">*@
+        <div class="TableOuterDiv table-responsive">
+            <div id="KgrdGrade"></div>
+        </div>
+        @*</div>*@
+        @*<div class="clear20"></div>*@
+
+        <div class="clear"></div>
+    </div>
+</div>
+
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="GradeDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+
+                                            <td><label>@Model.GARDE_NAME_TEXT</label> </td>
+                                            <td><span id="lblGradeName"> </span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td> <label>@Model.PAY_GRADE_CODE_TEXT</label> </td>
+                                            <td><span id="lblPAY_GRADE_CODE"></span></td>
+                                            <td> <label>@Model.ERP_GRADE_CODE_TEXT</label> </td>
+                                            <td><span id="lblERP_GRADE_CODE"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><label>@Model.GRADE_MIDPOINT_TEXT</label></td>
+                                            <td> <span id="lblGradeMidPoint"> </span></td>
+                                            <td> <label>@Model.Prob_Period_TEXT</label> </td>
+                                            <td><span id="lblProbationPeriod"></span></td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td> <label>@Model.GRADE_SCALE_FROM_TEXT</label> </td>
+                                            <td><span id="lblGRADE_SCALE_FROM"></span></td>
+                                            <td> <label>@Model.GRADE_SCALE_TO_TEXT</label> </td>
+                                            <td><span id="lblGRADE_SCALE_TO"></span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label>Created On</label></td>
+                                            <td><span id="lblCreatedOn"></span> </td>
+                                            <td> <label>@Model.ISACTIVE_TEXT</label> </td>
+                                            <td><span id="lblStatus"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvGradeAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdateGrade", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage" }))
+                {@Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.GARDE_NAME_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.TID)
+                            @Html.TextBoxFor(m => m.GARDE_NAME, new { @class = "form-control", @placeholder = @Model.GARDE_NAME_TEXT })
+                            @Html.ValidationMessageFor(m => m.GARDE_NAME)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.PAY_GRADE_CODE_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.PAY_GRADE_CODE, new { @class = "form-control", @placeholder = @Model.PAY_GRADE_CODE_TEXT })
+                            @Html.ValidationMessageFor(m => m.PAY_GRADE_CODE)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.ERP_GRADE_CODE_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.ERP_GRADE_CODE, new { @class = "form-control", @placeholder = @Model.ERP_GRADE_CODE_TEXT })
+                            @Html.ValidationMessageFor(m => m.ERP_GRADE_CODE)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.Prob_Period_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.Prob_Period, new { @class = "form-control", @placeholder = @Model.Prob_Period_TEXT })
+                            @Html.ValidationMessageFor(m => m.Prob_Period)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.GRADE_SCALE_FROM_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.GRADE_SCALE_FROM, new { @class = "form-control", @placeholder = @Model.GRADE_SCALE_FROM_TEXT })
+                            @Html.ValidationMessageFor(m => m.GRADE_SCALE_FROM)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.GRADE_SCALE_TO_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.GRADE_SCALE_TO, new { @class = "form-control", @placeholder = @Model.GRADE_SCALE_TO_TEXT })
+                            @Html.ValidationMessageFor(m => m.GRADE_SCALE_TO)
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.GRADE_MIDPOINT_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.GRADE_MIDPOINT, new { @class = "form-control", @placeholder = @Model.GRADE_MIDPOINT_TEXT })
+                            @Html.ValidationMessageFor(m => m.GRADE_MIDPOINT)
+                        </div>
+                        <label for="inputPassword3" class="col-sm-2 control-label">@Model.ISACTIVE_TEXT</label>
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(m => m.IsActive)
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+                <div class="clear"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Log</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                            <label class="headtag">Total Success</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotSuccess" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label class="headtag">Total Loss</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotFailed" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="reset_btn" align="right">
+                                <input type="hidden" id="hdnresultFile" />
+                                <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+    <script type="text/javascript">
+        var GetGradeURL = "@Url.RouteUrl("GetGrade")"
+        var GetGradeHistoryURL = "@Url.RouteUrl("GetGradHistory")"
+
+        var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadGradeDetailsURL = "@Url.RouteUrl("UploadGradeDetails")"
+        var DownLoadResultFileURL = '@Url.RouteUrl("DownLoadResultFileForExcel")'
+        var DownloadAllGradeURL= '@Url.RouteUrl("DownloadAllGrade")'
+     GetModel(@Html.Raw(Json.Encode(Model)));
+
+    </script>
+
+    @Scripts.Render("~/Scripts/GradeScript")
+}

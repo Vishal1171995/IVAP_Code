@@ -1,0 +1,174 @@
+﻿@model Ivap.Areas.Master.Models.MinWageModel
+@using Ivap.Repository
+@*@using Idea.Repository;*@
+@{
+    ViewBag.Title = "Manage Min Wage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="ContentRightMain">*@
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @if (AuthorizationRepo.IsValidAction("ViewMinWage", "ViewAction"))
+        {
+            <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction("ViewMinWage", "CreateAction"))
+        {
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+
+<div id="dvMinWageDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Min Wage Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td><label>State</label> </td>
+                                        <td><span id="lblSTATE_NAME"> </span></td>
+                                        <td><label>Category</label></td>
+                                        <td> <span id="lblCATEGORY"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> <label>Min Wage</label> </td>
+                                        <td><span id="lblMIN_WAGE"></span></td>
+                                        <td><label>EFF DT From</label></td>
+                                        <td> <span id="lblEFF_DT_FROM"> </span></td>
+                                    </tr>
+                                    <tr>
+                                        <td> <label>EFF DT To</label> </td>
+                                        <td><span id="lblEFF_DATE_TO"></span></td>
+                                        <td> <label>Status</label> </td>
+                                        <td><span id="lblSTATUS"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<div id="dvMinWageAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Min Wage Master</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateMinWage", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+            {@Html.AntiForgeryToken()
+            <div class="modal-body horizontalscroll">
+                <div class="row form-group">
+                    @Html.HiddenFor(m => m.MinWageID)
+                    <label for="inputEmail3" class="col-sm-4 control-label">State<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(m => m.STATE_ID, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control selectbdr" })
+                        @Html.ValidationMessageFor(m => m.STATE_ID)
+                    </div>
+                </div>
+                @*<div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">Location<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.LOCATION_ID, new SelectList(Model.LocationList, "Value", "Text", "0"), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.STATE_ID)
+                        </div>
+                    </div>*@
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Category<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.CATEGORY, new { @class = "form-control", @placeholder = @Model.CATEGORY_TEXT })
+                        @Html.ValidationMessageFor(m => m.CATEGORY)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Min Wage<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.MIN_WAGE, new { @class = "form-control", @placeholder = @Model.MIN_WAGE_TEXT })
+                        @Html.ValidationMessageFor(m => m.MIN_WAGE)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">EFF DT From<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.EFF_DT_FROM, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                        @Html.ValidationMessageFor(m => m.EFF_DT_FROM)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">EFF DT TO<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.EFF_DATE_TO, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                        @Html.ValidationMessageFor(m => m.EFF_DATE_TO)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Is Active</label>
+                    <div class="col-sm-8">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="clear20"></div>
+            <div class="col-md-12">
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" onclick="ValidateEndDate();" />
+            </div>
+            <div class="clear20"></div>
+        }
+        </div>
+        <!-- Modal content-->
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetMinWageURL = "@Url.RouteUrl("GetMinWage")"
+        var GetMinWageHistoryURL = "@Url.RouteUrl("GetMinWageHistory")"
+        var DownloadAllMinWageURL = '@Url.RouteUrl("DownloadAllMinWage")'
+    </script>
+    @Scripts.Render("~/Scripts/MinWageScript")
+}
+

@@ -1,0 +1,93 @@
+﻿@model Ivap.Areas.Configuration.Models.TransposeModel
+
+
+<div id="dvTransposeAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close" />
+                </button>
+                <h4 class="modal-title" style="font-size:16px !important">Add File Transpose</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateTranspose", new AjaxOptions { OnSuccess = "SuccessMessageTranspose" }))
+            {
+                @Html.AntiForgeryToken();
+                <div class="modal-body">
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Field Type<span class="text-red">*</span></label>
+                        <div class="col-sm-4">
+                            @Html.HiddenFor(m => m.TID)
+                            @Html.HiddenFor(m => m.Transpose_FileID)
+
+                            @Html.DropDownListFor(m => m.Transpose_Field_Type,
+                                             new SelectList(new List<SelectListItem> {
+                                                    new SelectListItem { Text = "Default Value", Value = "DEFAULTVALUE"},
+                                                    new SelectListItem { Text = "Component", Value = "COMPONENT"},
+                                                     new SelectListItem { Text = "Transposed Field", Value = "TRANSPOSEFIELD"},
+                                                    new SelectListItem { Text = "Transpose Value", Value = "TRANSPOSEVALUE"},
+                                             }, "Value", "Text"),
+                                             "Select Field Type",
+                                             new { @class = "form-control selectbdr" })
+                            @Html.ValidationMessageFor(m => m.Transpose_Field_Type)
+                        </div>
+                    </div>
+                    <div class="row form-group" id="ComponentName" style="display:none">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Component Name</label>
+                        <div class="col-sm-4">
+
+                            @Html.DropDownListFor(m => m.Transpose_Component_Name, new List<SelectListItem> { new SelectListItem { Text = "-- First select Table Name  --", Value = "0" } }, new { @class = "form-control selectbdr" })
+                            @Html.ValidationMessageFor(m => m.Transpose_Component_Name)
+
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Display Name</label>
+                        <div class="col-sm-4">
+
+                            @Html.TextBoxFor(m => m.Transpose_File_Display_Name, new { @class = "form-control", @placeholder = "File Display Name" })
+                            @Html.ValidationMessageFor(m => m.Transpose_File_Display_Name)
+                        </div>
+                    </div>
+
+                    <div class="row form-group" id="DefaultValue" style="display:none">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Default Value</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.Transpose_Default_Value, new { @class = "form-control", @placeholder = "Default Value" })
+                            @Html.ValidationMessageFor(m => m.Transpose_Default_Value)
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Display Order</label>
+                        <div class="col-sm-4">
+
+                            @Html.TextBoxFor(m => m.Display_order, new { @class = "form-control", @placeholder = "Display Order" })
+                            @Html.ValidationMessageFor(m => m.Display_order)
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Is Active</label>
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(m => m.Transpose_ISACTIVE)
+                        </div>
+                    </div>
+                </div>
+                <div class="clear5"></div>
+                <div class="col-md-12">
+                  
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" class="btn btn-primary BtnBlueLg BtnWidth150" id="TransposeSubmit" />
+                  
+                </div>
+                <div class="clear10"></div>
+
+            }
+            <div id="Tkgrid"></div>
+        </div>
+    </div>
+
+</div>

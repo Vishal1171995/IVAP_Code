@@ -1,0 +1,582 @@
+﻿@using System.Data;
+@{
+    ViewBag.Title = "Account Setup Wizard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"> <h2>Account Setup Wizard</h2> </div>
+    <div class="panel-body panel-body-pd">
+        @{
+            DataSet Ds = (DataSet)ViewBag.Ds;
+            DataTable DtMaster = Ds.Tables[0];
+            DataTable DtComp = Ds.Tables[1];
+            DataTable DtFile = Ds.Tables[2];
+            DataTable DtUser = Ds.Tables[3];
+            DataTable DtWorkFlow1 = Ds.Tables[4];
+            DataTable DtWorkFlow2 = Ds.Tables[5];
+            bool isStep = false;
+            bool IsMasterSetup = false, IsCompSetup = false, IsUserSetup = false, isFileSetup = false, isWFSetup = false;
+            string MasterSetupbutton = "", CompSetupbutton = "", UserSetupbutton = "", FileSetupbutton = "", WFSetupbutton = "";
+            string MasterSetupClass = "", CompSetupClass = "", UserSetupClass = "", FileSetupClass = "", WFSetupClass = "";
+            if (Convert.ToInt32(DtMaster.Rows[0]["TotalMaster"]) == Convert.ToInt32(DtMaster.Rows[0]["MenuMasterTotal"]))
+            {
+                isStep = true;
+                IsMasterSetup = true;
+                MasterSetupClass = "step done";
+            }
+            else
+            {
+                IsMasterSetup = false;
+                MasterSetupClass = "step current";
+                CompSetupbutton = FileSetupbutton = UserSetupbutton = WFSetupbutton = "disabled";
+            }
+            bool Iscomp1 = true;
+            if (DtComp.Rows.Count > 0)
+            {
+                for (int i = 0; i < DtComp.Rows.Count; i++)
+                {
+                    if (Convert.ToInt32(DtComp.Rows[i]["CompCount"]) == 0)
+                    {
+                        Iscomp1 = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Iscomp1 = false;
+            }
+            if(Iscomp1 == true)
+            {
+                IsCompSetup = true;
+                CompSetupClass = "step done";
+            }
+            else
+            {
+                if(IsMasterSetup)
+                {
+                    CompSetupClass = "step current";
+                    IsCompSetup = false;
+                    FileSetupbutton = UserSetupbutton = WFSetupbutton = "disabled";
+                }
+                else
+                {
+                    IsCompSetup = false;
+                    CompSetupClass = "step";
+                }
+            }
+            bool IsFile1 = true;
+            if (DtFile.Rows.Count > 0)
+            {
+                for (int i = 0; i < DtFile.Rows.Count; i++)
+                {
+                    if (Convert.ToInt32(DtFile.Rows[i]["CatCount"]) == 0)
+                    {
+                        IsFile1 = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                IsFile1 = false;
+            }
+            if (IsFile1)
+            {
+                FileSetupClass = "step done";
+                isFileSetup = true;
+            }
+            else
+            {
+                if (IsMasterSetup == true && IsCompSetup == true)
+                {
+                    isFileSetup = false;
+                    FileSetupClass = "step current";
+                    UserSetupbutton = WFSetupbutton = "disabled";
+                }
+                else
+                {
+                    isFileSetup = false;
+                    FileSetupClass = "step";
+                }
+            }
+
+
+            bool clientMaker1 = false;
+            bool clientChecker1 = false;
+            if (DtUser.Rows.Count > 0)
+            {
+                for (int i = 0; i < DtUser.Rows.Count; i++)
+                {
+                    if (DtUser.Rows[i]["ROLENAME"].ToString().ToUpper() == "MYND MAKER" && Convert.ToInt32(DtUser.Rows[i]["UserCount"]) > 0)
+                    {
+                        clientMaker1 = true;
+                    }
+                    if (DtUser.Rows[i]["ROLENAME"].ToString().ToUpper() == "CLIENT MAKER" && Convert.ToInt32(DtUser.Rows[i]["UserCount"]) > 0)
+                    {
+                        clientChecker1 = true;
+                    }
+                }
+            }
+            if (clientMaker1 == true && clientChecker1 == true)
+            {
+                UserSetupClass = "step done";
+                IsUserSetup = true;
+            }
+            else
+            {
+                if(IsMasterSetup == true && IsCompSetup == true && IsUserSetup == true)
+                {
+                    IsUserSetup = false;
+                    UserSetupClass = "step current";
+                    WFSetupbutton = "disabled";
+                }
+                else
+                {
+                    IsUserSetup = false;
+                    UserSetupClass = "step";
+                }
+            }
+
+            //------------------------------------------------------------------------------
+
+            int TotalParollInputFile1 = 0;
+            int TotalPmsOutputFile1 = 0;
+            int CompParollInputFile1 = 0;
+            int CompPmsOutputFile1 = 0;
+            bool isWorkFlow1 = true;
+            for (int i = 0; i < DtWorkFlow2.Rows.Count; i++)
+            {
+                if (DtWorkFlow2.Rows[i]["FILE_TYPE"].ToString().ToUpper() == ("Payroll Input File").ToUpper())
+                {
+                    TotalParollInputFile1 = Convert.ToInt32(DtWorkFlow2.Rows[i]["CountFile_Type"]);
+                }
+                if (DtWorkFlow2.Rows[i]["FILE_TYPE"].ToString().ToUpper() == ("PMS Output File").ToUpper())
+                {
+                    TotalPmsOutputFile1 = Convert.ToInt32(DtWorkFlow2.Rows[i]["CountFile_Type"]);
+                }
+            }
+            for (int j = 0; j < DtWorkFlow1.Rows.Count; j++)
+            {
+                if (DtWorkFlow1.Rows[j]["FILE_TYPE"].ToString().ToUpper() == ("Payroll Input File").ToUpper())
+                {
+                    CompParollInputFile1 = Convert.ToInt32(DtWorkFlow1.Rows[j]["FileCount"]);
+                }
+                if (DtWorkFlow1.Rows[j]["FILE_TYPE"].ToString().ToUpper() == ("PMS Output File").ToUpper())
+                {
+                    CompPmsOutputFile1 = Convert.ToInt32(DtWorkFlow1.Rows[j]["FileCount"]);
+                }
+            }
+
+            if ((TotalParollInputFile1 == 0 && CompParollInputFile1 == 0) || (TotalPmsOutputFile1 == 0 && CompPmsOutputFile1 == 0))
+            {
+                if (IsMasterSetup == true && IsCompSetup == true && IsUserSetup == true && isFileSetup == true)
+                {
+                    isWFSetup = false;
+                    WFSetupClass = "step current";
+                }
+                else
+                {
+                    isWFSetup = false;
+                    WFSetupClass = "step";
+                }
+            }
+            else if (TotalParollInputFile1 == CompParollInputFile1 && TotalPmsOutputFile1 == CompPmsOutputFile1)
+            {
+                isWFSetup = true;
+                WFSetupClass = "step done";
+            }
+            else
+            {
+                if (IsMasterSetup == true && IsCompSetup == true && IsUserSetup == true && isFileSetup == true)
+                {
+                    isWFSetup = false;
+                    WFSetupClass = "step current";
+                }
+                else
+                {
+                    isWFSetup = false;
+                    WFSetupClass = "step";
+                }
+            }
+        }
+            <div class="TableOuterDiv">
+                <div class="arrow-steps Wizard clearfix">
+                    
+                    <div class="col-md-2 step done"> <span> Step 1</span> </div>
+                    <div class="col-md-2 @MasterSetupClass"> <span>Step 2</span> </div>
+                    <div class="col-md-2 @CompSetupClass"> <span> Step 3</span> </div>
+                    <div class="col-md-2 @FileSetupClass"> <span> Step 4</span> </div>
+                    <div class="col-md-2 @UserSetupClass"> <span> Step 5</span> </div>
+                    <div class="col-md-2 @WFSetupClass"> <span>Step 6</span> </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="main-timeline12">
+                            <div class="col-md-2 col-sm-4 timeline">
+                                <span class="timeline-icon">
+                                    <i class="fa fa-check"></i>
+                                </span>
+                                <div class="border"></div>
+                                <div class="timeline-content">
+                                    <h4 class="title">Menu Setup</h4>
+                                    <div align="center"><button id="btnMenuRights" type="button" class="btn btn-info btn-sm BtnWidth150">Manage Menu</button></div>
+                                    <div class="clear10"></div>
+                                    <ul class="">
+                                        <li> <div class="col-md-10 pd-0"> <p class="description">Done</p> </div> </li>
+                                    </ul>
+                                    <div class="clear10"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 timeline">
+                                <span class="timeline-icon">
+                                    @if (Convert.ToInt32(DtMaster.Rows[0]["TotalMaster"]) == Convert.ToInt32(DtMaster.Rows[0]["MenuMasterTotal"]))
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-close color-danger"></i>
+                                    }
+                                </span>
+                                <div class="border"></div>
+                                <div class="timeline-content">
+                                    <h4 class="title">Master Setup</h4>
+                                    <div align="center"><button id="btnMasterSetup" @MasterSetupbutton type="button" class="btn btn-info btn-sm BtnWidth150">Manage Master</button></div>
+                                    <div class="clear10"></div>
+                                    <ul class="">
+                                        <li> <div class="col-md-10 pd-0"> <p class="description">@Convert.ToInt32(DtMaster.Rows[0]["MenuMasterTotal"]) Out of  @Convert.ToInt32(DtMaster.Rows[0]["TotalMaster"])</p> </div> </li>
+                                    </ul>
+                                    <div class="clear10"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 timeline">
+                                @{
+                                    bool Iscomp = true;
+                                    if (DtComp.Rows.Count > 0)
+                                    {
+                                        for (int i = 0; i < DtComp.Rows.Count; i++)
+                                        {
+                                            if (Convert.ToInt32(DtComp.Rows[i]["CompCount"]) == 0)
+                                            {
+                                                Iscomp = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Iscomp = false;
+                                    }
+                                }
+                                <span class="timeline-icon">
+                                    @if (Iscomp)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-close color-danger"></i>
+                                    }
+                                </span>
+                                <div class="border"></div>
+                                <div class="timeline-content">
+                                    <h4 class="title">Component Setup</h4>
+                                    <div align="center"><button id="btnCompSetup" @CompSetupbutton type="button" class="btn btn-info btn-sm BtnWidth150">Manage Component</button></div>
+                                    <div class="clear10"></div>
+                                    <ul class="">
+                                        @if (DtComp.Rows.Count > 0)
+                                        {
+                                            for (int i = 0; i < DtComp.Rows.Count; i++)
+                                            {
+                                                <li> <div class="col-md-10 pd-0"> <p class="description">@DtComp.Rows[i]["COMPONENT_FILE_TYPE"]</p> </div> </li>
+                                                <li> <div class="col-md-2 pd-0"> <label class="description">@DtComp.Rows[i]["CompCount"]</label> </div> </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li> <div class="col-md-10 pd-0"> <p class="description">HRDMAST</p> </div> </li>
+                                            <li> <div class="col-md-2 pd-0"> <label class="description">0</div> </li>
+                                            <li> <div class="col-md-10 pd-0"> <p class="description">PAYMAST</p> </div> </li>
+                                            <li> <div class="col-md-2 pd-0"> <label class="description">0</div> </li>
+                                        }
+                                    </ul>
+                                    <div class="clear10"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 timeline">
+                                <span class="timeline-icon">
+                                    @{
+                                        bool IsFile = true;
+                                        if (DtFile.Rows.Count > 0)
+                                        {
+                                            for (int i = 0; i < DtFile.Rows.Count; i++)
+                                            {
+                                                if (Convert.ToInt32(DtFile.Rows[i]["CatCount"]) == 0)
+                                                {
+                                                    IsFile = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            IsFile = false;
+                                        }
+                                    }
+
+                                    @if (IsFile)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-close color-danger"></i>
+                                    }
+                                </span>
+                                <div class="border"></div>
+                                <div class="timeline-content">
+                                    <h4 class="title">File Setup</h4>
+                                    <div align="center"><button id="btnFileSetup" type="button" @FileSetupbutton class="btn btn-info btn-sm BtnWidth150">Manage File</button></div>
+                                    <div class="clear10"></div>
+                                    <ul class="">
+                                        @if (DtFile.Rows.Count > 0)
+                                        {
+                                            for (int i = 0; i < DtFile.Rows.Count; i++)
+                                            {
+                                                <li> <div class="col-md-10 pd-0"> <p class="description">@DtFile.Rows[i]["CATEGORY"]</p> </div> </li>
+                                                <li> <div class="col-md-2 pd-0"> <label class="description">@DtFile.Rows[i]["CatCount"]</label> </div> </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li> <div class="col-md-10 pd-0"> <p class="description">No Data Found.</p> </div> </li>
+                                        }
+                                    </ul>
+                                    <div class="clear10"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 timeline">
+                                @{
+                                    bool IsUser = true;
+                                    string users = "";
+                                    bool clientMaker = false;
+                                    bool clientChecker = false;
+                                    if (DtUser.Rows.Count > 0)
+                                    {
+                                        for (int i = 0; i < DtUser.Rows.Count; i++)
+                                        {
+                                            if (DtUser.Rows[i]["ROLENAME"].ToString().ToUpper() == "MYND MAKER" && Convert.ToInt32(DtUser.Rows[i]["UserCount"]) > 0)
+                                            {
+                                                clientMaker = true;
+                                            }
+                                            if (DtUser.Rows[i]["ROLENAME"].ToString().ToUpper() == "CLIENT MAKER" && Convert.ToInt32(DtUser.Rows[i]["UserCount"]) > 0)
+                                            {
+                                                clientChecker = true;
+                                            }
+                                            //if (Convert.ToInt32(DtUser.Rows[i]["UserCount"]) == 0)
+                                            //{
+                                            //    IsUser = false;
+                                            //    break;
+                                            //}
+                                        }
+                                    }
+                                }
+                                <span class="timeline-icon">
+
+                                    @if (clientMaker == true && clientChecker == true)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-close color-danger"></i>
+                                    }
+                                </span>
+                                <div class="border"></div>
+                                <div class="timeline-content">
+                                    <h4 class="title">User setup</h4>
+                                    <div align="center"><button id="btnUser" type="button" @UserSetupbutton class="btn btn-info btn-sm BtnWidth150">Manage User</button></div>
+                                    <div class="clear10"></div>
+                                    <ul class="">
+                                        @if (DtUser.Rows.Count > 0)
+                                        {
+                                            for (int i = 0; i < DtUser.Rows.Count; i++)
+                                            {
+                                                <li> <div class="col-md-10 pd-0"> <p class="description">@DtUser.Rows[i]["ROLENAME"]</p> </div> </li>
+                                                <li> <div class="col-md-2 pd-0"> <label class="description">@DtUser.Rows[i]["UserCount"]</label> </div> </li>
+                                                @*<li> <div class="col-md-12 pd-0"><p class="description">@users</p> </div> </li>*@
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li> <div class="col-md-10 pd-0"> <p class="description">No Data Found</p> </div> </li>
+                                        }
+                                    </ul>
+                                    <div class="clear10"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 col-sm-4 timeline">
+                                @{
+                                    int TotalParollInputFile = 0;
+                                    int TotalPmsOutputFile = 0;
+                                    int CompParollInputFile = 0;
+                                    int CompPmsOutputFile = 0;
+                                    bool isWorkFlow = true;
+                                    for (int i = 0; i < DtWorkFlow2.Rows.Count; i++)
+                                    {
+                                        if (DtWorkFlow2.Rows[i]["FILE_TYPE"].ToString().ToUpper() == ("Payroll Input File").ToUpper())
+                                        {
+                                            TotalParollInputFile = Convert.ToInt32(DtWorkFlow2.Rows[i]["CountFile_Type"]);
+                                        }
+                                        if (DtWorkFlow2.Rows[i]["FILE_TYPE"].ToString().ToUpper() == ("PMS Output File").ToUpper())
+                                        {
+                                            TotalPmsOutputFile = Convert.ToInt32(DtWorkFlow2.Rows[i]["CountFile_Type"]);
+                                        }
+                                    }
+                                    for (int j = 0; j < DtWorkFlow1.Rows.Count; j++)
+                                    {
+                                        if (DtWorkFlow1.Rows[j]["FILE_TYPE"].ToString().ToUpper() == ("Payroll Input File").ToUpper())
+                                        {
+                                            CompParollInputFile = Convert.ToInt32(DtWorkFlow1.Rows[j]["FileCount"]);
+                                        }
+                                        if (DtWorkFlow1.Rows[j]["FILE_TYPE"].ToString().ToUpper() == ("PMS Output File").ToUpper())
+                                        {
+                                            CompPmsOutputFile = Convert.ToInt32(DtWorkFlow1.Rows[j]["FileCount"]);
+                                        }
+                                    }
+                                }
+                                <span class="timeline-icon">
+                                    @if ((TotalParollInputFile == 0 && CompParollInputFile == 0) || (TotalPmsOutputFile == 0 && CompPmsOutputFile == 0))
+                                    {
+                                        <i class="fa fa-close color-danger"></i>
+                                    }
+                                    else if (TotalParollInputFile == CompParollInputFile && TotalPmsOutputFile == CompPmsOutputFile)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-close color-danger"></i>
+                                    }
+                                </span>
+                                <div class="border"></div>
+                                <div class="timeline-content">
+                                    <h4 class="title">Work Flow Setup</h4>
+                                    <div align="center"><button id="btnWorkFlow" @WFSetupbutton type="button" class="btn btn-info btn-sm BtnWidth150">Manage Work Flow</button></div>
+                                    <div class="clear10"></div>
+                                    <ul class="">
+                                        <li> <div class="col-md-10 pd-0"> <p class="description">Payroll Input File</p> </div> </li>
+                                        <li> <div class="col-md-2 pd-0"> <label class="description">@CompParollInputFile/@TotalParollInputFile</label> </div> </li>
+                                        <li> <div class="col-md-10 pd-0"> <p class="description">PMS Output File</p> </div> </li>
+                                        <li> <div class="col-md-2 pd-0"> <label class="description">@CompPmsOutputFile/@TotalPmsOutputFile</label> </div> </li>
+                                    </ul>
+                                    <div class="clear10"></div>
+                                </div>
+                            </div>
+                            @*<div class="col-md-2 col-sm-4 timeline">
+            <span class="timeline-icon">
+
+
+            </span>
+            <div class="border"></div>
+            <div class="timeline-content">
+
+            </div>
+        </div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="clear10"></div>
+            </div>
+        </div>
+</div>
+<div id="dvMasterDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Master Details</h4>
+            </div>
+            <div class="modal-body">
+                <div id="GridMaster"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <link href="~/Content/css/Stepwise-timeline.css" rel="stylesheet" />
+    <script>
+$('.scrollbox3').enscroll({
+    showOnHover: false,
+    verticalTrackClass: 'track3',
+    verticalHandleClass: 'handle3'
+    });
+    $(document).ready(function () {
+        $("#btnMenuRights").click(function () {
+            window.location.href = "@Url.RouteUrl("ViewMenu")";
+        });
+        $("#btnCompSetup").click(function () {
+            window.location.href = "@Url.RouteUrl("EntityComponentsList")";
+        });
+        $("#btnUser").click(function () {
+            window.location.href = "@Url.RouteUrl("ViewUser")";
+        });
+        $("#btnFileSetup").click(function () {
+            window.location.href = "@Url.RouteUrl("FileSetupList")";
+        });
+        $("#btnWorkFlow").click(function () {
+            window.location.href = "@Url.RouteUrl("WorkFlowSetting")";
+        });
+        $("#btnMasterSetup").click(function () {
+            window.location.href = "@Url.RouteUrl("MasterMetaSetup")";
+            //BindMaster();
+        });
+    });
+    var Masterkgrid = "";
+    function BindMaster() {
+        $.ajax({
+            type: "GET",
+            url: "@Url.RouteUrl("GetMasterCount")",
+            contentType: "application/json; charset=utf-8",
+            data: { "EID": 0 },
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (Masterkgrid != "") {
+                        $('#GridMaster').kendoGrid('destroy').empty();
+                    }
+                    Masterkgrid = $("#GridMaster").kendoGrid({
+                        dataSource: {
+                            //pageSize: 10,
+                            data: JSON.parse(response.Data)
+                        },
+                        columns: [
+                            //{ field: "ENTITY_NAME", title: "Entity Name", width: 150 },
+                            { field: "COMP_NAME", title: "Comp Name", width: 200 },
+                            { field: "COMP_CODE", title: "Comp Code", width: 150 },
+                        ],
+                        dataBound: function (e) {
+                        },
+                        pageable: false,
+                        height: 350,
+                        sortable: true,
+                        resizable: true,
+                        noRecords: true
+                    });
+                    $("#GridMaster .k-grid-content.k-auto-scrollable").css("height", "272px");
+                    OpenModal("dvMasterDetails", 909, "Master Details");
+                }
+                else {
+                    FailResponse(response);
+                }
+            }
+        });
+    }
+    </script>
+}

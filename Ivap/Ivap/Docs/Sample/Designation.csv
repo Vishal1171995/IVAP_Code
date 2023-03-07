@@ -1,0 +1,12 @@
+DSGID,COMP_NAME,DSG_CODE,DSG_NAME,GARDE_NAME,UNDER_DSG,JOB_DESC,MANPOWER_BUDGET,Status
+,,,,,,,,
+Display Name,,Mandatory Fields,Data Type,Remarks,,,,
+DSGID,,,integer,Insert time 0 and updata time give CompID id,,,,
+COMP_NAME,,YES,Text,,,,,
+DSG_CODE,,YES,Text,Minimum 4 character and Maximum can be 100 character,,,,
+DSG_NAME,,YES,Text,,,,,
+GARDE_NAME,,YES,Text,,,,,
+UNDER_DSG,,NO,Text,,,,,
+JOB_DESC,,NO,Text,,,,,
+MANPOWER_BUDGET,,NO,integer,,,,,
+Status,,YES,bool,,,,,

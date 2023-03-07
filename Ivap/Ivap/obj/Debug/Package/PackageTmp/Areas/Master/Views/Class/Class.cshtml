@@ -1,0 +1,515 @@
+﻿@model Ivap.Areas.Master.Models.ClassModel
+@{
+    ViewBag.Title = "Class";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewClass", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="ClassDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>Entity Name</label> </td>
+                                            <td><span id="lblCompanyID"> </span></td>
+                                            <td><label>@Model.PAY_CLASS_CODE_TEXT</label> </td>
+                                            <td><span id="lblPayClassCode"> </span></td>
+                                            <td><label>@Model.ERP_CLASS_CODE_TEXT</label> </td>
+                                            <td><span id="lblErpClassCode"> </span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><label>@Model.CLASS_NAME_TEXT</label></td>
+                                            <td> <span id="lblClassName"> </span></td>
+                                            <td> <label>@Model.ISACTIVE_TEXT</label> </td>
+                                            <td><span id="lblIsActive"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvClassAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Class Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+                {@Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+
+
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.PAY_CLASS_CODE_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.CID)
+                            @Html.TextBoxFor(m => m.PAY_CLASS_CODE, new { @class = "form-control", @placeholder = "PAY Class Code" })
+                            @Html.ValidationMessageFor(m => m.PAY_CLASS_CODE)
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.ERP_CLASS_CODE_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.CID)
+                            @Html.TextBoxFor(m => m.ERP_CLASS_CODE, new { @class = "form-control", @placeholder = "ERP Class Code" })
+                            @Html.ValidationMessageFor(m => m.ERP_CLASS_CODE)
+                        </div>
+
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.CLASS_NAME_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+
+                            @Html.TextBoxFor(m => m.CLASS_NAME, new { @class = "form-control", @placeholder = "Class Name" })
+                            @Html.ValidationMessageFor(m => m.CLASS_NAME)
+                        </div>
+
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">@Model.ISACTIVE_TEXT</label>
+                        <div class="col-sm-8">
+                            @Html.CheckBoxFor(m => m.IsActive)
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clear200"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+            </div>
+        </div>
+    </div>
+</section>
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Log</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                            <label class="headtag">Total Success</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotSuccess" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label class="headtag">Total Loss</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotFailed" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="reset_btn" align="right">
+                                <input type="hidden" id="hdnresultFile" />
+                                <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetClassURL = "@Url.RouteUrl("GetClass")"
+         var GetClassHisURL = '@Url.RouteUrl("GetClassHis")'
+        var DownloadAllClassURL = '@Url.RouteUrl("DownloadAllClass")'
+      var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadClassDetailsURL = "@Url.RouteUrl("UploadClassDetails")"
+        var DownLoadResultFileURL= '@Url.RouteUrl("DownLoadResultFileForExcel")'
+    </script>
+    <script type="text/javascript">
+
+        function SuccessMessage(res) {
+           // alert(res);
+            if ($("#CID").val() > 0 && res.IsSuccess == false)
+            {
+                $("#dvClassAddEdit").modal("hide");
+                HandleSuccessMessage(res, "btnReset");
+            }
+            HandleSuccessMessage(res, "btnReset");
+            BindGrid();
+        }
+
+        $(document).ready(function () {
+            $("#li_Master").addClass("active");
+            $("#anch_ViewClass").addClass("CurantPageIcon");
+            BindGrid();
+            $("#dvExport").bind("click", {}, DownLoadAll);
+            $("#add").click(function (event) {
+                $("#btnReset").click();
+                $("#CID").val(0);
+                $("#btnSubmit").val("Submit");
+                OpenModal("dvClassAddEdit", 500, "Add Class");
+            });
+        });
+
+       
+            $("#dvimport").bind("click", {}, function () {
+                OpenModal("Uploaddialog", 500, "Upload Plant");
+            });
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $("#files").kendoUpload({
+                async: {
+                    saveUrl: FilesUploadURL,
+                    //removeUrl: "remove",
+                    autoUpload: true
+                },
+                upload: function (e) {
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+                },
+                select: function (event) {
+                    var notAllowed = false;
+                    $.each(event.files, function (index, value) {
+                        if (value.extension !== '.xlsx') {
+                            alert("Plese select a xlsx file only!");
+                            notAllowed = true;
+                        }
+                    });
+                    var breakPoint = 0;
+                    if (notAllowed == true) e.preventDefault();
+                },
+                multiple: false,
+                success: onSuccessForUpload,
+                remove: onRemoveForUpload,
+                showFileList: false
+            });
+            $("#btnUpload").click(function (event) {
+                var fileName = $("#hdnFileName").val();
+                if (fileName.trim() == "") {
+                    alert("Please select a xlsx file");
+                    return false;
+                }
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                var Data = { __RequestVerificationToken: token, FileName: fileName };
+                $.ajax({
+                    type: "POST",
+                    url: UploadClassDetailsURL,
+                    contentType: "application/x-www-form-urlencoded",
+                    //data: Data,
+                    data: {
+                        __RequestVerificationToken: token,
+                        FileName: fileName
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess == true) {
+                            var Data = JSON.parse(response.Data);//.split(",");
+                            $("#lblTotSuccess").html(Data["Success"]);
+                            $("#lblTotFailed").html(Data["Failed"]);
+                            $("#hdnresultFile").val(Data["FileName"]);
+                            $("#Uploaddialog").modal("hide");
+                            OpenModal("log", 500, "Result");
+                            BindGrid();
+                        }
+                        else {
+                            //FailResponse(response);
+                            alert(response.Message);
+                        }
+                        $("#dvDetails").show();
+                    }
+                });
+            });
+
+
+
+        var Kgrid = "";
+        function BindGrid() {
+            var ClassID = 0;
+            $.get(GetClassURL, { ClassID: ClassID }, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [ { field: "ENTITY_NAME", title: "Entity Name", width: 200 },
+                    { field: "PAY_CLASS_CODE", title: '@Model.PAY_CLASS_CODE_TEXT', width: 200 },
+                    { field: "ERP_CLASS_CODE", title: '@Model.ERP_CLASS_CODE_TEXT', width: 200 },
+                    { field: "CLASS_NAME", title: '@Model.CLASS_NAME_TEXT', width: 200 },
+                    { field: "STATUS", title: '@Model.ISACTIVE_TEXT', width: 100, template: "<span class= #if(STATUS=='ACTIVE'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:STATUS#</span>" },
+               
+                ];
+
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditHandler;
+                        else if (response.Command.command[i].name == "View")
+                            response.Command.command[i].click = ViewHandler;
+                    }
+                    GridColumns.push(response.Command);
+                }
+
+                Kgrid = $("#Kgrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+        }
+
+        var EditHandler = function EditHandler(e) {
+            $("#btnReset").click();
+            e.preventDefault();
+            var dataItem = {};
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var ClassID = dataItem.TID;
+          // alert(ClassID);
+            $.ajax({
+                type: "GET",
+                url: GetClassURL,
+                contentType: "application/json; charset=utf-8",
+                data: { ClassID: ClassID },
+                dataType: "json",
+                success: function (response) {
+                    var data1 = $.parseJSON(response.Data);
+                    if (data1.length > 0) {
+                        $("#btnSubmit").val("Update");
+                        $("#CID").val(data1[0].TID);
+                        $("#PAY_CLASS_CODE").val(htmlEncode(data1[0].PAY_CLASS_CODE));
+                        $("#ERP_CLASS_CODE").val(htmlEncode(data1[0].ERP_CLASS_CODE));
+                        $("#CLASS_NAME").val(htmlEncode(data1[0].CLASS_NAME));
+                        var IsActive = htmlEncode(data1[0].ISACTIVE);
+                        (IsActive == 1) ? $('#IsActive').prop('checked', true) : $('#IsActive').prop('checked', false);
+                        OpenModal("dvClassAddEdit", 500, "Add Role");
+                    }
+                }
+            });
+        }
+
+        var ViewHandler = function ViewHandler(e) {
+
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var ClassID = dataItem.TID;
+          //  alert(ClassID);
+            $.get(GetClassURL, { ClassID: ClassID }, function (response) {
+                var Data = $.parseJSON(response.Data);
+                $("#lblCompanyID").html(htmlEncode(Data[0].ENTITY_NAME));
+                $("#lblPayClassCode").html(htmlEncode(Data[0].PAY_CLASS_CODE));
+                $("#lblErpClassCode").html(htmlEncode(Data[0].ERP_CLASS_CODE));
+                $("#lblClassName").html(htmlEncode(Data[0].CLASS_NAME));
+                $("#lblIsActive").html(htmlEncode(Data[0].STATUS));
+                HistoryGridData(ClassID);
+            });
+        }
+        function HistoryGridData(ClassID) {
+
+            $.ajax({
+                type: "GET",
+                url: GetClassHisURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "ClassID": ClassID },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        HistorybindGrid(response.Data);
+                        OpenModal("ClassDetails", 909, "Class Details");
+                    }
+                    else {
+                        FailResponse(response);
+                    }
+                }
+            });
+        }
+        var histkgrid = "";
+
+        function HistoryGridData(ClassID) {
+            $.ajax({
+                type: "GET",
+                url: GetClassHisURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "ClassID": ClassID },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        if (histkgrid != "") {
+                            $('#GridHis').kendoGrid('destroy').empty();
+                        }
+                        histkgrid = $("#GridHis").kendoGrid({
+                            dataSource: {
+                                //pageSize: 10,
+                                data: JSON.parse(response.Data)
+                            },
+                            columns: [
+                                //{ field: "ENTITY_NAME", title: "Entity Name", width: 150 },
+                                { field: "ENTITY_NAME", title: "ENTITY NAME", width: 150 },
+                                { field: "PAY_CLASS_CODE", title: '@Model.PAY_CLASS_CODE_TEXT', width: 150 },
+                                { field: "ERP_CLASS_CODE", title: '@Model.ERP_CLASS_CODE_TEXT', width: 200 },
+                                { field: "CLASS_NAME", title: '@Model.CLASS_NAME_TEXT', width: 120 },
+                                { field: "STATUS", title: "Status", width: 120 },
+                                { field: "UPDATE_ON", title: "UPDATED", width: 120 },
+                                { field: "ACTION", title: "Action", width: 100 },
+                            ],
+                            dataBound: function (e) {
+                                var grid = e.sender;
+                                if (grid.dataSource.total() != 0) {
+                                    var rows = grid.dataSource.total();
+                                    var colCount = grid.columns.length;
+                                    for (var i = rows - 1; i > 0; i--) {
+                                        for (var k = 0; k < colCount; k++) {
+                                            if (grid.tbody[0].children[i].cells[k].innerText != grid.tbody[0].children[i - 1].cells[k].innerText) {
+                                                grid.tbody[0].children[i - 1].cells[k].bgColor = "red";
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            pageable: false,
+                            height: 350,
+                            sortable: true,
+                            resizable: true,
+                            noRecords: true
+                        });
+                        $("#GridHis .k-grid-content.k-auto-scrollable").css("height", "272px");
+                        OpenModal("ClassDetails", 909, "Class Details");
+                    }
+                    else {
+                        FailResponse(response);
+                    }
+                }
+            });
+        }
+
+        function DownLoadAll() {
+            var URL = DownloadAllClassURL;
+            window.location = URL;
+            return false;
+        }
+
+
+
+        function DownLoadSample() {
+            var URL = DownLoadSampleURL + '?TableName=IVAP_MST_CLASS &ActionName=ViewClass&SampleName=ClassMaster.xlsx';
+            window.location = URL;
+            return false;
+        }
+        function DownLoadResultFile() {
+            var FileName = $("#hdnresultFile").val();
+            var Data = { FileName: FileName };
+            var URL = DownLoadResultFileURL + '?FileName=' + FileName;
+            window.location = URL;
+            return false;
+        }
+
+    </script>
+}

@@ -1,0 +1,245 @@
+﻿@model Ivap.Areas.FileExplorer.Models.FileMetaDataModel
+@using Ivap.Repository;
+@{
+    ViewBag.Title = "Manage File Meta Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    /* aside accordian css starts */
+    .u-vmenu {
+        height: auto;
+        *margin: 0 3px 10px;
+        max-height: 370px;
+        overflow-y: scroll;
+        *padding: 0 5px;
+        width: 100%;
+    }
+
+        .u-vmenu ul {
+            margin: 0px;
+            padding: 0px;
+            height: 355px;
+            *overflow: scroll;
+        }
+
+            .u-vmenu ul li {
+                width: 210px;
+                list-style: none;
+            }
+
+            .u-vmenu ul ul {
+                display: none;
+            }
+
+        .u-vmenu > ul > li {
+            background: #f6f6f4 none repeat scroll 0 0;
+            border-radius: 5px;
+            margin: 6px 0;
+            text-align: center;
+            width: auto;
+            height: auto;
+        }
+
+            .u-vmenu > ul > li:hover {
+                color: #000;
+                border-radius: 5px;
+            }
+
+        .u-vmenu ul li a {
+            color: #82846f;
+            display: block;
+            font-family: arial;
+            font-size: 12px;
+            height: auto;
+            line-height: 15px;
+            outline: medium none;
+            text-align: left;
+            text-decoration: none;
+        }
+
+            .u-vmenu ul li a:hover {
+                background: #ffcd03;
+                color: #000;
+                border-radius: 5px;
+            }
+
+        .u-vmenu > ul > li > a {
+            height: 35px;
+            line-height: 10px;
+            margin-left: 7px;
+            padding-left: 25px;
+            text-align: left;
+        }
+
+        .u-vmenu > ul > li > ul > li > ul > li > a {
+            padding-left: 100px;
+        }
+
+        .u-vmenu > ul > li > ul > li > ul > li > ul > li > a {
+            padding-left: 135px;
+        }
+
+        .u-vmenu ul li a[data-option='on'] {
+            background: url(../images/on.png) left center no-repeat;
+        }
+
+        .u-vmenu ul li a[data-option='off'] {
+            background: url(../images/off.png) left center no-repeat;
+        }
+
+    .listvmenu > ul > li > a {
+        height: auto;
+        margin-left: 0px;
+        padding-left: 10px;
+    }
+
+    .listvmenu > li > label {
+        font-weight: normal !important;
+    }
+
+    .ct {
+        width: 150px;
+    }
+    /* aside accordian css ends */
+    .mappingbtn > input {
+        width: 100%;
+        border-radius: 3px;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+</style>
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @*@if (AuthorizationRepo.IsValidAction(ViewBag.RouteName, "CreateAction"))
+            {
+                <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+            }*@
+        <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+    </div>
+    <div class="panel-heading"><h3><strong>File Meta Data</strong></h3></div>
+    <div class="panel-body">
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="dvMetaGrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div id="dvMetaDataDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">File Meta Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td> <label>Entity</label> </td>
+                                        <td><span id="lblEntity"></span></td>
+                                        <td><label>Description</label></td>
+                                        <td> <span id="lblDescription"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label>Meta Data</label></td>
+                                        <td> <span id="lblMetaData"> </span></td>
+                                        <td> <label>File Type</label> </td>
+                                        <td><span id="lblFileType"></span></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvMetaDataAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Meta Data Master</h4>
+                @*<input type="radio" name="" value=""*@
+            </div>
+            @using (Ajax.BeginForm("CreateFileMetaData", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", InsertionMode = InsertionMode.Replace }))
+            {@Html.AntiForgeryToken()
+            <div class="modal-body horizontalscroll">
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">File Type<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(x => x.FileMetaID)
+                        @Html.TextBoxFor(m => m.FileTypeName, new { @class = "form-control", @placeholder = "File Type" })
+                        @Html.ValidationMessageFor(m => m.FileTypeName)
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Description</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(m => m.Description, new { @class = "form-control", @placeholder = "Description" })
+                        @Html.ValidationMessageFor(m => m.Description)
+                    </div>
+                </div>
+                <div class="col-sm-12 nobdr">
+                    <label for="inputEmail3" class="control-label">MetaData</label>
+                    <div class="u-vmenu listvmenu metadrop">
+                        @Html.HiddenFor(x => x.MetaData)
+                        <div class="col-md-12 mappingbtn" id="dvMetaData">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-12 metadd" id="btnAddMetaData">
+                            Add More
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="clear20"></div>
+            <div class="col-md-12">
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+            </div>
+            <div class="clear20"></div>
+        }
+        </div>
+        <!-- Modal content-->
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+    <script type="text/javascript">
+        var GetMetaDataURL = '@Url.RouteUrl("GetMetaData")';
+        
+    </script>
+    @Scripts.Render("~/Scripts/FileMetaDataScript")
+}

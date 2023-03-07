@@ -1,0 +1,39 @@
+﻿
+@{
+    //ViewBag.Title = "DashBoardMessage";
+    Layout = null;
+}
+
+<div class="MsgRightMain">
+    <div class="LastLogin">
+        <div class="clear10"></div>
+        @{
+            DateTime Lastlogintime = ((Ivap.Models.AppUser)Session["uBo"]).Lastlogintime;
+            string lastdate = Lastlogintime.ToString("dd-MMM-yyyy");
+            string lasttime = Lastlogintime.ToString("hh:mm tt");
+            string currenttime = System.DateTime.Now.ToString("HH");
+            string greeting = "";
+            if (Int32.Parse(currenttime) < 12)
+            {
+                greeting = "Good morning!";
+            }
+            else if (Int32.Parse(currenttime) < 17)
+            {
+                greeting = "Good afternoon!";
+
+            }
+            else
+            {
+                greeting = "Good evening!";
+            }
+        }
+        <h3>
+            <strong>@greeting<small> Your Last Login was on <span>@lastdate</span>  at <span>@lasttime</span></small></strong>
+        </h3>
+        <div class="clear10"></div>
+    </div>
+
+</div>
+
+
+

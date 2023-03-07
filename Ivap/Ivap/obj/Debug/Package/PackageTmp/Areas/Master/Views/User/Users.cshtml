@@ -1,0 +1,741 @@
+﻿@model Ivap.Areas.Master.Models.UserModel
+@using Ivap.Repository;
+
+@{
+    ViewBag.Title = "User Master";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="ContentRightMain">*@
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewUser", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+        
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrd"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+<section class="content">
+    <div id="tab" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td> <label>@Model.EID_TEXT</label> </td>
+                                            <td><span id="lblEntity"> </span></td>
+                                            <td> <label>@Model.FirstName_Text</label> </td>
+                                            <td><span id="lblUserName"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.LastName_Text</label> </td>
+                                            <td><span id="lblLastName"> </span></td>
+                                            <td> <label>@Model.Email_Text</label> </td>
+                                            <td><span id="lblEmail"></span></td>
+                                            
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.MobileNo_Text</label> </td>
+                                            <td><span id="lblMobileNo"></span></td>
+                                            <td> <label>@Model.Role_Text</label> </td>
+                                            <td><span id="lblRole"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.USERID_Text</label></td>
+                                            <td><span id="lblUSERID"></span></td>
+                                            <td><label>Is Active</label></td>
+                                            <td><span id="lblIsAct"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="kgrdHistory"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dvAddUpdateUser" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">User Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { OnSuccess = "SuccessMessage", OnFailure = "FailMessage", OnBegin = "Validate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body horizontalscroll">
+                        <div class="row form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">@Model.FirstName_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = @Model.FirstName_Text })
+                                @Html.ValidationMessageFor(m => m.FirstName)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">@Model.LastName_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = @Model.LastName_Text })
+                                @Html.ValidationMessageFor(m => m.LastName)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+
+                            <label for="inputPassword3" class="col-sm-2 control-label">@Model.Email_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Model.Email_Text })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                            <label for="inputEmail3" class="col-sm-2 control-label">@Model.MobileNo_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(m => m.MobileNo, new { @class = "form-control", @placeholder = @Model.MobileNo_Text })
+                                @Html.ValidationMessageFor(m => m.MobileNo)
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">@Model.Role_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.DropDownListFor(m => m.Role, new SelectList(Model.RoleList, "Value", "Text", "0"), new { @class = "form-control", @placeholder = @Model.Role_Text })
+                                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "" })
+                            </div>
+                            <label for="inputPassword3" class="col-sm-2 control-label">@Model.USERID_Text<span class="text-red">*</span></label>
+                            <div class="col-sm-4">
+                                @Html.HiddenFor(m => m.UID, new { id = "hdnUID" })
+                                @Html.TextBoxFor(m => m.USERID, new { @class = "form-control", @placeholder = @Model.USERID_Text })
+                                @Html.ValidationMessageFor(m => m.USERID)
+                                <br />
+                                @Html.CheckBox("chkIsEmail")
+                                <label for="inputPassword3" class="control-label">Same as Email</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="col-md-12">
+                        <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                        <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                    </div>
+                    <div class="clear20"></div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Upload @Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="clearfix"></div>
+                    <div class="row top_content">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <label>select a XLSX file</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                                <input type="file" name="files" id="files" target-control="hdnFileName">
+                                <input type="hidden" id="hdnFileName" />
+                            </div>
+                            <div class="clear20"></div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                                <div class="reset_btn" align="right">
+                                    <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                    <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                                </div>
+
+                            </div>
+                            @*</div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="log" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="clearfix"></div>
+                    <div class="row top_content">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                                <label class="headtag">Total Success</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label id="lblTotSuccess" class="feedback_content">500</label>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label class="headtag">Total Loss</label>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-3">
+                                <label id="lblTotFailed" class="feedback_content"></label>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="reset_btn" align="right">
+                                    <input type="hidden" id="hdnresultFile" />
+                                    <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-danger" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+
+    @Scripts.Render("~/Scripts/commanscript")
+
+    <script type="text/javascript">
+        var ExportUserURL = '@Url.RouteUrl("ExportUser")'
+        var getGridUserURL = '@Url.RouteUrl("getGridUser")'
+        var getUserURL = '@Url.RouteUrl("getUser")'
+        var getUserHistoryURL = '@Url.RouteUrl("getUserHistory")'
+        var ChangeStatusURL = '@Url.RouteUrl("ChangeStatus")'
+        var ResetPasswordURL = '@Url.RouteUrl("ResetPassword")'
+        var FilesUploadURL = '@Url.RouteUrl("ExcelFilesUpload")'
+        var UploadUserDetailsURL = '@Url.RouteUrl("UploadUserDetails")'
+        var DownLoadResultFileURL = '@Url.RouteUrl("DownLoadResultFileForExcel")'
+        var DownLoadSampleURL= '@Url.RouteUrl("DownLoadSampleForExcel")'
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#li_Master").addClass("active");
+            $("#anch_ViewUser").addClass("CurantPageIcon");
+            //Ajeet();
+            BindGrid();
+            $("#dvExport").bind("click", {}, function DownLoadAll() {
+                var URL = ExportUserURL;
+                window.location = URL;
+                return false;
+            });
+            $("#dvimport").bind("click", {}, OpenUploadPopup);
+            $("#add").click(function () {
+                $("#btnReset").click();
+                $("#btnSubmit").val("Submit");
+                $("#hdnUID").val(0);
+                OpenModal("dvAddUpdateUser", 700, "Add User");
+            });
+        });
+        function Ajeet() {
+            $.ajax({
+                type: "POST",
+                url: getGridUserURL,
+                data: { pageSize: 10 },
+                success: function () { alert("from success") },
+                dataType: "json"
+
+            });
+        }
+        var Kgrid = "";
+        function BindGrid() {
+            var UID = 0;
+            $.get(getUserURL, { UID: UID }, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrd').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [
+                    { field: "ENTITY_NAME", title: "Entity Name", width: 150 },
+                    { field: "USERNAME", title: 'User Name', width: 150 },
+                    { field: "USERID", title: '@Model.USERID_Text', width: 130 },
+                    //{ field: "USER_EMAIL", title: "Email", width: 130 },
+                    { field: "ROLENAME", title: '@Model.Role_Text', width: 80 },
+                    //{ field: "Circle", title: "Circle", width: 200 },
+                    { field: "USER_MOBILENO", title: '@Model.MobileNo_Text', width: 100 },
+                    { field: "STATUS", title: "Status", width: 100, template: "<span class= #if(STATUS=='Active'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:STATUS#</span>" },
+                    //{ field: "ActText", title: "Status", width: 100 },
+                    //{
+                    //    command:
+                    //        [
+                    //            { name: "Edit", text: "", iconClass: "kIcon  kIconEdit ", click: EditHandler, title: "Edit" },
+                    //            { name: "View", text: "", iconClass: "kIcon kIconView ", click: ViewHandler, title: "View" },
+                    //            //{ name: "ChangeStatus", text: "", iconClass: "k-icon k-i-change-manually", click: ActivateUser, title: "Change Status" },
+                    //            //{ name: "ResetPassword", text: "", iconClass: "k-icon k-i-reset-sm", click: ResetPassword, title: "Reset Passsword" }
+                    //        ], title: "Action", width: 140
+                    //},
+
+                ];
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditHandler;
+                        else if (response.Command.command[i].name == "View")
+                            response.Command.command[i].click = ViewHandler;
+                    }
+                    GridColumns.push(response.Command);
+                }
+                Kgrid = $("#Kgrd").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data)
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+
+        }
+//function BindGrid() {
+//    var typepar = "";
+//    if (Kgrid != "") {
+//        $('#Kgrd').kendoGrid('destroy').empty();
+//    }
+//    Kgrid = $("#Kgrd").kendoGrid({
+//        dataSource: {
+//            type: "json",
+//            transport: {
+//                read: {
+//                    url: getGridUserURL,
+//                    dataType: "json",
+//                    type: "POST",
+//                    contentType: "application/json; charset=utf-8",
+//                },
+//                parameterMap: function (data, type) {
+//                    return JSON.stringify({
+//                        page: data.page,
+//                        pageSize: data.pageSize,
+//                        skip: data.skip,
+//                        take: data.take,
+//                        sorting: data.sort === undefined ? null : data.sort,
+//                        filter:data.filter === undefined ? null : data.filter
+//                    });
+//                }
+//            },
+//            schema: {
+//                model: {
+//                    fields: {
+//                        USER_FIRSTNAME: { type: "string" },
+//                        USERID: { type: "string" },
+//                        USER_EMAIL: { type: "string" },
+//                        Role: { type: "string" },
+//                        //Circle: { type: "string" },
+//                        USER_MOBILENO: { type: "string" },
+//                        ActText: { type: "string" },
+//                    }
+//                },
+//                data: function (data) {
+//                    var res = JSON.parse(data.Data)
+//                    if (data.IsSuccess) {
+//                        if (res.Data.length > 0) {
+//                            return res.Data || [];
+//                        }
+//                    }
+//                    else {
+//                        FailResponse(data);
+//                    }
+//                },
+//                error: function (data) {
+//                    alert(data);
+//                },
+//                total: function (data) {
+//                    if (data.IsSuccess) {
+//                        var res = JSON.parse(data.Data)
+//                        if (res.Data.length > 0) {
+//                            return res.Total || [];
+//                        }
+//                    }
+//                    else {
+//                        //alert("data 2")
+//                        //FailResponse(data);
+//                    }
+//                }
+//            },
+//            pageSize: 10,
+//            serverPaging: true,
+//            serverFiltering: true,
+//            serverSorting: true
+//        },
+//        //dataBound: ShowToolTip,
+//        noRecords: true,
+//        groupable: false,
+//        resizable: true,
+//        height: 400,
+//        filterable: {
+//            //  extra: false,
+//            operators: {
+//                string: {
+//                    eq: "Is equal to",
+//                    neq: "Is not equal to",
+//                    contains: "Contains",
+//                    doesnotcontain: "Does not contain",
+//                    startswith: "Starts with",
+//                    endswith: "Ends with"
+//                }
+//            }
+//        },
+//        sortable: {
+//            mode: "multiple"
+//        },
+//        pageable: {
+//            pageSizes: true,
+//            refresh: true
+//        },
+//        columns: [
+//                { field: "USER_FIRSTNAME", title: "User Name", width: 150 },
+//                { field: "USERID", title: "User Id", width: 130 },
+//                //{ field: "USER_EMAIL", title: "Email", width: 130 },
+//                { field: "Role", title: "Role", width: 80 },
+//                { field: "Circle", title: "Circle", width: 200 },
+//                { field: "USER_MOBILENO", title: "Mobile No", width: 100 },
+//                { field: "ActText", title: "Status", width: 100, template: "<span class= #if(ActText=='Active'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:ActText#</span>" },
+//                //{ field: "ActText", title: "Status", width: 100 },
+//                {
+//                    command:
+//                      [
+//                          { name: "Edit", text: "", iconClass: "kIcon  kIconEdit ", click: EditHandler, title: "Edit" },
+//                          { name: "View", text: "", iconClass: "kIcon kIconView ", click: ViewHandler, title: "View" },
+//                          { name: "ChangeStatus", text: "", iconClass: "k-icon k-i-change-manually", click: ActivateUser, title: "Change Status" },
+//                          { name: "ResetPassword", text: "", iconClass: "k-icon k-i-reset-sm", click: ResetPassword, title: "Reset Passsword" }
+//                      ], title: "Action", width: 140
+//                },
+//        ]
+//    });
+
+//}
+
+
+        function SuccessMessage(res) {
+            if ($("#hdnUID").val() > 0)
+                $("#dvAddUpdateUser").modal('hide');
+            HandleSuccessMessage(res, "btnReset");
+            BindGrid();
+        }
+        function FailMessage() {
+            // alert("Fail Post");
+        }
+        function Validate() {
+            return true;
+        }
+// For Upload popup
+
+        function ShowToolTipUser() {
+            $(".k-icon.k-i-edit").parent().attr("title", "Edit");
+            $(".k-icon.k-view").parent().attr("title", "View");
+
+            $(".k-icon.k-i-change-manually").parent().attr("title", "Change Status");
+            $(".k-icon.k-i-reset-sm").parent().attr("title", "Reset Password");
+
+            $(".k-icon.k-i-edit").parent().kendoTooltip({
+                width: 60,
+                position: "top"
+            }).data("kendoTooltip");
+            $(".k-icon.k-view").parent().kendoTooltip({
+                width: 60,
+                position: "top"
+            }).data("kendoTooltip");
+            $(".k-icon.k-i-change-manually").parent().kendoTooltip({
+                width: 60,
+                position: "top"
+            }).data("kendoTooltip");
+            $(".k-icon.k-i-reset-sm").parent().kendoTooltip({
+                width: 60,
+                position: "top"
+            }).data("kendoTooltip");
+        }
+
+        var ViewHandler = function ViewHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var UID = dataItem.UID;
+            $.get(getUserURL, { UID: UID }, function (response) {
+                var Data = $.parseJSON(response.Data);
+                $("#lblEntity").html(htmlEncode(Data[0].ENTITY_NAME));
+                $("#lblUserName").html(htmlEncode(Data[0].USER_FIRSTNAME));
+                $("#lblLastName").html(htmlEncode(Data[0].USER_LASTNAME))
+                $("#lblUSERID").html(Data[0].USERID);
+                $("#lblEmail").html(htmlEncode(Data[0].USER_EMAIL));
+                $("#lblRole").html(htmlEncode(Data[0].ROLENAME));
+                $("#lblMobileNo").html(htmlEncode(Data[0].USER_MOBILENO));
+                //$("#lblCircle").html(htmlEncode(Data[0].Circle));
+
+                var IsAct = Data[0].ISACT;
+                (IsAct == 1) ? $('#lblIsAct').html('Active') : $('#lblIsAct').html('In Active');
+                HistoryGridData(UID);
+            });
+        }
+        function DownLoadAll() {
+            var URL = DownloadAllMapppingUserUrl
+            window.location = URL;
+            return false;
+        }
+        function HistoryGridData(UID) {
+            $.ajax({
+                type: "GET",
+                url: getUserHistoryURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "UID": UID },
+                dataType: "json",
+                success: function (response) {
+                    HistorybindGrid(response.Data);
+                    OpenModal("tab", 910, "User Details");
+                },
+                error: function (data) {
+                    alert("something went wrong");
+                }
+            });
+        }
+
+        var histkgrid = "";
+        function HistorybindGrid(Data1) {
+            if (histkgrid != "") {
+                $('#kgrdHistory').kendoGrid('destroy').empty();
+            }
+            histkgrid = $("#kgrdHistory").kendoGrid({
+                dataSource: {
+                    pageSize: 10,
+                    data: JSON.parse(Data1)
+                },
+                columns: [{ field: "ENTITY_NAME", title: "Entity", width: 150 },
+                { field: "USERID", title: "User ID", width: 150 },
+                { field: "USER_FIRSTNAME", title: "User Name", width: 200 },
+                { field: "USER_EMAIL", title: "Email", width: 150 },
+                { field: "ROLENAME", title: "Role", width: 130 },
+                { field: "USER_MOBILENO", title: "Mobile No", width: 100 },
+                { field: "UPDATE_ON", title: "Updated On", width: 120 },
+                { field: "CREATE_ON", title: "Created On", width: 120 },
+                { field: "ACTION", title: "Action", width: 100 },
+                ],
+                dataBound: function (e) {
+                    var grid = e.sender;
+                    if (grid.dataSource.total() == 0) {
+                        var colCount = grid.columns.length;
+                        //$(e.sender.wrapper)
+                        //    .find('tbody')
+                        //    .append('<tr class="kendo-data-row"><td colspan="' + colCount + '" class="no-data"><span style="margin-left:46%;">No data found.</span></td></tr>');
+                    }
+                    else {
+                        var rows = grid.dataSource.total();
+                        var colCount = grid.columns.length;
+                        for (var i = rows - 1; i > 0; i--) {
+                            for (var k = 0; k < colCount; k++) {
+
+                                if (grid.tbody[0].children[i].cells[k].innerText != grid.tbody[0].children[i - 1].cells[k].innerText) {
+                                    grid.tbody[0].children[i - 1].cells[k].bgColor = "red";
+                                }
+                            }
+                        }
+                    }
+                },
+                noRecords: true,
+                filterable: true,
+                sortable: true,
+                pageable: true,
+                reorderable: true,
+                resizable: true,
+            });
+        }
+
+        var ActivateUser = function ActivateUser(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var UID = dataItem.U_ID;
+            var Status = dataItem.ISACT;
+            $.get(ChangeStatusURL, { UID: UID, Status: Status }, function (response) {
+
+                //BindGrid();
+
+            });
+        }
+        var EditHandler = function EditHandler(e) {
+            $("#btnReset").click();
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var UID = dataItem.UID;
+            $.get(getUserURL, { UID: UID }, function (response) {
+
+                var Data = $.parseJSON(response.Data);
+                $("#hdnUID").val(UID);
+
+                $("#EID").val(htmlEncode(Data[0].ENTITY_ID));
+                $("#FirstName").val(htmlEncode(Data[0].USER_FIRSTNAME));
+                $("#LastName").val(htmlEncode(Data[0].USER_LASTNAME));
+                $("#MobileNo").val(htmlEncode(Data[0].USER_MOBILENO));
+                $("#Email").val(htmlEncode(Data[0].USER_EMAIL));
+                $("#Role").val(htmlEncode(Data[0].USER_ROLE));
+                ///$("#Role").change();
+                //$("#Circle").val(htmlEncode(Data[0].USER_CIRCLE));
+                $("#USERID").val(htmlEncode(Data[0].USERID));
+                //$("#IsAct").val(htmlEncode(Data[0].IsAct));
+                $("#btnSubmit").val("Update");
+                //$("#dvMsg").hide();
+                //$("#dvcontent").show();
+                OpenModal("dvAddUpdateUser", 700, "Edit User");
+                //var dialog = $("#dvAddUpdateUser").dialog({
+                //    //autoOpen: false,
+                //    modal: true,
+                //    title: "User Master",
+                //    width: 909,
+                //    closeText: ""
+                //});
+                //dialog.dialog("open");
+
+            });
+        }
+        var ResetPassword = function ResetPassword(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var UID = dataItem.U_ID;
+            $.get(ResetPasswordURL, { UID: UID }, function (response) {
+
+            });
+        }
+        $('#chkIsEmail').click(function () {
+            if ($(this).is(':checked')) {
+                if ($("#Email").val() != '') {
+
+                    $("#USERID").val($("#Email").val());
+                }
+                else {
+
+                    $("#Email").next().toggleClass("field-validation-error").toggleClass("field-validation-valid").html("Please enter Email");
+                    return false;
+                }
+            }
+            else { $("#USERID").val(''); }
+
+        });
+        var form = $('#__AjaxAntiForgeryForm');
+        var token = $('input[name="__RequestVerificationToken"]', form).val();
+        $("#files").kendoUpload({
+            async: {
+                saveUrl: FilesUploadURL,
+                removeUrl: "remove",
+                autoUpload: true
+            },
+            upload: function (e) {
+                e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+            },
+            select: function (event) {
+                var notAllowed = false;
+                $.each(event.files, function (index, value) {
+                    if (value.extension !== '.xlsx') {
+                        alert("Plese select a xlsx file only!");
+                        notAllowed = true;
+                    }
+                });
+                var breakPoint = 0;
+                if (notAllowed == true) e.preventDefault();
+            },
+            multiple: false,
+            success: onSuccessForUpload,
+            remove: onRemoveForUpload,
+            showFileList: false
+        });
+        $("#btnUpload").click(function (event) {
+            var fileName = $("#hdnFileName").val();
+            if (fileName.trim() == "") {
+                alert("Please select a CSV file");
+                return false;
+            }
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            var Data = { __RequestVerificationToken: token, FileName: fileName };
+    @*url: '@Url.RouteUrl("UploadVendor")',*@
+            //Url.RouteUrl(new { controller = "Vendor", action = "UploadVendor" })
+            $.ajax({
+                type: "POST",
+                url: UploadUserDetailsURL,
+                contentType: "application/x-www-form-urlencoded",
+
+                data: {
+                    __RequestVerificationToken: token,
+                    FileName: fileName
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess == false) {
+                        alert(response.Message);
+                    }
+                    else {
+                        var Data = JSON.parse(response.Data);
+                        $("#lblTotSuccess").html(Data["Success"]);
+                        $("#lblTotFailed").html(Data["Failed"]);
+                        $("#hdnresultFile").val(Data["FileName"]);
+                        $("#dvUploadVendor").dialog("close");
+                        BindGrid();
+                        $("#Uploaddialog").modal('hide');
+                        OpenModal("log", 500, "Upload User Master");
+                    }
+
+                }
+
+            });
+        });
+        function DownLoadResultFile() {
+            var FileName = $("#hdnresultFile").val();
+            var Data = { FileName: FileName };
+            var URL = DownLoadResultFileURL + '?FileName=' + FileName;
+            window.location = URL;
+            return false;
+        }
+        function DownLoadSample() {
+            var URL = DownLoadSampleURL + '?TableName=IVAP_MST_USER &ActionName=ViewUser&SampleName=UserMaster.xlsx';
+            window.location = URL;
+            return false;
+        }
+        function OpenUploadPopup() {
+            OpenModal("Uploaddialog", 500, "Upload User Details");
+        }
+
+    </script>
+    @*@Scripts.Render("~/Scripts/UserScript")*@
+}
+

@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "Dummy Dash Board";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+   <div class="panel panel-default">
+    <div class="panel-heading"> <h2></h2> </div>
+    <div class="panel-body">
+        <div class="clear"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <img src="~/Content/images/MyndPayRollTag.jpg" class="img-responsive">
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+@Scripts.Render("~/Scripts/LoginScript")
+@section scripts {
+<script>
+    $('.scrollbox3').enscroll({
+        showOnHover: false,
+        verticalTrackClass: 'track3',
+        verticalHandleClass: 'handle3'
+    });
+</script>
+<script>
+    function openCity(evt, cityName) {
+        var i, paymentcontent, tablinks;
+        paymentcontent = document.getElementsByClassName("paymentcontent");
+        for (i = 0; i < paymentcontent.length; i++) {
+            paymentcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>
+<script>
+    $(document).ready(function ($) {
+        $('#slide').find('.accordion-toggle').click(function () {
+
+            //Expand or collapse this panel
+            $(this).next().slideToggle('fast');
+            var ii = $(this).find('.icon');
+
+            $('.icon').not(ii).addClass('icon-plus');
+            ii.toggleClass('icon-plus');
+
+            //Hide the other panels
+            $(".accordion-content").not($(this).next()).slideUp('fast');
+        });
+    });
+</script>
+}

@@ -1,0 +1,716 @@
+﻿@model Ivap.Areas.InputProcessing.Models.UploadInputModel
+@using Ivap.Repository;
+@{
+    ViewBag.Title = "UploadInput";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .k-upload-files {
+        height: 40px !important;
+        overflow-x: scroll !important;
+    }
+</style>
+<div class="panel-default">
+    <div class="panel-heading"> <h2>Input File Upload Wizard</h2> </div>
+    <div class="panel-body pd-0">
+        <div class="TextBoxMainOuter">
+            <div class="clear"></div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="clear20"></div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><h4><strong>File Upload</strong></h4></div>  @*verticalscroll*@
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div>
+                                                <label for="File Type" class="col-md-4 mg-top15">File Type<span class="text-red">*</span></label>
+                                                <div class="col-md-6">
+                                                    @Html.DropDownListFor(m => m.FileID, new SelectList(Model.FileList, "Value", "Text", 0), new { @class = "selectpicker mg - 0" })
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <i class="fa fa-download mg-top15" data-toggle="tooltip" title="Download Sample" id="ExportSample" style="cursor: pointer; margin-right:10px"></i>
+                                                </div>
+                                                <div class="clear20"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clear20"></div>
+                                    <div class="row Uploadverticalscroll">
+
+                                        <div class="col-md-12">
+                                            <div id="DownloadSample">
+                                                <div>
+                                                    <span class="col-md-4 mg-top15">
+                                                        <label for="Download Sample">Select File</label><span class="text-red">*</span>
+                                                    </span>
+                                                    <div class="col-md-6">
+                                                        <div class="demo-section k-content kendo-multiselect" id="DivFileUpload">
+                                                            <input type="file" id="files" name="files" target-control="System_Document" target-control-orignal="Original_Document_Name" />
+                                                            @Html.HiddenFor(m => m.System_Document)
+                                                            @Html.HiddenFor(m => m.Original_Document_Name)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clear20"></div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-primary" id="BtnImportExcel">Upload </button>
+                                            </div>
+                                        </div>
+                                        <div class="clear50"></div>
+                                        <div class="clear5"></div>
+                                        <div id="Log" style="display:none">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success fade in alert-dismissible">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close"></a>
+                                                    <span id="LogText"><strong></strong></span>
+                                                    <span id="LogSuccess"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="panel panel-default" id="dvAvailableRecords" style="display:none;">
+                                @*style="display:none;"*@
+                                <div class="panel-heading"><h4><strong>Available Records</strong> </h4></div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        @*style="height: 191px"*@
+                                        <div class="TableOuterDiv table-responsive">
+                                            <div id="kGridAllData"></div>
+                                        </div>
+                                    </div>
+                                    <div class="clear40"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default" id="dvValidationSummary" style="display:none;">
+                        <div class="panel-heading">
+                            <h4><strong>Validation Summary</strong> </h4>
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="row">
+                            <div class="col-md-7 col-sm-7 col-xs-12">
+                                <div id="Validationchart"></div>
+                                @*<div id="divtotalSucess" class="inner-content-1"></div>*@
+                            </div>
+                            <div class="col-md-5 col-sm-5 col-xs-12">
+                                <div class="clear20"></div>
+                                <div class="TableOuterDiv table-responsive">
+                                    <div id="KVlidgrd"></div>
+                                </div>
+                            </div>
+                        </div>
+                         
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+<div class="modal fade PopUpMainDiv popupindex" id="dvSuccess" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" id="ColourModel">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" id="ModalHeadingSuccess"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnSuccess"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade PopUpMainDiv popupindex" id="dvError" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header error-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title" id="ModalHeadingError"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnError"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvDeleteUploadIn" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 style="font-size: 16px !important" id="Divtitle" class="modal-title">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clear10"></div>
+                <div class="row">
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                    <div class="col-md-10 col-sm-10 col-lg-10 col-xs-12">
+                        <div id="dvConfirmationTxt">
+                            <label id="SpnComponentName"></label>
+                        </div>
+                        <div class="clear20"></div>
+                        <input type="submit" id="btnReject" class="btn btn-primary BtnWhiteLg BtnWidth99" value="Cancel" />
+                        <input type="submit" id="btnValidDelete" class="btn btn-primary BtnBlueLg BtnWidth99" value="Delete" />
+                        <div class="clear20"></div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-lg-1 col-xs-12"></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+
+
+
+    <script type="text/javascript">
+            var DownloadSampleFile = "@Url.RouteUrl("DownloadSampleFile")"
+            var UploadInputDetailsURL = "@Url.RouteUrl("UploadInputDetails")"
+            var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+            var ValidateInputData = "@Url.RouteUrl("ValidateInputData")";
+            var getCheckEffDateURL = "@Url.RouteUrl("GetAllTempData")";
+            var GetEffectiveDueDateDataURL = "@Url.RouteUrl("GetEffectiveDueDateData")";
+            $("#ExportSample").click(function () {
+                var FileID = $("#FileID").val();
+                var File_Name = $("#FileID :selected").text();
+                if (FileID != 0) {
+                    var URL = DownloadSampleFile + '?FileID=' + FileID + ' &File_Name=' + File_Name + '';
+                    window.location = URL;
+                }
+                else {
+                    alert("Please Select a file to download sample.");
+                }
+            });
+            $("#anch_UploadFile").parent().parent().parent().addClass("active123");
+            var test = $("#anch_UploadFile").parent().parent().parent().attr("id");
+        var FileID = "";
+        $("#FileID").change(function () {
+            FileID = $("#FileID").val();
+            $("#Log").hide();
+            $("#dvAvailableRecords").hide();
+            $("#dvValidationSummary").hide();
+            $(".k-i-close").click();
+            if (FileID > 0 && FileID != "") {
+                BindDueGrid();
+            }
+
+        })
+        function CheckEfforDueDate(File_ID) {
+            $("#dvAvailableRecords").show();
+            $.ajax({
+                type: "GET",
+                url: getCheckEffDateURL,
+                contentType: "application/json; charset=utf-8",
+                data: { File_ID: File_ID },
+                dataType: "json",
+                success: function (response) {
+                    var Data = JSON.parse(response.Data);
+                    BindDueGrid(File_ID, Data);
+                }
+            });
+        }
+
+        var kGridAllDataGrid = "";
+        function BindDueGrid() {
+            $("#dvAvailableRecords").show();
+            var File_ID = $("#FileID").val();
+            $.get(GetEffectiveDueDateDataURL, { File_ID: File_ID }, function (response) {
+                var kData = JSON.parse(response.Data);
+                var CheckTotal = kData.length > 0 ? kData[0].TOTAL : 0;
+                if (kGridAllDataGrid != "") {
+                    $('#kGridAllData').kendoGrid('destroy').empty();
+                }
+                var Command = [];
+                if (CheckTotal > 0) {
+                    Command = [
+                        { name: "Validate", text: "", iconClass: "kIcon ActionIconValidate", click: ValidateHandler, title: "Validate" },
+                        { name: "Delete", text: "", iconClass: "kIcon ActionIconDeleteRed", click: DeleteHandler, title: "Delete" },
+                        { name: "Download", text: "", iconClass: "kIcon ActionIconDownload", click: DownloadHandler, title: "Download" },
+                    ]
+                }
+                var GridColumns = [
+                    { field: "PAYDATE", filterable: false, title: "Pay Date", width: 130 },
+                    { field: "TOTAL", filterable: false, title: "Available Number of Records", width: 130 },
+                    {
+                        command: Command
+                        , title: "Action", width: 150
+                    },
+                ];
+                kGridAllDataGrid = $("#kGridAllData").kendoGrid({
+                    dataSource: {
+                        data: kData
+                    },
+                    height: 200,
+                    filterable: true,
+                    noRecords: true,
+                    resizable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+
+            });
+
+        }
+
+        var DownloadHandler = function DownloadHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var EffectiveDate = dataItem.EFFDATE;
+            var PayDate = dataItem.PAYDATE;
+            EffectiveDate = EffectiveDate == undefined ? "" : EffectiveDate;
+            PayDate = PayDate == undefined ? "" : PayDate;
+            var fileID = $("#FileID").val();
+            if (fileID == 0 || fileID == null) {
+                alert("Select file");
+                return false;
+            }
+            var URL = "@Url.RouteUrl("TempFileDownload")" + '?FileID=' + fileID + '&EffectiveDate=' + EffectiveDate + '&PayDate=' + PayDate;
+            window.location = URL;
+        }
+       
+        var DeletePayDate = "";
+        var ValidateHandler = function ValidateHandler(e) {
+            $("#dvValidationSummary").show();
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var PayDate = dataItem.PAYDATE;
+            DeletePayDate = PayDate;
+            //alert(PayDate);
+            GetValidateFunction(PayDate);
+        };
+
+        function GetValidateFunction(PayDate) {
+            var fileID = $("#FileID").val();
+            if (fileID == 0 || fileID == null) {
+                alert("Please select file to validate.");
+                $("#FileID").focus();
+                return false;
+            }
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $.ajax({
+                type: "POST",
+                url: ValidateInputData,
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    __RequestVerificationToken: token,
+                    FileID: fileID,
+                    PayDate: PayDate
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess == true) {
+                        var Getdata = $.parseJSON(response.Data);
+                        var jsondata = Getdata.CData;
+                        BindValidGrid(Getdata.GData);
+                        $("#Validationchart").kendoChart({
+                            theme: "default",
+
+                            legend: {
+                                visible: false
+                            },
+
+                            seriesDefaults: {
+                                labels: {
+                                    visible: true,
+                                    background: "transparent",
+                                    font: "bold 14px black Arial;",
+                                },
+                                startAngle: 150
+                            },
+                            chartArea: {
+                                background: ""
+                            },
+                            series: [{
+                                type: "pie",
+                                data:
+                                [{ "category": "Total Success", "value": parseFloat(jsondata.SuccessCount).toFixed(2), "color": "#7CFC00	" },
+                                { "category": "Required field Error", "value": parseFloat(jsondata.ReqValFailCount).toFixed(2), "color": "#8B0000" },
+                                { "category": "Master Valued Error", "value": parseFloat(jsondata.MasterValFailCount).toFixed(2), "color": "#FFA07A" },
+                                { "category": "Date Format Error", "value": parseFloat(jsondata.DateFormateValFailCount).toFixed(2), "color": "#FFA07A" },
+                                { "category": "Data Format  Error", "value": parseFloat(jsondata.DataFormateValFailCount).toFixed(2), "color": "#CD5C5C" },
+                                { "category": "Access Voilation Error", "value": parseFloat(jsondata.MasterAccessVoilationCount).toFixed(2), "color": "#B22222" }],
+                                labels: { visible: true, background: "transparent", template: "#= category # \n #= kendo.format('{0}', value )#%" /*template: "#= value#%"*/ }
+                            }],
+                            tooltip: {
+                                visible: true,
+                                template: "#= category # - #= kendo.format('{0}', value ) #%"
+                            },
+                            seriesClick: onSeriesClick
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+        var KVlidgrd = "";
+        function BindValidGrid(data) {
+            var EffGroupColumn = "";
+            var PayDate = "";
+            var cm = [];
+            cm.push({ name: "Process", text: "", iconClass: "kIcon ActionIconProceed", click: ProcessHandler, title: "Process" })
+            cm.push({ name: "Download", text: "", iconClass: "kIcon ActionIconDownload", click: ErrorDownloadHandler, title: "Download" })
+            cm.push({ name: "Delete", text: "", iconClass: "kIcon ActionIconDeleteRed", click: DeletevalidHandler, title: "Delete" })
+
+            var cmd = {
+                command: cm, title: "Action", width: 150
+            };
+            var kData = data;
+            if (KVlidgrd != "") {
+                $('#KVlidgrd').kendoGrid('destroy').empty();
+            }
+            var GridColumns = [
+                { field: "Item", filterable: false, title: "Items", width: 200 },
+                { field: "Data", filterable: false, title: "Total Records", width: 80 },
+                cmd
+            ];
+
+            KVlidgrd = $("#KVlidgrd").kendoGrid({
+                dataSource: {
+                    data: data
+                },
+                height: 250,
+                filterable: true,
+                noRecords: true,
+                resizable: true,
+                //reorderable: true,
+                dataBound: function (e) {
+                    var grid = $("#KVlidgrd").data("kendoGrid");
+                    var gridData = grid.dataSource.view();
+                    for (var i = 0; i < gridData.length; i++) {
+                        var currentUid = gridData[i].uid;
+                        var currentRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                        if (gridData[i].Data == 0) {
+                            $(currentRow).find('.k-grid-Process').remove();
+                            $(currentRow).find('.k-grid-Download').remove();
+                            $(currentRow).find('.k-grid-Delete').remove();
+                        }
+                        else if (gridData[i].Item == "Total Valid Records" && gridData[i].Data > 0) {
+                            $(currentRow).find('.k-grid-Mearge').remove();
+                        }
+                        else if (gridData[i].Item != "Total Valid Records" && gridData[i].Data > 0) {
+                            $(currentRow).find('.k-grid-Process').remove();
+                        }
+                    }
+                    ShowToolTip();
+                }
+                ,
+                sortable: true,
+                columns: GridColumns,
+            });
+
+            //  });
+
+        }
+       
+
+        var ErrorDownloadHandler = function ErrorDownloadHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var ItemName = dataItem.Item;
+            ItemName = ItemName == undefined ? "" : ItemName;
+            var fileID = $("#FileID").val();
+            if (fileID == 0 || fileID == null) {
+                alert("Select file");
+                return false;
+            }
+            var URL = "@Url.RouteUrl("ErrorFileDownload")" + '?ItemName=' + ItemName + "&FileID=" + fileID;
+            window.location = URL;
+        }
+        var ProcessHandler = function ProcessHandler(e) {
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            var FileID = $("#FileID").val();
+            $.ajax({
+                type: "POST",
+                url: "@Url.RouteUrl("ProceedClearance")",
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    __RequestVerificationToken: token,
+                    "FileID": FileID,
+                    "PayDate": "ALL"
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess == true) {
+                        FileID = $("#FileID").val();
+                        $("#Log").hide();
+                        $("#dvAvailableRecords").hide();
+                        $("#dvValidationSummary").hide();
+                        BindDueGrid();
+                    }
+                    HandleSuccessMessage(response);
+                }
+            });
+        };
+        /////////////
+            $("#BtnImportExcel").click(function (event) {
+                var fileName = $("#System_Document").val();
+                var fileID = $("#FileID").val();
+                if (fileID == 0 || fileID == null) {
+                    alert("Select file");
+                    return false;
+                }
+                if (fileName.trim() == "") {
+                    alert("Please select a xlsx or xls file");
+                    return false;
+                }
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                var Data = { __RequestVerificationToken: token, FileName: fileName };
+
+                $.ajax({
+                    type: "POST",
+                    url: UploadInputDetailsURL,
+                    contentType: "application/x-www-form-urlencoded",
+                    data: {
+                        __RequestVerificationToken: token,
+                        FileName: fileName,
+                        FileID: fileID
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess == true) {
+
+                            $("#Log").show();
+                            $("#LogText").html(response.SuccessCount + '  Record Uploded');
+                            $("#LogSuccess").html(' Your BatchNumber is :' + response.BatchNumber);
+                            BindDueGrid();
+                            $("#kGridAllData").show();
+                        }
+                        else {
+                            //FailResponse(response);
+                            //alert(response.Message);ColourModel
+                            $("#dvError").modal("show");
+                            $("#ModalHeadingError").html("Error");
+                            $("#spnError").html(response.Message);
+                        }
+
+                    }
+                });
+
+            });
+            ////
+            var fileUidToRemove = "";
+        $("#files").kendoUpload({
+                async: {
+                    saveUrl: FilesUploadURL,
+                    removeUrl: "@Url.RouteUrl("RemoveFiles")",
+                    autoUpload: true
+
+                },
+                upload: function (e) {
+                    var form = $('#__AjaxAntiForgeryForm');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+                }, select: function (event) {
+                },
+                remove: function (e) {
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp", System_FileName: e.files[0].System_FileName };
+                },
+                select: function (event) {
+                    var notAllowed = false;
+                    $.each(event.files, function (index, value) {
+                        if (value.extension == ".xls" || value.extension == ".xlsx") {
+                            fileUidToRemove = event.files[0].uid;
+                        }
+                        else {
+                            alert("Plese select a xlsx or xls file only!");
+                            notAllowed = true;
+                        }
+                    });
+                    var breakPoint = 0;
+                    if (notAllowed == true) e.preventDefault();
+                },
+                multiple: false,
+                success: onSuccessForUpload,
+                 remove: onRemoveForUploadInput,
+                showFileList: true
+        });
+        function onRemoveForUploadInput(e) {
+            var name = this.name;
+            var target = $("#" + name).attr("target-control");
+            $("#" + target).val("");
+            $("#System_Document").val("");
+            $("#Original_Document_Name").val("");
+            $("#Log").hide();
+        }
+        var SuccessCount= 0;
+        var onSeriesClick = function onSeriesClick(e) {
+            e.preventDefault();
+           // var URL = File_ID_DownloadURL + '?FILE_ID=' + FILE_ID;
+            var fileID = $("#FileID").val();
+            window.location = "@Url.RouteUrl("ErrorFileDownload")" + "?ItemName=" + e.category + "&FileID=" + fileID;
+        }
+        $("#btnSendtoApproval").click(function (event) {
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.RouteUrl("SendToApproval")",
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    __RequestVerificationToken: token,
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess == true) {
+                        HandleSuccessMessage(response);
+                    }
+                    else {
+                        //FailResponse(response);
+                        alert(response.Message);
+                    }
+
+                }
+            });
+
+        });
+        ////////////////////////
+
+    </script>
+    <script>
+        var Gridbutton = "Delete";
+        var DeleteItemName = "";
+        var DeleteEffectiveDate = "";
+        var DeletePayDate = "";
+        var DeletevalidHandler = function DeletevalidHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            DeleteItemName = dataItem.Item;
+            DeleteItemName = DeleteItemName == undefined ? "" : DeleteItemName;
+            var fileID = $("#FileID").val();
+            if (fileID == 0 || fileID == null) {
+                alert("Select file");
+                return false;
+            }
+            Gridbutton = "ValidateDelete";
+            
+            $("#SpnComponentName").html('Are you sure you want to delete ' + dataItem.Data + ' Records? which has be '+ DeleteItemName);
+            OpenModal("dvDeleteUploadIn", 150, "Delete Confirmation");
+        }
+        // delete option Pay date 
+         var DeleteHandler = function DeleteHandler(e) {
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var EffectiveDate = dataItem.EFFDATE;
+            var PayDate = dataItem.PAYDATE;
+            DeleteEffectiveDate = EffectiveDate == undefined ? "" : EffectiveDate;
+            DeletePayDate = PayDate == undefined ? "" : PayDate;
+            var fileID = $("#FileID").val();
+            if (fileID == 0 || fileID == null) {
+                alert("Select file");
+                return false;
+            }
+            Gridbutton = "Delete";
+            $("#SpnComponentName").html('Are you sure you want to delete Paydate ' + PayDate + ' Records?');
+            OpenModal("dvDeleteUploadIn", 150, "Delete Confirmation");
+        }
+        $("#btnValidDelete").click(function () {
+                    var form = $('#__AjaxAntiForgeryForm');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    if (Gridbutton == "ValidateDelete") {
+                        $.post("@Url.RouteUrl("DeleteValidatedData")", { __RequestVerificationToken: token, ItemName: DeleteItemName }, function (response) {
+
+                            if (response.IsSuccess) {
+                                BindDueGrid();
+                                GetValidateFunction(DeletePayDate);
+                                $("#Log").hide();
+                                $('#dvDeleteUploadIn').modal('toggle');
+                                //$(".k-delete").parent().click();
+                                $("#files").data("kendoUpload").removeFileByUid(fileUidToRemove);
+                                var target = $("#files").attr("target-control");
+                                $("#" + target).val("");
+                                $("#System_Document").val("");
+                                $("#Original_Document_Name").val("");
+                                HandleSuccessMessage(response);
+                            }
+                        });
+                        /////
+                    }
+
+                    if (Gridbutton == "Delete") {
+                        var fileID = $("#FileID").val();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.RouteUrl("DeleteTempTableData")",
+                    contentType: "application/x-www-form-urlencoded",
+                    data: {
+                        __RequestVerificationToken: token,
+                        FileID: fileID,
+                        EffectiveDate: DeleteEffectiveDate,
+                        PayDate: DeletePayDate
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess == true) {
+                            $("#dvValidationSummary").hide();
+                            BindDueGrid();
+                            $("#Log").hide();
+                            $('#dvDeleteUploadIn').modal('toggle');
+                            HandleSuccessMessage(response);
+                        }
+                        else {
+                            alert(response.Message);
+                        }
+
+                    }
+                });
+            }
+         });
+
+        $("#btnReject").click(function () {
+            $('#dvDeleteUploadIn').modal('toggle');
+        })
+    </script>
+}

@@ -1,0 +1,182 @@
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\ApplicationInsights.config
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\csc.exe
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\csc.exe.config
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\csc.rsp
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\csi.exe
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\csi.rsp
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\System.AppContext.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\System.Collections.Immutable.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\System.Diagnostics.StackTrace.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\System.IO.FileSystem.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\System.IO.FileSystem.Primitives.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\vbc.exe
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\vbc.exe.config
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\vbc.rsp
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\VBCSCompiler.exe
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\roslyn\VBCSCompiler.exe.config
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Ivap.dll.config
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Ivap.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Ivap.pdb
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Antlr3.Runtime.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\ClosedXML.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\DocumentFormat.OpenXml.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\ExcelNumberFormat.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\FastMember.Signed.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.Agent.Intercept.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.DependencyCollector.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.PerfCounterCollector.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.ServerTelemetryChannel.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.Web.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.WindowsServer.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.ApplicationInsights.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.Web.Infrastructure.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Newtonsoft.Json.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Net.Http.Formatting.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Helpers.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Http.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Http.WebHost.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Mvc.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Optimization.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Razor.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.WebPages.Deployment.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.WebPages.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.WebPages.Razor.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\WebGrease.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\ClosedXML.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\DocumentFormat.OpenXml.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\ExcelNumberFormat.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Newtonsoft.Json.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Net.Http.Formatting.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Helpers.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Http.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Http.WebHost.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Mvc.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Optimization.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.Razor.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.WebPages.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.WebPages.Deployment.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\System.Web.WebPages.Razor.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Antlr3.Runtime.pdb
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.ApplicationInsights.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.DependencyCollector.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.ServerTelemetryChannel.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.WindowsServer.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\bin\Microsoft.AI.Web.xml
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\obj\Debug\Ivap.dll
+c:\users\ajeet.kumar.myndsol\documents\visual studio 2017\Projects\Ivap\Ivap\obj\Debug\Ivap.pdb
+C:\Users\ajeet.kumar.MYNDSOL\documents\visual studio 2017\Projects\Ivap\Ivap\obj\Debug\Ivap.csprojResolveAssemblyReference.cache
+E:\Ajeet\WebApp\Ivap\Ivap\bin\ApplicationInsights.config
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\csc.exe
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\csc.exe.config
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\csc.rsp
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\csi.exe
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\csi.rsp
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.CSharp.Core.targets
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\Microsoft.VisualBasic.Core.targets
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\System.AppContext.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\System.Collections.Immutable.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\System.Diagnostics.StackTrace.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\System.IO.FileSystem.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\System.IO.FileSystem.Primitives.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\System.Reflection.Metadata.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\vbc.exe
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\vbc.exe.config
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\vbc.rsp
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\VBCSCompiler.exe
+E:\Ajeet\WebApp\Ivap\Ivap\bin\roslyn\VBCSCompiler.exe.config
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Ivap.dll.config
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Ivap.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Ivap.pdb
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Antlr3.Runtime.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.Http.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.Http.WebHost.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.Mvc.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\ClosedXML.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\DocumentFormat.OpenXml.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\ExcelNumberFormat.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\FastMember.Signed.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.Agent.Intercept.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.DependencyCollector.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.PerfCounterCollector.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.ServerTelemetryChannel.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.Web.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.WindowsServer.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.ApplicationInsights.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.Web.Infrastructure.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Newtonsoft.Json.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Net.Http.Formatting.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Helpers.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Http.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Http.WebHost.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Mvc.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Optimization.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Razor.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.WebPages.Deployment.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.WebPages.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.WebPages.Razor.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\WebActivator.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\WebGrease.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.Http.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.Http.WebHost.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\AttributeRouting.Web.Mvc.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\ClosedXML.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\DocumentFormat.OpenXml.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\ExcelNumberFormat.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Newtonsoft.Json.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Net.Http.Formatting.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Helpers.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Http.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Http.WebHost.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Mvc.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Optimization.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.Razor.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.WebPages.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.WebPages.Deployment.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Web.WebPages.Razor.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\WebActivator.pdb
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Antlr3.Runtime.pdb
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.ApplicationInsights.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.DependencyCollector.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.ServerTelemetryChannel.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.WindowsServer.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Microsoft.AI.Web.xml
+E:\Ajeet\WebApp\Ivap\Ivap\obj\Debug\Ivap.dll
+E:\Ajeet\WebApp\Ivap\Ivap\obj\Debug\Ivap.pdb
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Runtime.CompilerServices.Unsafe.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.ValueTuple.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Unity.Abstractions.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Unity.Container.dll
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.Runtime.CompilerServices.Unsafe.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\System.ValueTuple.xml
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Unity.Abstractions.pdb
+E:\Ajeet\WebApp\Ivap\Ivap\bin\Unity.Container.pdb
+E:\Ajeet\WebApp\Ivap\Ivap\obj\Debug\Ivap.csprojAssemblyReference.cache
+E:\Ajeet\WebApp\Ivap\Ivap\obj\Debug\Ivap.csproj.CoreCompileInputs.cache
+E:\Ajeet\WebApp\Ivap\Ivap\obj\Debug\Ivap.csproj.CopyComplete

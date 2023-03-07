@@ -1,0 +1,121 @@
+﻿@using System.Data;
+@model DataTable
+@{
+    Layout = null;
+}
+
+@{
+    //Getting Menu list from model
+    DataView dvAllMenu = new DataView(Model);
+    dvAllMenu.RowFilter = "Menu_Type='MENU'";
+    DataTable dt = dvAllMenu.ToTable();
+    DataView dv = new DataView(dt);
+    //Filtering All Parent Lavel Menu
+    dv.RowFilter = "Pmenu=0";
+    dv.Sort = "Display_Order ASC";
+    DataTable dtP = dv.ToTable();
+}
+        <!-- Sidebar user panel -->
+<ul class="pcoded-item pcoded-left-item">
+
+    @for (int i = 0; i < dtP.Rows.Count; i++)
+    {
+        string Cssclass = "";
+        string Route = "";
+
+        if (!string.IsNullOrEmpty(Convert.ToString(dtP.Rows[i]["Image"])))
+        {
+            Cssclass = " " + dtP.Rows[i]["Image"].ToString();
+        }
+        if (!string.IsNullOrEmpty(Convert.ToString(dtP.Rows[i]["ROUTE"])))
+        {
+            try
+            {
+                Route = Url.RouteUrl(Convert.ToString(dtP.Rows[i]["ROUTE"]));
+            }
+            catch
+            {
+                Route = "Javascript:void('0')";
+            }
+        }
+        else
+        {
+            Route = "Javascript:void('0')";
+        }
+
+        string MenuID = "anch_" + dtP.Rows[i]["ACTIONS_NAME"];
+        string liID = "li_" + dtP.Rows[i]["ACTIONS_NAME"];
+
+        DataView dvChild = new DataView(dt);
+        int Mid = Convert.ToInt32(dtP.Rows[i]["Tid"]);
+        dvChild.RowFilter = "Pmenu=" + Mid;
+        dvChild.Sort = "Display_Order ASC";
+        DataTable dtC = dvChild.ToTable();
+        string LiClass = "pcoded";
+        if (dtC.Rows.Count > 0)
+        {
+            LiClass = "pcoded-hasmenu";
+        }
+
+        <li id="@liID" class="@LiClass">
+            <a href="@Route" class="waves-effect waves-dark" title="@dtP.Rows[i]["Name"]" id="@MenuID">
+                <span class="pcoded-micon"><i class="@Cssclass"></i></span>
+                <span class="pcoded-mtext">@dtP.Rows[i]["Name"]</span>
+            </a>
+            
+            @if (dtC.Rows.Count > 0)
+            {
+                <ul class="pcoded-submenu">
+                    @for (int j = 0; j < dtC.Rows.Count; j++)
+                    {
+                        Cssclass = "";
+                        if (!string.IsNullOrEmpty(Convert.ToString(dtC.Rows[j]["Image"])))
+                        {
+                            Cssclass = " " + dtC.Rows[j]["Image"].ToString();
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(dtC.Rows[j]["ROUTE"])))
+                        {
+                            try
+                            {
+                                Route = Url.RouteUrl(Convert.ToString(dtC.Rows[j]["ROUTE"]));
+                            }
+                            catch
+                            {
+                                Route = "Javascript:void('0')";
+                            }
+                        }
+                        else
+                        {
+                            Route = "Javascript:void('0')";
+                        }
+                        DataView dvChild2 = new DataView(dt);
+                        int Mid2 = Convert.ToInt32(dtC.Rows[j]["Tid"]);
+                        dvChild2.RowFilter = "Pmenu=" + Mid2;
+                        dvChild2.Sort = "Display_Order ASC";
+                        DataTable dtC2 = dvChild2.ToTable();
+                        //MenuID = "anch" + dtC.Rows[j]["tid"];
+                        MenuID = "anch_" + dtC.Rows[j]["ACTIONS_NAME"];
+                        //liID = "li" + dtC.Rows[j]["tid"];
+                        liID = "li_" + dtC.Rows[j]["ACTIONS_NAME"];
+                    <li id="@liID">
+                        <a href="@Route" class="waves-effect waves-dark" id="@MenuID">
+                            <span class="pcoded-micon"><i class="@Cssclass"></i></span>
+                            <span class="pcoded-mtext">@dtC.Rows[j]["Name"]</span>
+                        </a>
+                    </li>
+                    }
+                </ul>
+            }
+        </li>
+
+    }
+        <li class="pcoded" nav-type="st2">
+            <a href="@Url.RouteUrl("LogOut")" class="waves-effect waves-dark">
+                <span class="pcoded-micon" data-toggle="tooltip" title="Logout">
+                    <i class="fa fa-sign-out"></i>
+                </span>
+                <span class="pcoded-mtext">Logout</span>
+            </a>
+        </li>
+</ul>
+

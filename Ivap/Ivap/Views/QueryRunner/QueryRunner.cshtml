@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "QueryRunner";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading"><h3><strong>Query Runner</strong></h3></div>
+    <div class="panel-body">
+        <div class="pull-left">
+            <textarea id="txtQuery" cols="90" class="aptextarea" rows="5" placeholder="Please type queries here"></textarea>
+        </div>
+        <div class="pull-right">
+            <div class="clear30"></div>
+            <button type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150">Submit</button>
+        </div>
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade PopUpMainDiv" id="dvError" role="dialog">
+    <div class="modal-dialog " style="width:30%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 id="htitle" class="modal-title">Error</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="block-trip mg-0">
+                            <span id="spnError">Please enter query.</span>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+                        <div class="clear20"></div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <button id="btnconfirmCancel" type="button" class="btn btn-primary BtnWhiteSm">Cancel</button>
+                            <button id="btnconfirmOK" type="button" class="btn btn-default BtnBlue">Ok</button>
+
+                        </div>
+                    </div>*@
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var Kgrid = "";
+            $("#btnSubmit").click(function () {
+                var query = $.trim($("#txtQuery").val());
+                if (query == "") {
+                    OpenModal("dvError", 500, "Confirm");
+                    return false;
+                }
+                $.get("@Url.RouteUrl("GetQueryResult")", { Query: query }, function (response) {
+                    if (response.IsSuccess) {
+                        if (Kgrid != "") {
+                            $('#Kgrid').kendoGrid('destroy').empty();
+                        }
+                        Kgrid = $("#Kgrid").kendoGrid({
+                            dataSource: {
+                                //pageSize: 15,
+                                data: JSON.parse(response.Data)
+                            },
+                            //pageable: { pageSizes: true },
+                            height: 400,
+                            filterable: true,
+                            noRecords: true,
+                            resizable: true,
+                            //reorderable: true,
+                            //dataBound: ShowToolTip,
+                            sortable: true,
+                            //columns: GridColumns,
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

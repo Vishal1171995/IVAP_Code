@@ -1,0 +1,9 @@
+TID,RoleName,RoleType,Status
+"11","CLIENT VIEWER","VIEWER","Active"
+"10","CLIENT CHECKER","CHECKER","Active"
+"9","CLIENT MAKER","MAKER","Active"
+"8","CLIENT ADMIN","ADMIN","Active"
+"4","MYND VIEWER","VIEWER","Active"
+"3","MYND CHECKER","CHECKER","Active"
+"2","MYND MAKER","MAKER","Active"
+"1","MYND ADMIN","ADMIN","Active"

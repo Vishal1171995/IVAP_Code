@@ -1,0 +1,21 @@
+﻿@model Ivap.Areas.MOM.Models.MinutesDetails
+    @{
+        /**/
+
+        Layout = null;
+    }
+
+    <div class="modal-dialog" style="width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="../../Content/images/popup_close.png" alt="" />
+                </button>
+                <h4 class="modal-title">Add  Minutes Detail</h4>
+            </div>
+            @using (Ajax.BeginForm("SaveMinutesDeatails", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SemiSuccessMessage" }))
+            {
+
+            }
+            </div>
+    </div>

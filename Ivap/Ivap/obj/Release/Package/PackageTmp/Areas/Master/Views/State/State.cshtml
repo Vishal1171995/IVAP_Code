@@ -1,0 +1,156 @@
+﻿@model Ivap.Areas.Master.Models.StateModel
+@using Ivap.Repository
+@{
+    ViewBag.Title = "State";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @if (AuthorizationRepo.IsValidAction("ViewState", "ViewAction"))
+        {
+            <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction("ViewState", "CreateAction"))
+        {
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+        @*@{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewState", area = string.Empty });}*@
+    </div>
+
+    <div class="panel-heading"><h3><strong>State Master</strong></h3></div>
+    <div class="panel-body">
+
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="StateDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">State Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>Country</label> </td>
+                                            <td><span id="lblCountry"> </span></td>
+                                            <td><label>State Code</label> </td>
+                                            <td><span id="lblStateCode"> </span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><label>State Name</label></td>
+                                            <td> <span id="lblStateName"> </span></td>
+                                            <td> <label>Status</label> </td>
+                                            <td><span id="lblIsActive"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvStateAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">State Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdateState", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+                {@Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">Country<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.Country_Name, new List<SelectListItem> {
+                              new SelectListItem { Text = "--Select--", Value = "" },
+                              new SelectListItem { Text = "INDIA", Value = "INDIA" },
+                          }, new { @class = "form-control selectbdr" })
+                            @Html.ValidationMessageFor(m => m.Country_Name)
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">State Code<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(m => m.State_Code, new { @class = "form-control", @placeholder = "State Code" })
+                            @Html.ValidationMessageFor(m => m.State_Code)
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">State Name<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.StateId)
+                            @Html.TextBoxFor(m => m.State_Name, new { @class = "form-control", @placeholder = "State Name" })
+                            @Html.ValidationMessageFor(m => m.State_Name)
+                        </div>
+
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">Is Active</label>
+                        <div class="col-sm-8">
+                            @Html.CheckBoxFor(m => m.IsActive)
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clear20"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetStateURL = "@Url.RouteUrl("GetState")"
+         var GetStateHisURL = '@Url.RouteUrl("GetStateHis")'
+        var DownloadAllStateURL= '@Url.RouteUrl("DownloadAllState")'
+    </script>
+    @Scripts.Render("~/Scripts/StateScript")
+}

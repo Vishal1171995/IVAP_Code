@@ -1,0 +1,199 @@
+﻿
+@model Ivap.Areas.Master.Models.RoleModel
+@using Ivap.Repository
+@*@using Idea.Repository;*@
+@{
+    ViewBag.Title = "Manage Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @if (AuthorizationRepo.IsValidAction("ViewRoles", "ViewAction"))
+        {
+            <button type="button" id="dvExport" class="btn btn-primary TransparantBtnBlue">Export Excel</button>
+        }
+        @if (AuthorizationRepo.IsValidAction("ViewRoles", "CreateAction"))
+        {
+            <button type="button" id="add" class="btn btn-primary BtnBlueLg BtnWidth150">Create New</button>
+        }
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+
+
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+<section class="content">
+    <!-- Info boxes -->
+    <!-- /.row -->
+    <!-- /.box-header -->
+    <div id="RoleDetails" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                            <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>@Model.RoleName_TEXT</label> </td>
+                                            <td><span id="lblRoleName"> </span></td>
+                                            <td><label>@Model.RoleType_TEXT</label></td>
+                                            <td> <span id="lblRoleType"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>Status</label> </td>
+                                            <td><span id="lblStatus"></span></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2">
+                                <div id="GridHis"></div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dvRoleAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+        <div class="modal-dialog" style="width:500px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <img src="~/Content/images/popup_close.png" alt="Close " />
+                    </button>
+                    <h4 class="modal-title">@Model.Screen_Name Master</h4>
+                </div>
+                @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+                {@Html.AntiForgeryToken()
+                <div class="modal-body horizontalscroll">
+                    @*<div class="row form-group">
+                            <label for="inputPassword3" class="col-sm-4 control-label">Entity<span class="text-red">*</span></label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(m => m.EntityID, new SelectList(Model.EntityList, "Value", "Text", "0"), new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.EntityID)
+                            </div>
+                        </div>*@
+                    <div class="row form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">@Model.RoleName_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.HiddenFor(m => m.RoleID)
+                            @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control", @placeholder = "Role Name" })
+                            @Html.ValidationMessageFor(m => m.RoleName)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">@Model.RoleType_TEXT<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(m => m.RoleType, new List<SelectListItem> {
+                                new SelectListItem { Text = "--Select--", Value = "" },
+                                new SelectListItem { Text = "ADMIN", Value = "ADMIN" },
+                                new SelectListItem { Text = "MAKER", Value = "MAKER" },
+                                new SelectListItem { Text = "CHECKER", Value = "CHECKER" },
+                                new SelectListItem { Text = "VIEWER", Value = "VIEWER" },
+                            }, new { @class = "form-control selectbdr" })
+                            @Html.ValidationMessageFor(m => m.RoleType)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="inputPassword3" class="col-sm-4 control-label">Is Active<span class="text-red">*</span></label>
+                        <div class="col-sm-8">
+                            @Html.CheckBoxFor(m => m.IsActive)
+                            @Html.ValidationMessageFor(m => m.IsActive)
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="col-md-12">
+                    <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                    <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+                </div>
+                <div class="clear20"></div>
+            }
+            </div>
+        </div>
+    </div>
+
+    @*<div id="dvRoleAddEdit" class="modal">
+        @using (Ajax.BeginForm("AddUpdate", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+        {  @Html.AntiForgeryToken()
+            <div class="box-body">
+                <div class="row form-group">
+                    <label for="inputEmail3" class="col-sm-4 control-label">Role Name<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.HiddenFor(m => m.RoleID)
+                        @Html.TextBoxFor(m => m.RoleName, new { @class = "form-control", @placeholder = "Role Name" })
+                        @Html.ValidationMessageFor(m => m.RoleName)
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Role Type<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(m => m.RoleType, new List<SelectListItem> {
+                        new SelectListItem { Text = "--Select--", Value = "" },
+                        new SelectListItem { Text = "Internal", Value = "Internal" },
+                        new SelectListItem { Text = "External", Value = "External" },
+                    }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.RoleType)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-4 control-label">Is Active<span class="text-red">*</span></label>
+                    <div class="col-sm-8">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                        @Html.ValidationMessageFor(m => m.IsActive)
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-danger"> <i class="fa fa-ban"></i> Reset</button>
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-danger" />
+                @*<button type="button" class="btn btn-danger"> <i class="fa fa-check"></i> Submit</button>*@
+    @*<input type="submit" id="btnSubmit" class="btn btn-danger" value="Submit" />*@
+    @*</div>*@
+    @*}
+        </div>*@
+</section>
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+    <script type="text/javascript">
+        var GetRolesURL = "@Url.RouteUrl("GetRoles")"
+        var GetUserRoleHisURL = '@Url.RouteUrl("GetUserRoleHis")'
+        var DownloadAllRoleURL= '@Url.RouteUrl("DownloadAllRole")'
+      GetModel(@Html.Raw(Json.Encode(Model)));
+    </script>
+    @Scripts.Render("~/Scripts/RoleScript")
+
+}
+

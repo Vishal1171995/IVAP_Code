@@ -1,0 +1,833 @@
+﻿@model Ivap.Areas.Master.Models.CompanyModel
+@*@using Idea.Repository;*@
+@{
+    ViewBag.Title = "Manage Company";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="ContentRightMain">*@
+<div class="panel panel-default">
+    <div class="pull-right VendorSiteBtnRightMain">
+        @{Html.RenderAction("RenderMasterButton", "Authorization", new { RouteName = "ViewCompany", area = string.Empty });}
+    </div>
+    <div class="panel-heading"><h3><strong>@Model.Screen_Name Master</strong></h3></div>
+    <div class="panel-body">
+        
+
+        <div class="clear20"></div>
+        <div class="TableOuterDiv table-responsive">
+            <div id="Kgrid"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+@*</div>*@
+
+<div id="dvCompanyDetails" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a id="atab1" href="#tab_1" data-toggle="tab" aria-expanded="true">Detail</a></li>
+                        <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">History</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1">
+                            <div class="horizontalscroll">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td><label>@Model.EID_TEXT</label> </td>
+                                            <td><span id="lblEntity"> </span></td>
+                                            <td><label>@Model.COMP_CODE_TEXT</label></td>
+                                            <td> <span id="lblCOMP_CODE"> </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_NAME_TEXT</label> </td>
+                                            <td><span id="lblCOMP_NAME"></span></td>
+                                            <td> <label>@Model.COMP_ADDR1_TEXT</label> </td>
+                                            <td><span id="lblCOMP_ADDR1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_ADDR2_TEXT</label> </td>
+                                            <td><span id="lblCOMP_ADDR2"></span></td>
+                                            <td> <label>@Model.COMP_CITY_TEXT</label> </td>
+                                            <td><span id="lblCOMP_CITY"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_STATE_TEXT</label> </td>
+                                            <td><span id="lblCOMP_STATE"></span></td>
+                                            <td> <label>@Model.COMP_PIN_TEXT</label> </td>
+                                            <td><span id="lblCOMP_PIN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_CLASS_TEXT</label> </td>
+                                            <td><span id="lblCOMP_CLASS"></span></td>
+                                            <td> <label>@Model.COMP_PANNO_TEXT</label> </td>
+                                            <td><span id="lblCOMP_PANNO"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_TANNO_TEXT</label> </td>
+                                            <td><span id="lblCOMP_TANNO"></span></td>
+                                            <td> <label>@Model.COMP_TDSCIRCLE_TEXT</label> </td>
+                                            <td><span id="lblCOMP_TDSCIRCLE"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_FNAME_TEXT</label> </td>
+                                            <td><span id="lblSIGN_FNAME"></span></td>
+                                            <td> <label>@Model.SIGN_LNAME_TEXT</label> </td>
+                                            <td><span id="lblSIGN_LNAME"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_ADDR1_TEXT</label> </td>
+                                            <td><span id="lblSIGN_ADDR1"></span></td>
+                                            <td> <label>@Model.SIGN_ADDR2_TEXT</label> </td>
+                                            <td><span id="lblSIGN_ADDR2"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_CITY_TEXT</label> </td>
+                                            <td><span id="lblSIGN_CITY"></span></td>
+                                            <td> <label>@Model.SIGN_DSG_TEXT</label> </td>
+                                            <td><span id="lblSIGN_DSG"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_STATE_TEXT</label> </td>
+                                            <td><span id="lblSIGN_STATE"></span></td>
+                                            <td> <label>@Model.SIGN_PIN_TEXT</label> </td>
+                                            <td><span id="lblSIGN_PIN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.SIGN_PLACE_TEXT</label> </td>
+                                            <td><span id="lblSIGN_PLACE"></span></td>
+                                            <td> <label>@Model.SIGN_DATE_TEXT</label> </td>
+                                            <td><span id="lblSIGN_DATE"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.RETIRE_AGE_TEXT</label> </td>
+                                            <td><span id="lblRETIRE_AGE"></span></td>
+                                            <td> <label>@Model.EMP_CODE_GEN_TEXT</label> </td>
+                                            <td><span id="lblEMP_CODE_GEN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.EMP_CODE_PREFIX_TEXT</label> </td>
+                                            <td><span id="lblEMP_CODE_PREFIX"></span></td>
+                                            <td> <label>@Model.EMP_CODE_LEN_TEXT</label> </td>
+                                            <td><span id="lblEMP_CODE_LEN"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <label>@Model.COMP_URL_TEXT</label> </td>
+                                            <td><span id="lblSCOMP_URL"></span></td>
+                                            <td> <label>@Model.ISACTIVE_TEXT</label> </td>
+                                            <td><span id="lblSTATUS"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2">
+                            <div id="GridHis"></div>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.box-body -->
+<div id="dvCompanyAddEdit" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Master</h4>
+            </div>
+            @using (Ajax.BeginForm("AddUpdateCompany", new AjaxOptions { HttpMethod = "POST", OnSuccess = "SuccessMessage", InsertionMode = InsertionMode.Replace }))
+            {@Html.AntiForgeryToken()
+            <div class="modal-body horizontalscroll">
+                <div class="row form-group">
+                    @Html.HiddenFor(m => m.CompID)
+                    <label for="inputEmail3" class="col-sm-2 control-label">@Model.COMP_CODE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_CODE, new { @class = "form-control", @placeholder = @Model.COMP_CODE_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_CODE)
+                    </div>
+                    <label for="inputEmail3" class="col-sm-2 control-label">@Model.COMP_NAME_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_NAME, new { @class = "form-control", @placeholder = @Model.COMP_NAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_NAME)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_ADDR1_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_ADDR1, new { @class = "form-control", @placeholder = @Model.COMP_ADDR1_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_ADDR1)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_ADDR2_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_ADDR2, new { @class = "form-control", @placeholder = @Model.COMP_ADDR2_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_ADDR2)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_CITY_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_CITY, new { @class = "form-control", @placeholder = @Model.COMP_CITY_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_CITY)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_STATE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.COMP_STATE, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control", @placeholder = @Model.COMP_STATE_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_STATE)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_PIN_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_PIN, new { @class = "form-control", @placeholder = @Model.COMP_PIN_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_PIN)
+                    </div>
+                    <label class="col-sm-2 control-label">@Model.COMP_CLASS_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.COMP_CLASS, new SelectList(Model.ClassList, "Value", "Text", "0"), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.COMP_CLASS)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-sm-2 control-label">@Model.COMP_PANNO_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_PANNO, new { @class = "form-control", @placeholder = @Model.COMP_PANNO_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_PANNO)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_TANNO_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_TANNO, new { @class = "form-control", @placeholder = @Model.COMP_TANNO_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_TANNO)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_TDSCIRCLE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_TDSCIRCLE, new { @class = "form-control", @placeholder = @Model.COMP_TDSCIRCLE_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_TDSCIRCLE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_FNAME_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_FNAME, new { @class = "form-control", @placeholder = @Model.SIGN_FNAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_FNAME)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_LNAME_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_LNAME, new { @class = "form-control", @placeholder = @Model.SIGN_LNAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_LNAME)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_FATHER_NAME_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_FATHER_NAME, new { @class = "form-control", @placeholder = @Model.SIGN_FATHER_NAME_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_FATHER_NAME)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_ADDR1_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_ADDR1, new { @class = "form-control", @placeholder = @Model.SIGN_ADDR1_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_ADDR1)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_ADDR2_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_ADDR2, new { @class = "form-control", @placeholder = @Model.SIGN_ADDR2_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_ADDR2)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_CITY_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_CITY, new { @class = "form-control", @placeholder = @Model.SIGN_CITY_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_CITY)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_DSG_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_DSG, new { @class = "form-control", @placeholder = @Model.SIGN_DSG_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_DSG)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_STATE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.SIGN_STATE, new SelectList(Model.StateList, "Value", "Text", "0"), new { @class = "form-control", @placeholder = @Model.SIGN_STATE_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_STATE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_PIN_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_PIN, new { @class = "form-control", @placeholder = @Model.SIGN_PIN_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_PIN)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_PLACE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_PLACE, new { @class = "form-control", @placeholder = @Model.SIGN_PLACE_TEXT })
+                        @Html.ValidationMessageFor(m => m.SIGN_PLACE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.SIGN_DATE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.SIGN_DATE, "{0:dd/M/yyyy}", new { @class = "form-control", @placeholder = "dd/mm/yyyy" })
+                        @Html.ValidationMessageFor(m => m.SIGN_DATE)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.RETIRE_AGE_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.RETIRE_AGE, new { @class = "form-control", @placeholder = @Model.RETIRE_AGE_TEXT })
+                        @Html.ValidationMessageFor(m => m.RETIRE_AGE)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.EMP_CODE_PREFIX_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.EMP_CODE_PREFIX, new { @class = "form-control", @placeholder = @Model.EMP_CODE_PREFIX_TEXT })
+                        @Html.ValidationMessageFor(m => m.EMP_CODE_PREFIX)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.EMP_CODE_LEN_TEXT<span class="text-red">*</span></label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.EMP_CODE_LEN, new { @class = "form-control", @placeholder = @Model.EMP_CODE_LEN_TEXT })
+                        @Html.ValidationMessageFor(m => m.EMP_CODE_LEN)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.Comp_Logo_TEXT</label>
+                    <div class="col-sm-4">
+                        <input type="file" name="files" id="Comp_Upload" target-control="Comp_Logo" target-control-orignal="RFP_DOCUMENT_NAME">
+                        @Html.HiddenFor(m => m.Comp_Logo)
+                        @Html.ValidationMessageFor(m => m.Comp_Logo)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.COMP_URL_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.COMP_URL, new { @class = "form-control", @placeholder = @Model.COMP_URL_TEXT })
+                        @Html.ValidationMessageFor(m => m.COMP_URL)
+                    </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.EMP_CODE_GEN_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(m => m.EMP_CODE_GEN)
+                        @Html.ValidationMessageFor(m => m.EMP_CODE_GEN)
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">@Model.ISACTIVE_TEXT</label>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="clear"></div>
+            <div class="col-md-12">
+                <input type="reset" id="btnReset" value="Reset" class="btn btn-primary BtnWhiteLg BtnWidth150" />
+                <input type="submit" id="btnSubmit" class="btn btn-primary BtnBlueLg BtnWidth150" value="Submit" />
+            </div>
+            <div class="clear20"></div>
+        }
+        </div>
+        <!-- Modal content-->
+    </div>
+</div>
+<div id="Uploaddialog" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">Upload @Model.Screen_Name</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <label>select a XLSX file</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-8 col-md-8 allcreditionals">
+                            <input type="file" name="files" id="files" target-control="hdnFileName">
+                            <input type="hidden" id="hdnFileName" />
+                        </div>
+                        <div class="clear20"></div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 allcreditionals">
+                            <div class="reset_btn" align="right">
+                                <input type="button" value="Sample" id="btnDownloadSample" class="btn btn-primary BtnBlueLg" onclick="DownLoadSample();" />
+                                <input type="button" value="Upload" id="btnUpload" class="btn btn-primary BtnBlueLg" />
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="log" class="modal fade PopUpMainDiv" role="dialog">
+    <div class="modal-dialog" style="width:500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <img src="~/Content/images/popup_close.png" alt="Close " />
+                </button>
+                <h4 class="modal-title">@Model.Screen_Name Log</h4>
+            </div>
+            <div class="modal-body">
+                <div class="clearfix"></div>
+                <div class="row top_content">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-3 col-md-3 top_content">
+                            <label class="headtag">Total Success</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotSuccess" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label class="headtag">Total Loss</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <label id="lblTotFailed" class="feedback_content">500</label>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="reset_btn" align="right">
+                                <input type="hidden" id="hdnresultFile" />
+                                <input type="button" value="Download" onclick="DownLoadResultFile();" class="btn btn-primary BtnBlueLg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+}
+@section scripts {
+    @Scripts.Render("~/Scripts/commanscript")
+@*<script src="~/Content/js/enscroll-0.6.2.min.js"></script>*@
+    <script type="text/javascript">
+        var FilesUploadURL = "@Url.RouteUrl("FilesUpload")"
+        var GetCompanyURL = "@Url.RouteUrl("GetCompany")"
+        var GetCompHisURL = "@Url.RouteUrl("GetCompanyHistory")"
+        var DownloadAllCompanyURL = '@Url.RouteUrl("DownloadAllCompany")'
+        var FilesUploadURL = "@Url.RouteUrl("ExcelFilesUpload")"
+        var UploadCompanyDetailsURL = "@Url.RouteUrl("UploadCompanyDetails")"
+        var DownLoadSampleURL = '@Url.RouteUrl("DownLoadSampleForExcel")'
+        var DownLoadResultFileURL= '@Url.RouteUrl("DownLoadResultFileForExcel")'
+    </script>
+    <script type="text/javascript">
+
+        function SuccessMessage(res) {
+            if ($("#CompID").val() > 0 && res.IsSuccess)
+                $("#dvCompanyAddEdit").modal('hide');
+            HandleSuccessMessage(res, "btnReset");
+            BindGrid();
+        }
+
+        $(document).ready(function () {
+            $("#SIGN_DATE").datepicker({
+                dateFormat: 'dd/mm/yy',
+                //minDate: 0
+            });
+            $("#li_Master").addClass("active");
+            $("#anch_ViewCompany").addClass("CurantPageIcon");
+            BindGrid();
+            $("#add").click(function (event) {
+                $("#btnReset").click();
+                $("#CompID").val(0);
+                $("#btnSubmit").val("Submit");
+                OpenModal("dvCompanyAddEdit", 900, "Add WareHouse");
+            });
+
+            $("#dvimport").bind("click", {}, function () {
+                OpenModal("Uploaddialog", 500, "Upload Company");
+            });
+            $("#dvExport").bind("click", {}, function () {
+                var URL = DownloadAllCompanyURL;
+                window.location = URL;
+                return false;
+            });
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $("#Comp_Upload").kendoUpload({
+                async: {
+                    saveUrl: '@Url.RouteUrl("FilesUploadForOther")',
+                    //removeUrl: "remove",
+                    autoUpload: true
+                },
+                upload: function (e) {
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+                },
+                select: function (event) {
+                    var notAllowed = false;
+                    $.each(event.files, function (index, value) {
+                        if (value.extension == '.csv') {
+                            alert("Plese select a image file only!");
+                            notAllowed = true;
+                        }
+                    });
+                    var breakPoint = 0;
+                    if (notAllowed == true) e.preventDefault();
+                },
+                multiple: false,
+                success: onSuccessForUpload,
+                remove: onRemoveForUpload,
+                showFileList: false
+            });
+
+            var form = $('#__AjaxAntiForgeryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            $("#files").kendoUpload({
+                async: {
+                    saveUrl: FilesUploadURL,
+                    //removeUrl: "remove",
+                    autoUpload: true
+                },
+                upload: function (e) {
+                    e.data = { __RequestVerificationToken: token, Folder: "Temp" };
+                },
+                select: function (event) {
+                    var notAllowed = false;
+                    $.each(event.files, function (index, value) {
+                        if (value.extension !== '.xlsx') {
+                            alert("Plese select a xlsx file only!");
+                            notAllowed = true;
+                        }
+                    });
+                    var breakPoint = 0;
+                    if (notAllowed == true) e.preventDefault();
+                },
+                multiple: false,
+                success: onSuccessForUpload,
+                remove: onRemoveForUpload,
+                showFileList: false
+            });
+            $("#btnUpload").click(function (event) {
+                var fileName = $("#hdnFileName").val();
+                if (fileName.trim() == "") {
+                    alert("Please select a CSV file");
+                    return false;
+                }
+                var form = $('#__AjaxAntiForgeryForm');
+                var token = $('input[name="__RequestVerificationToken"]', form).val();
+                var Data = { __RequestVerificationToken: token, FileName: fileName };
+                $.ajax({
+                    type: "POST",
+                    url: UploadCompanyDetailsURL,
+                    contentType: "application/x-www-form-urlencoded",
+                    //data: Data,
+                    data: {
+                        __RequestVerificationToken: token,
+                        FileName: fileName
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess == true) {
+                            var Data = JSON.parse(response.Data);//.split(",");
+                            $("#lblTotSuccess").html(Data["Success"]);
+                            $("#lblTotFailed").html(Data["Failed"]);
+                            $("#hdnresultFile").val(Data["FileName"]);
+                            $("#Uploaddialog").modal("hide");
+                            OpenModal("log", 500, "Result");
+                            BindGrid();
+                        }
+                        else {
+                            //FailResponse(response);
+                            alert(response.Message);
+                        }
+                        $("#dvDetails").show();
+                    }
+                });
+            });
+        });
+
+        var Kgrid = "";
+        function BindGrid() {
+            var CompID = 0;
+            $.get(GetCompanyURL, { CompID: CompID }, function (response) {
+                if (Kgrid != "") {
+                    $('#Kgrid').kendoGrid('destroy').empty();
+                }
+                var GridColumns = [{ field: "ENTITY_NAME", title: "Entity Name", width: 200 },
+                    { field: "COMP_CODE", title: '@Model.COMP_CODE_TEXT', width: 100 },
+                    { field: "COMP_NAME", title: '@Model.COMP_NAME_TEXT', width: 200 },
+                    { field: "COMP_ADDR1", title: '@Model.COMP_ADDR1_TEXT', width: 150 },
+                    { field: "COMP_CITY", title: '@Model.COMP_CITY_TEXT', width: 150 },
+                    { field: "COMPStateText", title: '@Model.SIGN_STATE_TEXT', width: 150 },
+                    //{ field: "COMPStateText", title: "Comp State", width: 150 },
+                    { field: "STATUS", title: '@Model.ISACTIVE_TEXT', width: 80, template: "<span class= #if(STATUS=='Active'){#'BtnApproved Setlabel'#}else{#'BtnGray Setlabel'# }#   >#:STATUS#</span>" },
+                   
+                ];
+                if (response.Command != null) {
+                    for (var i = 0; i < response.Command.command.length; i++) {
+                        if (response.Command.command[i].name == "Edit")
+                            response.Command.command[i].click = EditHandler;
+                        else if (response.Command.command[i].name == "View")
+                            response.Command.command[i].click = ViewHandler;
+                    }
+                    GridColumns.push(response.Command);
+                }
+               
+                Kgrid = $("#Kgrid").kendoGrid({
+                    dataSource: {
+                        pageSize: 15,
+                        data: JSON.parse(response.Data),
+                        schema: {
+                            model: {
+                                fields: {
+                                    WH_SORTNAME: { type: "string" },
+                                    SECURITYGUARD: { type: "string" },
+                                    CIRCLE_NAME: { type: "string" },
+                                    ZONE_NAME: { type: "string" },
+                                    ADDRESS_CITY: { type: "string" },
+                                    STATUS: { type: "string" }
+                                }
+                            }
+                        },
+                    },
+                    pageable: { pageSizes: true },
+                    height: 400,
+                    filterable: {
+                        //extra: false,
+                        operators: {
+                            string: {
+                                eq: "Is equal to",
+                                neq: "Is not equal to",
+                                contains: "Contains",
+                                doesnotcontain: "Does not contain",
+                                startswith: "Starts with",
+                                endswith: "Ends with"
+                            }
+                        }
+                    },
+                    noRecords: true,
+                    resizable: true,
+                    //reorderable: true,
+                    dataBound: ShowToolTip,
+                    sortable: true,
+                    columns: GridColumns,
+                });
+            });
+        }
+        var EditHandler = function EditHandler(e) {
+            $("#btnReset").click();
+            e.preventDefault();
+            var dataItem = {};
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var CompID = dataItem.TID;
+            $.ajax({
+                type: "GET",
+                url: GetCompanyURL,
+                contentType: "application/json; charset=utf-8",
+                data: { CompID: CompID },
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.Data != "") {
+                        var data1 = $.parseJSON(response.Data);
+                        if (data1.length > 0) {
+                            $("#btnSubmit").val("Update");
+                            $("#CompID").val(data1[0].TID);
+                            $("#EID").val(htmlEncode(data1[0].EID));
+                            $("#COMP_CODE").val(htmlEncode(data1[0].COMP_CODE));
+                            $("#COMP_NAME").val(htmlEncode(data1[0].COMP_NAME));
+
+                            $("#COMP_ADDR1").val(htmlEncode(data1[0].COMP_ADDR1));
+                            $("#COMP_ADDR2").val(htmlEncode(data1[0].COMP_ADDR2));
+                            $("#COMP_CITY").val(htmlEncode(data1[0].COMP_CITY));
+                            $("#COMP_STATE").val(htmlEncode(data1[0].COMP_STATE));
+                            $("#COMP_PIN").val(htmlEncode(data1[0].COMP_PIN));
+                            $("#COMP_CLASS").val(htmlEncode(data1[0].COMP_CLASS));
+                            $("#COMP_PANNO").val(htmlEncode(data1[0].COMP_PANNO));
+                            $("#COMP_TANNO").val(htmlEncode(data1[0].COMP_TANNO));
+                            $("#COMP_TDSCIRCLE").val(htmlEncode(data1[0].COMP_TDSCIRCLE));
+
+                            $("#SIGN_FNAME").val(data1[0].SIGN_FNAME);
+                            $("#SIGN_LNAME").val(data1[0].SIGN_LNAME);
+                            $("#SIGN_FATHER_NAME").val(data1[0].SIGN_FATHER_NAME);
+                            $("#SIGN_ADDR1").val(data1[0].SIGN_ADDR1);
+                            $("#SIGN_ADDR2").val(data1[0].SIGN_ADDR2);
+                            $("#SIGN_CITY").val(data1[0].SIGN_CITY);
+                            $("#SIGN_DSG").val(data1[0].SIGN_DSG);
+                            $("#SIGN_STATE").val(data1[0].SIGN_STATE);
+                            $("#SIGN_PIN").val(data1[0].SIGN_PIN);
+                            $("#SIGN_PLACE").val(data1[0].SIGN_PLACE);
+                            $("#SIGN_DATE").val(data1[0].SIGN_DATE);
+                            $("#RETIRE_AGE").val(data1[0].RETIRE_AGE);
+                            //$("#EMP_CODE_GEN").val(data1[0].ADDRESS_POSTAL_CODE);
+                            $("#EMP_CODE_PREFIX").val(data1[0].EMP_CODE_PREFIX);
+                            $("#EMP_CODE_LEN").val(data1[0].EMP_CODE_LEN);
+                            $("#Comp_Logo").val(data1[0].COMP_LOGO);
+                            $("#COMP_URL").val(data1[0].COMP_URL);
+                            var isMother = data1[0].EMP_CODE_GEN;
+                            (isMother == 1) ? $('#EMP_CODE_GEN').prop('checked', true) : $('#EMP_CODE_GEN').prop('checked', false);
+                            var IsAct = data1[0].ISACTIVE;
+                            (IsAct == 1) ? $('#IsActive').prop('checked', true) : $('#IsActive').prop('checked', false);
+                            OpenModal("dvCompanyAddEdit", 900, "Edit Circle");
+                        }
+                    }
+                }
+
+            });
+        }
+        var ViewHandler = function ViewHandler(e) {
+            $("#atab1").click();
+            e.preventDefault();
+            dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            var CompID = dataItem.TID;
+            $.get(GetCompanyURL, { CompID: CompID }, function (response) {
+
+                var Data = $.parseJSON(response.Data);
+                if (Data.length > 0) {
+                    //alert(Data[0].NAME+"Ajeet");
+                    $("#lblEntity").html(htmlEncode(Data[0].ENTITY_NAME));
+                    $("#lblCOMP_CODE").html(htmlEncode(Data[0].COMP_CODE));
+                    $("#lblCOMP_NAME").html(htmlEncode(Data[0].COMP_NAME));
+                    $("#lblCOMP_ADDR1").html(htmlEncode(Data[0].COMP_ADDR1));
+                    $("#lblCOMP_ADDR2").html(htmlEncode(Data[0].COMP_ADDR2));
+                    $("#lblCOMP_CITY").html(htmlEncode(Data[0].COMP_CITY));
+                    $("#lblCOMP_STATE").html(htmlEncode(Data[0].COMPStateText));
+                    $("#lblCOMP_PIN").html(htmlEncode(Data[0].COMP_PIN));
+                    $("#lblCOMP_CLASS").html(htmlEncode(Data[0].COMP_CLASS));
+                    $("#lblCOMP_PANNO").html(htmlEncode(Data[0].COMP_PANNO));
+                    $("#lblCOMP_TANNO").html(htmlEncode(Data[0].COMP_TANNO));
+                    $("#lblCOMP_TDSCIRCLE").html(htmlEncode(Data[0].COMP_TDSCIRCLE));
+                    $("#lblSIGN_FNAME").html(htmlEncode(Data[0].SIGN_FNAME));
+                    $("#lblSIGN_LNAME").html(htmlEncode(Data[0].SIGN_LNAME));
+                    $("#lblSIGN_ADDR1").html(htmlEncode(Data[0].SIGN_ADDR1));
+                    $("#lblSIGN_ADDR2").html(htmlEncode(Data[0].SIGN_ADDR2));
+                    $("#lblSIGN_CITY").html(htmlEncode(Data[0].SIGN_CITY));
+                    $("#lblSIGN_DSG").html(htmlEncode(Data[0].SIGN_DSG));
+                    $("#lblSIGN_STATE").html(htmlEncode(Data[0].SignStateText));
+                    $("#lblSIGN_PIN").html(htmlEncode(Data[0].SIGN_PIN));
+                    $("#lblSIGN_PLACE").html(htmlEncode(Data[0].SIGN_PLACE));
+                    $("#lblSIGN_DATE").html(htmlEncode(Data[0].SIGN_DATE));
+                    $("#lblRETIRE_AGE").html(htmlEncode(Data[0].RETIRE_AGE));
+                    $("#lblEMP_CODE_GEN").html(htmlEncode(Data[0].EMP_CODE_GEN_Text));
+                    $("#lblEMP_CODE_PREFIX").html(htmlEncode(Data[0].EMP_CODE_PREFIX));
+                    $("#lblEMP_CODE_LEN").html(htmlEncode(Data[0].EMP_CODE_LEN));
+                    $("#lblCOMP_URL").html(htmlEncode(Data[0].COMP_URL));
+                    $("#lblSTATUS").html(htmlEncode(Data[0].STATUS));
+                    HistoryGridData(CompID);
+                }
+            });
+        }
+        var histkgrid = "";
+        function HistoryGridData(CompID) {
+            $.ajax({
+                type: "GET",
+                url: GetCompHisURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "CompID": CompID },
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        if (histkgrid != "") {
+                            $('#GridHis').kendoGrid('destroy').empty();
+                        }
+                        histkgrid = $("#GridHis").kendoGrid({
+                            dataSource: {
+                                //pageSize: 10,
+                                data: JSON.parse(response.Data)
+                            },
+                            columns: [
+                                { field: "ENTITY_NAME", title: "Entity Name", width: 150 },
+                                { field: "COMP_CODE", title: "Comp Code", width: 150 },
+                                { field: "COMP_NAME", title: "Comp Name", width: 200 },
+                                { field: "COMP_ADDR1", title: "Comp Addr1", width: 100 },
+                                { field: "COMP_ADDR2", title: "Comp Addr2", width: 250 },
+                                { field: "COMP_CITY", title: "Comp City", width: 100 },
+                                { field: "COMPStateText", title: "Comp State", width: 75 },
+                                { field: "COMP_PIN", title: "Comp Pin", width: 100 },
+                                { field: "COMP_CLASS", title: "Comp Class", width: 100 },
+                                { field: "COMP_PANNO", title: "Comp PanNo", width: 100 },
+                                { field: "COMP_TANNO", title: "Comp TanNo", width: 100 },
+                                { field: "COMP_TDSCIRCLE", title: "Comp TDSCircle", width: 100 },
+                                { field: "SIGN_FNAME", title: "Sign Fname", width: 150 },
+                                { field: "SIGN_LNAME", title: "Sign Lname", width: 150 },
+                                { field: "SIGN_FATHER_NAME", title: "Sign Father Name", width: 150 },
+                                { field: "SIGN_ADDR1", title: "Sign Addr", width: 150 },
+                                { field: "SIGN_ADDR2", title: "Sign Addr2", width: 150 },
+                                { field: "SIGN_CITY", title: "Sign City", width: 150 },
+                                { field: "SIGN_DSG", title: "Sign Dsg", width: 150 },
+                                { field: "SignStateText", title: "Sign State", width: 150 },
+                                { field: "SIGN_PIN", title: "Sign Pin", width: 150 },
+                                { field: "SIGN_PLACE", title: "Sign Place", width: 150 },
+                                { field: "SIGN_DATE", title: "Sign Date", width: 150 },
+                                { field: "RETIRE_AGE", title: "Retire Age", width: 150 },
+                                { field: "EMP_CODE_GEN_Text", title: "Emp Code Gen", width: 150 },
+                                { field: "EMP_CODE_PREFIX", title: "Emp Code Prefix", width: 150 },
+                                { field: "EMP_CODE_LEN", title: "Emp Code Len", width: 150 },
+                                { field: "UPDATED_ON", title: "Updated On", width: 120 },
+                                { field: "CREATE_ON", title: "Created On", width: 120 },
+                                { field: "STATUS", title: "Status", width: 120 },
+                                { field: "ACTION", title: "Action", width: 100 },
+                            ],
+                            dataBound: function (e) {
+                                var grid = e.sender;
+                                if (grid.dataSource.total() != 0) {
+                                    var rows = grid.dataSource.total();
+                                    var colCount = grid.columns.length;
+                                    for (var i = rows - 1; i > 0; i--) {
+                                        for (var k = 0; k < colCount; k++) {
+                                            if (grid.tbody[0].children[i].cells[k].innerText != grid.tbody[0].children[i - 1].cells[k].innerText) {
+                                                grid.tbody[0].children[i - 1].cells[k].bgColor = "red";
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            pageable: false,
+                            height: 350,
+                            sortable: true,
+                            resizable: true,
+                            noRecords: true
+                        });
+                        $("#GridHis .k-grid-content.k-auto-scrollable").css("height", "272px");
+                        OpenModal("dvCompanyDetails", 909, "Company Details");
+                    }
+                    else {
+                        FailResponse(response);
+                    }
+                }
+            });
+        }
+
+        function DownLoadSample() {
+            var URL = DownLoadSampleURL + '?TableName=IVAP_MST_COMPANY &ActionName=ViewCompany&SampleName=CompanyMaster.xlsx';
+            window.location = URL;
+            return false;
+        }
+        function DownLoadResultFile() {
+            var FileName = $("#hdnresultFile").val();
+            var Data = { FileName: FileName };
+            var URL = DownLoadResultFileURL + '?FileName=' + FileName;
+            window.location = URL;
+            return false;
+        }
+    </script>
+    
+}
+
